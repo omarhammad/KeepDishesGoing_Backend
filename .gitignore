@@ -1,0 +1,66 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sonarlint plugin
+.idea/sonarlint/
+
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/**/shelf/
+
+# AWS plugin
+.idea/**/aws.xml
+
+# File-based project format
+*.iml
+
+# IntelliJ logs
+.idea/**/usage.statistics.xml
+.idea/**/dbeaver-data-sources.xml
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Maven wrapper files (if not using them)
+!.mvn/wrapper/maven-wrapper.jar
+
+### Spring Boot ###
+# Logs
+*.log
+
+# Runtime data
+*.pid
+*.seed
+*.key
+*.db
+
+# Spring Boot devtools
+.spring-boot-devtools.properties
+
+### OS-specific ###
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~

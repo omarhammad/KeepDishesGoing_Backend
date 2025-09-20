@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: kdg_backend
