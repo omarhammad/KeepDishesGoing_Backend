@@ -1,0 +1,38 @@
+version: "3.8"
+
+
+services:
+
+  kdg_db:
+    image: postgres:16.1-alpine
+    container_name: kdg_db
+    restart: always
+    environment:
+      POSTGRES_DB: kdg_db
+      POSTGRES_USER: kdg_user
+      POSTGRES_PASSWORD: kdg_pass
+    ports:
+      - "54321:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  service_kdg_rabbitmq:
+    image: rabbitmq:3-management
+    container_name: service_kdg_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"  # main RabbitMQ port
+      - "15672:15762" # management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - backend
+
+
+
+networks:
+  backend:
+    driver: bridge
