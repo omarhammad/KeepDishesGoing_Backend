@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Restaurant {
 
-    private Long id;
+    private UUID id;
     private String name;
     private Email email;
     private Address address;
@@ -26,11 +26,11 @@ public class Restaurant {
         this.dishes = new ArrayList<>();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -116,5 +116,23 @@ public class Restaurant {
 
     public void setOwner(Owner owner) {
         this.owner = owner;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email=" + email +
+                ", address=" + address +
+                ", resPictureUrl='" + resPictureUrl + '\'' +
+                ", dayOpeningHours=" + dayOpeningHours +
+                ", manualOpening=" + manualOpening +
+                ", cuisine=" + cuisine +
+                ", defaultPrepTime=" + defaultPrepTime +
+                ", dishes=" + dishes +
+                ", owner=" + owner +
+                '}';
     }
 }

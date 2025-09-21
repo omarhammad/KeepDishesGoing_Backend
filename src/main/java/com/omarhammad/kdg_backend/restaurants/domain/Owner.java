@@ -13,6 +13,16 @@ public class Owner {
     private String password;
 
 
+    public Owner(Long id, String firstName, String lastName, Email email, String phoneNumber, String username, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.password = password;
+    }
+
     public Owner() {
     }
 
@@ -70,5 +80,18 @@ public class Owner {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Owner{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email=" + email +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
