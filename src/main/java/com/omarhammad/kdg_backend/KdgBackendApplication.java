@@ -11,7 +11,7 @@ import org.springframework.modulith.core.ApplicationModules;
 @Modulith
 public class KdgBackendApplication {
 
-    private Logger log = LoggerFactory.getLogger(KdgBackendApplication.class);
+    private final Logger log = LoggerFactory.getLogger(KdgBackendApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(KdgBackendApplication.class, args);
