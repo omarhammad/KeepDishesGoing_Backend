@@ -1,12 +1,11 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.out;
 
-import com.omarhammad.kdg_backend.common.Email;
+import com.omarhammad.kdg_backend.common.sharedDomain.Email;
 import com.omarhammad.kdg_backend.restaurants.domain.Owner;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadOwnerData;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantsData;
+import com.omarhammad.kdg_backend.restaurants.ports.out.SaveRestaurantData;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,15 +13,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class inMemoryAdapter implements LoadRestaurantData, LoadOwnerData {
+public class inMemoryAdapter implements SaveRestaurantData, LoadRestaurantsData, LoadOwnerData {
 
     private final List<Restaurant> restaurants;
-    private final Logger logger;
     public List<Owner> owners;
 
     public inMemoryAdapter() {
         this.restaurants = new ArrayList<>();
-        this.logger = LoggerFactory.getLogger(inMemoryAdapter.class);
         this.owners = new ArrayList<>(List.of(new Owner(
                         1L,
                         "Omar",
@@ -58,18 +55,16 @@ public class inMemoryAdapter implements LoadRestaurantData, LoadOwnerData {
     public void saveRestaurant(Restaurant restaurant) {
         restaurant.setId(UUID.randomUUID());
         restaurants.add(restaurant);
-        showRestaurants();
     }
 
-
-    public void showRestaurants() {
-        restaurants.forEach(restaurant -> logger.info("{}", restaurant));
-
-    }
 
     @Override
     public Owner findOwnerById(Long ownerId) {
         return owners.stream().filter(owner -> owner.getId().equals(ownerId)).findFirst().get();
     }
 
+    @Override
+    public List<Restaurant> findAllRestaurants() {
+        return this.restaurants;
+    }
 }

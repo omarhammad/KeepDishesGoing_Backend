@@ -1,6 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
-import com.omarhammad.kdg_backend.common.Email;
+import com.omarhammad.kdg_backend.common.sharedDomain.Email;
 
 public class Owner {
 
