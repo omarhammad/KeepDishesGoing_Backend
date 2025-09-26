@@ -2,6 +2,7 @@ package com.omarhammad.kdg_backend.restaurants.domain;
 
 import com.omarhammad.kdg_backend.common.sharedDomain.Address;
 import com.omarhammad.kdg_backend.common.sharedDomain.Email;
+import com.omarhammad.kdg_backend.common.sharedDomain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.utils.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.utils.Day;
 
@@ -9,7 +10,7 @@ import java.util.*;
 
 public class Restaurant {
 
-    private UUID id;
+    private Id id;
     private String name;
     private Email email;
     private Address address;
@@ -26,11 +27,11 @@ public class Restaurant {
         this.dishes = new ArrayList<>();
     }
 
-    public UUID getId() {
+    public Id getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Id id) {
         this.id = id;
     }
 

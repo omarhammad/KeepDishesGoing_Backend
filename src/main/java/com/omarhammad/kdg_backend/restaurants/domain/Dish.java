@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
+import com.omarhammad.kdg_backend.common.sharedDomain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.utils.DishType;
 import com.omarhammad.kdg_backend.restaurants.domain.utils.FoodTag;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class Dish {
 
-    private Long id;
+    private Id id;
     private String name;
     private DishType dishType;
     private final List<FoodTag> foodTags;
@@ -25,11 +26,11 @@ public class Dish {
         this.foodTags = new ArrayList<>();
     }
 
-    public Long getId() {
+    public Id getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Id id) {
         this.id = id;
     }
 

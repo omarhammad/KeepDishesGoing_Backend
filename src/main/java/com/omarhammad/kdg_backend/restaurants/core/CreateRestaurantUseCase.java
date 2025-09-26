@@ -1,11 +1,14 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
+import com.omarhammad.kdg_backend.common.sharedDomain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.ports.in.CreateRestaurantCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.ICreateRestaurantUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadOwnerData;
 import com.omarhammad.kdg_backend.restaurants.ports.out.SaveRestaurantData;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class CreateRestaurantUseCase implements ICreateRestaurantUseCase {
@@ -21,7 +24,7 @@ public class CreateRestaurantUseCase implements ICreateRestaurantUseCase {
     }
 
 
-    /*        http POST :8080/api/restaurants   name="La Piazza"   email="contact@lapiazza.com"   resPictureUrl="https://example.com/images/lapiazza.jpg"   cuisine="ITALIAN"   defaultPrepTime:=30   ownerId:=1   address:='{
+/*            http POST :8080/api/restaurants   name="La Piazza"   email="contact@lapiazza.com"   resPictureUrl="https://example.com/images/lapiazza.jpg"   cuisine="ITALIAN"   defaultPrepTime:=30   ownerId="1494f798-c30a-4a6d-ac7d-502ff746c9b5"   address:='{
                 "street": "Main Street",
                 "number": "42",
                 "postalCode": "2000",
@@ -47,7 +50,8 @@ public class CreateRestaurantUseCase implements ICreateRestaurantUseCase {
         cmd.dayOpeningHours().forEach(restaurant::addOpeningHoursForDay);
         restaurant.setCuisine(cmd.cuisine());
         restaurant.setDefaultPrepTime(cmd.defaultPrepTime());
-        restaurant.setOwner(loadOwnerData.findOwnerById(cmd.ownerId()));
+        Id ownerId = new Id(UUID.fromString(cmd.ownerId()));
+        restaurant.setOwner(loadOwnerData.findOwnerById(ownerId));
 
         saveRestaurantData.saveRestaurant(restaurant);
 

@@ -1,10 +1,11 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
 import com.omarhammad.kdg_backend.common.sharedDomain.Email;
+import com.omarhammad.kdg_backend.common.sharedDomain.Id;
 
 public class Owner {
 
-    private Long id;
+    private Id id;
     private String firstName;
     private String lastName;
     private Email email;
@@ -13,24 +14,24 @@ public class Owner {
     private String password;
 
 
-    public Owner(Long id, String firstName, String lastName, Email email, String phoneNumber, String username, String password) {
-        this.id = id;
+    public Owner(Id id, String firstName, String lastName, Email email, String phoneNumber, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
+        this.id = id;
     }
 
     public Owner() {
     }
 
-    public Long getId() {
+    public Id getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Id id) {
         this.id = id;
     }
 

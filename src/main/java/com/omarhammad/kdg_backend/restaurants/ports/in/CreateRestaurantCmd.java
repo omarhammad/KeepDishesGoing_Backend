@@ -15,7 +15,7 @@ public record CreateRestaurantCmd(String name,
                                   Map<Day, OpeningHours> dayOpeningHours,
                                   Cuisine cuisine,
                                   int defaultPrepTime,
-                                  long ownerId) {
+                                  String ownerId) {
 
 
 }
