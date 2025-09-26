@@ -6,7 +6,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.utils.FoodTag;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record CreateDishCmd(
+public record CreateDishDraftCmd(
         String name,
         DishType dishType,
         List<FoodTag> foodTags,

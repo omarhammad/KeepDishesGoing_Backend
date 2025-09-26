@@ -1,11 +1,10 @@
 package com.omarhammad.kdg_backend.restaurants.ports.in;
 
 import com.omarhammad.kdg_backend.common.sharedDomain.Id;
-import com.omarhammad.kdg_backend.restaurants.domain.Dish;
+import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 
-public interface ICreateDishDraftUseCase {
+public interface IFindRestaurantById {
 
-    void createDish(Id restaurantId, CreateDishDraftCmd cmd) throws EntityNotFoundException;
-
+    Restaurant findRestaurantById(Id restaruantId) throws EntityNotFoundException;
 }

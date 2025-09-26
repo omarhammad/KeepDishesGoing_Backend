@@ -8,8 +8,6 @@ import com.omarhammad.kdg_backend.restaurants.ports.out.LoadOwnerData;
 import com.omarhammad.kdg_backend.restaurants.ports.out.SaveRestaurantData;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class CreateRestaurantUseCase implements ICreateRestaurantUseCase {
 
@@ -24,21 +22,7 @@ public class CreateRestaurantUseCase implements ICreateRestaurantUseCase {
     }
 
 
-/*            http POST :8080/api/restaurants   name="La Piazza"   email="contact@lapiazza.com"   resPictureUrl="https://example.com/images/lapiazza.jpg"   cuisine="ITALIAN"   defaultPrepTime:=30   ownerId="1494f798-c30a-4a6d-ac7d-502ff746c9b5"   address:='{
-                "street": "Main Street",
-                "number": "42",
-                "postalCode": "2000",
-                "city": "Antwerp",
-                "country": "Belgium"
-    }'   dayOpeningHours:='{
-            "MONDAY": { "open": "11:00", "close": "22:00" },
-            "TUESDAY": { "open": "11:00", "close": "22:00" },
-            "WEDNESDAY": { "open": "11:00", "close": "22:00" },
-            "THURSDAY": { "open": "11:00", "close": "22:00" },
-            "FRIDAY": { "open": "11:00", "close": "23:00" },
-            "SATURDAY": { "open": "12:00", "close": "23:00" },
-            "SUNDAY": { "open": "12:00", "close": "21:00" }
-            }'*/
+
     @Override
     public void CreateRestaurant(CreateRestaurantCmd cmd) {
 
@@ -50,7 +34,7 @@ public class CreateRestaurantUseCase implements ICreateRestaurantUseCase {
         cmd.dayOpeningHours().forEach(restaurant::addOpeningHoursForDay);
         restaurant.setCuisine(cmd.cuisine());
         restaurant.setDefaultPrepTime(cmd.defaultPrepTime());
-        Id ownerId = new Id(UUID.fromString(cmd.ownerId()));
+        Id ownerId = new Id(cmd.ownerId());
         restaurant.setOwner(loadOwnerData.findOwnerById(ownerId));
 
         saveRestaurantData.saveRestaurant(restaurant);
