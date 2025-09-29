@@ -5,9 +5,9 @@ import com.omarhammad.kdg_backend.restaurants.domain.Dish;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.CreateDishDraftCmd;
-import com.omarhammad.kdg_backend.restaurants.ports.in.ICreateDishDraftUseCase;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantById;
-import com.omarhammad.kdg_backend.restaurants.ports.out.SaveDishDraft;
+import com.omarhammad.kdg_backend.restaurants.ports.in.CreateDishDraftUseCase;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantByIdPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.SaveDishDraftPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +15,20 @@ import java.util.Objects;
 
 @Service
 @AllArgsConstructor
-public class CreateDishDraftUseCase implements ICreateDishDraftUseCase {
+public class DefaultCreateDishDraftUseCase implements CreateDishDraftUseCase {
 
 
-    private final SaveDishDraft saveDishDraft;
-    private final LoadRestaurantById loadRestaurantById;
+    private final SaveDishDraftPort saveDishDraftPort;
+    private final LoadRestaurantByIdPort loadRestaurantByIdPort;
 
     @Override
-    public void createDish(Id restaurantId, CreateDishDraftCmd cmd) throws EntityNotFoundException {
+    public void createDish(Id<Restaurant> restaurantId, CreateDishDraftCmd cmd) throws EntityNotFoundException {
 
-        Restaurant restaurant = loadRestaurantById.findRestaurantBYId(restaurantId);
-        if (Objects.isNull(restaurant)) {
-            throw new EntityNotFoundException("Restaurant {%s} not found".formatted(restaurantId.value()));
-        }
+        loadRestaurantByIdPort.findRestaurantById(restaurantId)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant {%s} not found".formatted(restaurantId.value())));
 
         Dish dish = new Dish();
+        dish.setId(Id.<Dish>createNewId());
         dish.setName(cmd.name());
         dish.setDishType(cmd.dishType());
         cmd.foodTags().forEach(dish::addFoodTag);
@@ -37,7 +36,7 @@ public class CreateDishDraftUseCase implements ICreateDishDraftUseCase {
         dish.setPrice(cmd.price());
         dish.setPictureUrl(cmd.pictureUrl());
 
-        saveDishDraft.saveDishDraft(restaurantId, dish);
+        saveDishDraftPort.save(restaurantId, dish);
 
     }
 }

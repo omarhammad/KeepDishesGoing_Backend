@@ -1,35 +1,38 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
 import com.omarhammad.kdg_backend.common.sharedDomain.Id;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.DishDTO;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.OwnerDTO;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.RestaurantDTO;
 import com.omarhammad.kdg_backend.restaurants.domain.Dish;
 import com.omarhammad.kdg_backend.restaurants.domain.Owner;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
-import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/restaurants")
 @AllArgsConstructor
 public class RestaurantController {
 
-    private final ICreateRestaurantUseCase createRestaurantUseCase;
-    private final IFindAllRestaurants findAllRestaurantsPort;
-    private final ICreateDishDraftUseCase createDishDraftUseCase;
-    private final IFindRestaurantById findRestaurantById;
+    private final CreateRestaurantUseCase createRestaurantUseCase;
+    private final FindAllRestaurantsUseCase findAllRestaurantsUseCasePort;
+    private final CreateDishDraftUseCase createDishDraftUseCase;
+    private final FindRestaurantByIdUseCase findRestaurantByIdUseCase;
+    private final EditDishDraftUseCase editDishDraftUseCase;
+    private final FindDishForRestaurantByIdUseCase findDishForRestaurantByIdUseCase;
+    private final Logger log = LoggerFactory.getLogger(RestaurantController.class);
 
     @GetMapping
     public ResponseEntity<List<RestaurantDTO>> findAllRestaurants() {
-        List<Restaurant> restaurants = findAllRestaurantsPort.findAllRestaurants();
+        List<Restaurant> restaurants = findAllRestaurantsUseCasePort.findAllRestaurants();
         List<RestaurantDTO> restaurantDTOS = restaurants
                 .stream()
                 .map(restaurant -> {
@@ -49,13 +52,17 @@ public class RestaurantController {
                                     owner.getPhoneNumber()));
                 })
                 .toList();
+
+        if (restaurantDTOS.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
         return ResponseEntity.status(HttpStatus.OK).body(restaurantDTOS);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantDTO> findRestaurantById(@PathVariable String id) {
-        Id restuarantId = new Id(id);
-        Restaurant restaurant = findRestaurantById.findRestaurantById(restuarantId);
+        Id<Restaurant> restuarantId = new Id<>(id);
+        Restaurant restaurant = findRestaurantByIdUseCase.findRestaurantById(restuarantId);
         Owner owner = restaurant.getOwner();
 
         RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant.getId().value(),
@@ -74,43 +81,83 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(restaurantDTO);
     }
 
-    /*                       http POST :8080/api/restaurants   name="La Piazza"   email="contact@lapiazza.com"   resPictureUrl="https://example.com/images/lapiazza.jpg"   cuisine="ITALIAN"   defaultPrepTime:=30   ownerId="1494f798-c30a-4a6d-ac7d-502ff746c9b5"   address:='{
-                         "street": "Main Street",
-                         "number": "42",
-                         "postalCode": "2000",
-                         "city": "Antwerp",
-                         "country": "Belgium"
-             }'   dayOpeningHours:='{
-                     "MONDAY": { "open": "11:00", "close": "22:00" },
-                     "TUESDAY": { "open": "11:00", "close": "22:00" },
-                     "WEDNESDAY": { "open": "11:00", "close": "22:00" },
-                     "THURSDAY": { "open": "11:00", "close": "22:00" },
-                     "FRIDAY": { "open": "11:00", "close": "23:00" },
-                     "SATURDAY": { "open": "12:00", "close": "23:00" },
-                     "SUNDAY": { "open": "12:00", "close": "21:00" }
-                     }'*/
+    /* http POST :8080/api/restaurants   name="La Piazza"   email="contact@lapiazza.com"   resPictureUrl="https://example.com/images/lapiazza.jpg"   cuisine="ITALIAN"   defaultPrepTime:=30   ownerId="1494f798-c30a-4a6d-ac7d-502ff746c9b5"   address:='{
+                             "street": "Main Street",
+                             "number": "42",
+                             "postalCode": "2000",
+                             "city": "Antwerp",
+                             "country": "Belgium"
+                 }'   dayOpeningHours:='{
+                         "MONDAY": { "open": "11:00", "close": "22:00" },
+                         "TUESDAY": { "open": "11:00", "close": "22:00" },
+                         "WEDNESDAY": { "open": "11:00", "close": "22:00" },
+                         "THURSDAY": { "open": "11:00", "close": "22:00" },
+                         "FRIDAY": { "open": "11:00", "close": "23:00" },
+                         "SATURDAY": { "open": "12:00", "close": "23:00" },
+                         "SUNDAY": { "open": "12:00", "close": "21:00" }
+                         }'*/
     @PostMapping
     public ResponseEntity<Void> createNewRestaurant(@RequestBody CreateRestaurantCmd cmd) {
         createRestaurantUseCase.CreateRestaurant(cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/{id}/dishes/{dhId}")
+    public ResponseEntity<DishDTO> findDishOfARestaurant(@PathVariable String dhId, @PathVariable String id) {
+        Id<Restaurant> restaurantId = new Id<>(id);
+        Id<Dish> dishId = new Id<>(dhId);
+        Dish dish = findDishForRestaurantByIdUseCase.findDishOfARestaurantById(restaurantId, dishId);
+        DishDTO dto = new DishDTO(
+                dish.getId().value(),
+                dish.getName(),
+                dish.getDishType(),
+                dish.getFoodTags(),
+                dish.getDescription(),
+                dish.getPrice(),
+                dish.getPictureUrl()
+        );
 
-    /*
-            http POST :8080/api/restaurants/1494f798-c30a-4a6d-ac7d-502ff746c9b5/dish \
-            name="Margherita Pizza" \
-            dishType="MAIN" \
-            foodTags:='["VEGAN","GLUTEN"]' \
-            description="Classic pizza with tomato, basil and vegan cheese" \
-            price:=12.50 \
-            pictureUrl="https://example.com/images/margherita.jpg"
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    /* http POST :8080/api/restaurants/4b511c8c-d762-4d15-bcf4-9a691c0be90e/dishes \
+                   name="Margherita Pizza" \
+                   dishType="MAIN" \
+                   foodTags:='["VEGAN","GLUTEN"]' \
+                   description="Classic pizza with tomato, basil and vegan cheese" \
+                   price:=12.50 \
+                   pictureUrl="https://example.com/images/margherita.jpg"
     */
-    @PostMapping("/{id}/dish")
-    public ResponseEntity<Void> createNewDish(@PathVariable String id, @RequestBody CreateDishDraftCmd cmd) {
-        Id restaurntId = new Id(id);
+    @PostMapping("/{id}/dishes")
+    public ResponseEntity<Void> createNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftCmd cmd) {
+        Id<Restaurant> restaurntId = new Id<>(id);
         createDishDraftUseCase.createDish(restaurntId, cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /*
+    http PUT :8080/api/restaurants/4b511c8c-d762-4d15-bcf4-9a691c0be90e/dishes/d707724f-8bb6-43d3-ba04-ecc74cc444bc \
+    id="d707724f-8bb6-43d3-ba04-ecc74cc444bc" \
+    name="Margherita Pizza - Updated" \
+    dishType="MAIN" \
+    foodTags:='["VEGAN","LACTOSE"]' \
+    description="Updated description: with extra basil and olive oil" \
+    price:=13.75 \
+    pictureUrl="https://example.com/images/margherita-updated.jpg"
+    */
+    @PutMapping("/{id}/dishes/{dId}")
+    public ResponseEntity<Void> updateDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftCmd cmd) {
+
+        if (!dId.equals(cmd.id()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+        Id<Restaurant> restaurantId = new Id<>(id);
+        Id<Dish> dishId = new Id<>(dId);
+        editDishDraftUseCase.editDish(restaurantId, dishId, cmd);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+    // TODO : MAKE A FIND DISH BY ID SO THAT CREATE & EDIT CAN BE TESTED...
 
 }

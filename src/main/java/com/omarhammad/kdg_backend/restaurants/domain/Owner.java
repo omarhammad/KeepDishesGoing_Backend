@@ -5,7 +5,7 @@ import com.omarhammad.kdg_backend.common.sharedDomain.Id;
 
 public class Owner {
 
-    private Id id;
+    private Id<Owner> id;
     private String firstName;
     private String lastName;
     private Email email;
@@ -14,7 +14,7 @@ public class Owner {
     private String password;
 
 
-    public Owner(Id id, String firstName, String lastName, Email email, String phoneNumber, String username, String password) {
+    public Owner(Id<Owner> id, String firstName, String lastName, Email email, String phoneNumber, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -27,11 +27,11 @@ public class Owner {
     public Owner() {
     }
 
-    public Id getId() {
+    public Id<Owner> getId() {
         return id;
     }
 
-    public void setId(Id id) {
+    public void setId(Id<Owner> id) {
         this.id = id;
     }
 

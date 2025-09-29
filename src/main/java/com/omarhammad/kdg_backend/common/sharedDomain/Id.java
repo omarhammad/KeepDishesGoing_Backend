@@ -1,23 +1,25 @@
 package com.omarhammad.kdg_backend.common.sharedDomain;
 
+import com.omarhammad.kdg_backend.common.sharedDomain.exceptions.InvalidUUIDFormatException;
+
 import java.util.Objects;
 import java.util.UUID;
 
-public record Id(String value) {
+public record Id<T>(String value) {
 
     public Id(String value) {
         this.value = Objects.requireNonNull(value, "ID can't be null");
         try {
             UUID.fromString(value);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid id, it has to be UUID");
+            throw new InvalidUUIDFormatException("Invalid id, it has to be UUID");
         }
 
 
     }
 
-    public static Id createNewId() {
-        return new Id(UUID.randomUUID().toString());
+    public static <T> Id<T> createNewId() {
+        return new Id<>(UUID.randomUUID().toString());
     }
 
     @Override

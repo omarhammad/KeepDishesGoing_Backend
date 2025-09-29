@@ -4,7 +4,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 
 import java.util.List;
 
-public interface IFindAllRestaurants {
+public interface FindAllRestaurantsUseCase {
 
 
     List<Restaurant> findAllRestaurants();

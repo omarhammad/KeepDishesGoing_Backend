@@ -4,7 +4,7 @@ import com.omarhammad.kdg_backend.common.sharedDomain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 
-public interface IFindRestaurantById {
+public interface FindRestaurantByIdUseCase {
 
-    Restaurant findRestaurantById(Id restaruantId) throws EntityNotFoundException;
+    Restaurant findRestaurantById(Id<Restaurant> restaruantId) throws EntityNotFoundException;
 }
