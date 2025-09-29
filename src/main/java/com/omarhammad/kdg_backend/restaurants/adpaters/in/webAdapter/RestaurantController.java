@@ -28,10 +28,11 @@ public class RestaurantController {
     private final FindRestaurantByIdUseCase findRestaurantByIdUseCase;
     private final EditDishDraftUseCase editDishDraftUseCase;
     private final FindDishForRestaurantByIdUseCase findDishForRestaurantByIdUseCase;
+    private final FindDishesByRestaurantIdUseCase findDishesByRestaurantIdUseCase;
     private final Logger log = LoggerFactory.getLogger(RestaurantController.class);
 
     @GetMapping
-    public ResponseEntity<List<RestaurantDTO>> findAllRestaurants() {
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
         List<Restaurant> restaurants = findAllRestaurantsUseCasePort.findAllRestaurants();
         List<RestaurantDTO> restaurantDTOS = restaurants
                 .stream()
@@ -60,7 +61,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantDTO> findRestaurantById(@PathVariable String id) {
+    public ResponseEntity<RestaurantDTO> getRestaurantById(@PathVariable String id) {
         Id<Restaurant> restuarantId = new Id<>(id);
         Restaurant restaurant = findRestaurantByIdUseCase.findRestaurantById(restuarantId);
         Owner owner = restaurant.getOwner();
@@ -97,13 +98,37 @@ public class RestaurantController {
                          "SUNDAY": { "open": "12:00", "close": "21:00" }
                          }'*/
     @PostMapping
-    public ResponseEntity<Void> createNewRestaurant(@RequestBody CreateRestaurantCmd cmd) {
+    public ResponseEntity<Void> makeNewRestaurant(@RequestBody CreateRestaurantCmd cmd) {
         createRestaurantUseCase.CreateRestaurant(cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/{id}/dishes")
+    public ResponseEntity<List<DishDTO>> getAllRestaurantDishes(@PathVariable String id) {
+        Id<Restaurant> restaurantId = new Id<>(id);
+        List<Dish> dishes = findDishesByRestaurantIdUseCase.findDishesByRestaurantId(restaurantId);
+
+        if (dishes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        List<DishDTO> dishDTOS = dishes.stream().map(dish -> new DishDTO(
+                dish.getId().value(),
+                dish.getName(),
+                dish.getDishType(),
+                dish.getFoodTags(),
+                dish.getDescription(),
+                dish.getPrice(),
+                dish.getPictureUrl()
+        )).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(dishDTOS);
+
+    }
+
     @GetMapping("/{id}/dishes/{dhId}")
-    public ResponseEntity<DishDTO> findDishOfARestaurant(@PathVariable String dhId, @PathVariable String id) {
+    public ResponseEntity<DishDTO> getDishOfARestaurant(@PathVariable String dhId, @PathVariable String id) {
+
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dhId);
         Dish dish = findDishForRestaurantByIdUseCase.findDishOfARestaurantById(restaurantId, dishId);
@@ -120,7 +145,7 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    /* http POST :8080/api/restaurants/4b511c8c-d762-4d15-bcf4-9a691c0be90e/dishes \
+    /* http POST :8080/api/restaurants/17b354fc-13b6-4eb0-b6f4-0a3fab83e615/dishes \
                    name="Margherita Pizza" \
                    dishType="MAIN" \
                    foodTags:='["VEGAN","GLUTEN"]' \
@@ -129,7 +154,7 @@ public class RestaurantController {
                    pictureUrl="https://example.com/images/margherita.jpg"
     */
     @PostMapping("/{id}/dishes")
-    public ResponseEntity<Void> createNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftCmd cmd) {
+    public ResponseEntity<Void> makeNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftCmd cmd) {
         Id<Restaurant> restaurntId = new Id<>(id);
         createDishDraftUseCase.createDish(restaurntId, cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -146,7 +171,7 @@ public class RestaurantController {
     pictureUrl="https://example.com/images/margherita-updated.jpg"
     */
     @PutMapping("/{id}/dishes/{dId}")
-    public ResponseEntity<Void> updateDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftCmd cmd) {
+    public ResponseEntity<Void> editDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftCmd cmd) {
 
         if (!dId.equals(cmd.id()))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -158,6 +183,12 @@ public class RestaurantController {
     }
 
 
-    // TODO : MAKE A FIND DISH BY ID SO THAT CREATE & EDIT CAN BE TESTED...
+    // TODO (MONDAY 30th SEP)
+    //  1) MAKE FIND ALL DISHES FOR A RESTAURANT, THEN START WITH
+    //  2) PUBLISH/UNPUBLISH,
+    //  3) APPLY_PUBLISH_ON_ALL_PENDING_MULTI
+    //  4) SCHEDULE SELECTED DISHES TO PUBLISH
+    //  5) MARK DISH IN_STOCK/OUT_OF_STOCK
+
 
 }

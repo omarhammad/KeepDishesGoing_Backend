@@ -15,7 +15,8 @@ import java.util.*;
 @Slf4j
 public class inMemoryAdapter implements
         SaveRestaurantPort, LoadRestaurantsPort, LoadOwnerPort,
-        SaveDishDraftPort, EditDishDraftPort, LoadDishByIdPort, LoadRestaurantByIdPort, LoadRestaurantByOwnerIdPort {
+        SaveDishDraftPort, EditDishDraftPort, LoadDishesByRestaurantIdPort,
+        LoadDishByIdPort, LoadRestaurantByIdPort, LoadRestaurantByOwnerIdPort {
 
     private final List<Restaurant> restaurants;
     private final List<Owner> owners;
@@ -111,5 +112,10 @@ public class inMemoryAdapter implements
                 .stream()
                 .filter((dish -> dish.getId().equals(dishId)))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<List<Dish>> findDishesByRestaurantId(Id<Restaurant> restaurantId) {
+        return Optional.ofNullable(dishesRestauarntMap.get(restaurantId));
     }
 }
