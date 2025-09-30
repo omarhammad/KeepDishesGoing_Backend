@@ -1,6 +1,7 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.*;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.generic.ResponseDTO;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.CreateDishDraftRequest;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.CreateRestaurantRequest;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.EditDishDraftRequest;
@@ -110,10 +111,11 @@ public class RestaurantController {
     }'
     */
     @PostMapping
-    public ResponseEntity<Void> makeNewRestaurant(@RequestBody CreateRestaurantRequest request) {
+    public ResponseEntity<ResponseDTO> makeNewRestaurant(@RequestBody CreateRestaurantRequest request) {
         CreateRestaurantCmd cmd = requestMapper.toCreateRestaurantCmd(request);
         createRestaurantUseCase.CreateRestaurant(cmd);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Restaurant created successfully"));
     }
 
     @GetMapping("/{id}/dishes")
@@ -167,16 +169,17 @@ public class RestaurantController {
                    pictureUrl="https://example.com/images/margherita.jpg"
     */
     @PostMapping("/{id}/dishes")
-    public ResponseEntity<Void> makeNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftRequest request) {
+    public ResponseEntity<ResponseDTO> makeNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftRequest request) {
         Id<Restaurant> restaurntId = new Id<>(id);
         CreateDishDraftCmd cmd = requestMapper.toCreateDishDraftCmd(request);
         createDishDraftUseCase.createDish(restaurntId, cmd);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Dish draft created successfully"));
     }
 
     /*
     http PUT :8080/api/restaurants/9163e064-bff1-4abc-b353-a28cabd1cf80/dishes/ddfbf7d6-156f-45f5-8e04-7265410fcd04 \
-    id="ddfbf7d6-156f-45f5-8e04-7265410fcd04" \
+    id="d1fbf7d6-156f-45f5-8e04-7265410fcd04" \
     name="Margherita Pizza - Updated" \
     dishType="MAIN" \
     foodTags:='["VEGAN","LACTOSE"]' \
@@ -185,18 +188,21 @@ public class RestaurantController {
     pictureUrl="https://example.com/images/margherita-updated.jpg"
     */
     @PutMapping("/{id}/dishes/{dId}")
-    public ResponseEntity<Void> editDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftRequest request) {
-
+    public ResponseEntity<ResponseDTO> editDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftRequest request) {
 
         if (!dId.equals(request.id()))
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponseDTO(HttpStatus.CONFLICT.value(),
+                            "Conflict in the ID between request body and path"));
 
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dId);
         EditDishDraftCmd cmd = requestMapper.toEditDishDraftCmd(request);
         editDishDraftUseCase.editDish(restaurantId, dishId, cmd);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ResponseDTO(HttpStatus.NO_CONTENT.value(), "Dish draft updated successfully"));
     }
+
 
 
     // TODO (Tuesday 30th SEP)

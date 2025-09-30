@@ -1,20 +1,17 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidEnumValueException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidUUIDFormatException;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.ErrorResponseDTO;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.generic.ErrorResponseDTO;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.BusinessRuleViolationException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

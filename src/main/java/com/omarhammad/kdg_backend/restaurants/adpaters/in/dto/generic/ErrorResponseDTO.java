@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.restaurants.adpaters.in.dto;
+package com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.generic;
 
 import org.springframework.http.HttpStatus;
 
