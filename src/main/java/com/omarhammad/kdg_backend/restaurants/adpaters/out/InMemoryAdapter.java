@@ -15,7 +15,7 @@ import java.util.*;
 @Slf4j
 public class InMemoryAdapter implements
         SaveRestaurantPort, LoadRestaurantsPort, LoadOwnerPort,
-        SaveDishDraftPort, EditDishDraftPort, LoadDishesByRestaurantIdPort,
+        SaveDishDraftPort, EditDishPort, LoadDishesByRestaurantIdPort,
         LoadDishByIdPort, LoadRestaurantByIdPort, LoadRestaurantByOwnerIdPort {
 
     private final List<Restaurant> restaurants;
@@ -75,7 +75,6 @@ public class InMemoryAdapter implements
 
     @Override
     public void save(Id<Restaurant> restaurantId, Dish dish) {
-        log.info("New Dish Id: {}", dish.getId().value());
         dishesRestauarntMap.computeIfAbsent(restaurantId, id -> new ArrayList<>()).add(dish);
     }
 
@@ -97,10 +96,12 @@ public class InMemoryAdapter implements
 
     @Override
     public void edit(Id<Restaurant> restaurantId, Dish updatedDish) {
+
         List<Dish> dishes = dishesRestauarntMap.get(restaurantId);
         for (int i = 0; i < dishes.size(); i++) {
             if (dishes.get(i).getId().equals(updatedDish.getId())) {
                 dishes.set(i, updatedDish);
+                log.info("Updated Dish: {}",dishes.get(i));
                 break;
             }
         }

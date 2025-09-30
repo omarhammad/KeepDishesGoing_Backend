@@ -2,24 +2,15 @@ package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.*;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.generic.ResponseDTO;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.CreateDishDraftRequest;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.CreateRestaurantRequest;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.EditDishDraftRequest;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.*;
 import com.omarhammad.kdg_backend.restaurants.domain.*;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
 import com.omarhammad.kdg_backend.restaurants.ports.in.*;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/restaurants")
@@ -33,6 +24,8 @@ public class RestaurantController {
     private final EditDishDraftUseCase editDishDraftUseCase;
     private final FindDishForRestaurantByIdUseCase findDishForRestaurantByIdUseCase;
     private final FindDishesByRestaurantIdUseCase findDishesByRestaurantIdUseCase;
+    private final SetDishPublishStatusUseCase setDishPublishStatusUseCase;
+    private final SetDishStockStatusUseCase setDishStockStatusUseCase;
     private final RestaurantRequestMapper requestMapper;
 
     @GetMapping
@@ -160,7 +153,7 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    /* http POST :8080/api/restaurants/9163e064-bff1-4abc-b353-a28cabd1cf80/dishes \
+    /* http POST :8080/api/restaurants/c170ead7-c77c-40c3-8be6-17a5a8e17ea2/dishes \
                    name="Margherita Pizza" \
                    dishType="MAIN" \
                    foodTags:='["VEGAN","GLUTEN"]' \
@@ -178,16 +171,16 @@ public class RestaurantController {
     }
 
     /*
-    http PUT :8080/api/restaurants/9163e064-bff1-4abc-b353-a28cabd1cf80/dishes/ddfbf7d6-156f-45f5-8e04-7265410fcd04 \
-    id="d1fbf7d6-156f-45f5-8e04-7265410fcd04" \
+    http PATCH :8080/api/restaurants/c170ead7-c77c-40c3-8be6-17a5a8e17ea2/dishes/0c44ba6f-46a2-4231-8241-7c8ff9f78815 \
+    id="0c44ba6f-46a2-4231-8241-7c8ff9f78815" \
     name="Margherita Pizza - Updated" \
     dishType="MAIN" \
-    foodTags:='["VEGAN","LACTOSE"]' \
+    foodTags:='["VEGAN","GLUTSDEN"]' \
     description="Updated description: with extra basil and olive oil" \
-    price:=1000.75 \
+    price:=15.75 \
     pictureUrl="https://example.com/images/margherita-updated.jpg"
     */
-    @PutMapping("/{id}/dishes/{dId}")
+    @PatchMapping("/{id}/dishes/{dId}")
     public ResponseEntity<ResponseDTO> editDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftRequest request) {
 
         if (!dId.equals(request.id()))
@@ -198,19 +191,65 @@ public class RestaurantController {
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dId);
         EditDishDraftCmd cmd = requestMapper.toEditDishDraftCmd(request);
-        editDishDraftUseCase.editDish(restaurantId, dishId, cmd);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(new ResponseDTO(HttpStatus.NO_CONTENT.value(), "Dish draft updated successfully"));
+        editDishDraftUseCase.editDishDraft(restaurantId, dishId, cmd);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK.value(), "Dish draft updated successfully"));
     }
 
+    /*
+        http PATCH :8080/api/restaurants/c2547bab-bf76-431b-ace5-3450763e9113/dishes/9d34c045-2b74-4278-ab64-6f3b1f6b0e65/published \
+           isPublished:=true
+        */
+    @PatchMapping("/{id}/dishes/{dId}/published")
+    public ResponseEntity<ResponseDTO> setDishPublishStatus(@PathVariable String dId, @PathVariable String id, @RequestBody DishPublishStatusRequest request) {
 
+        Id<Restaurant> restaurantId = new Id<>(id);
+        Id<Dish> dishId = new Id<>(dId);
+
+        SetDishPublishStatusCmd cmd = new SetDishPublishStatusCmd(request.isPublished());
+        setDishPublishStatusUseCase.setPublishDishStatus(restaurantId, dishId, cmd);
+
+        String message;
+        if (request.isPublished()) {
+            message = "Dish published successfully";
+        } else {
+            message = "Dish unPublished successfully";
+
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK.value(), message));
+    }
+
+    /*
+    http PATCH :8080/api/restaurants/c2547bab-bf76-431b-ace5-3450763e9113/dishes/9d34c045-2b74-4278-ab64-6f3b1f6b0e65/stock \
+       isInStock:=true
+    */
+    @PatchMapping("/{id}/dishes/{dId}/stock")
+    public ResponseEntity<ResponseDTO> setDishStockStatus(@PathVariable String id, @PathVariable String dId, @RequestBody DishStockStatusRequest request) {
+        Id<Restaurant> restaurantId = new Id<>(id);
+        Id<Dish> dishId = new Id<>(dId);
+
+        SetDishStockStatusCmd cmd = new SetDishStockStatusCmd(request.isInStock());
+        setDishStockStatusUseCase.setDishStockStatus(restaurantId, dishId, cmd);
+        String message;
+
+        if (request.isInStock()) {
+            message = "Dish stock changed to {IN_STOCK} successfully";
+        } else {
+            message = "Dish stock changed to {OUT_OF_STOCK} successfully";
+
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK.value(), message));
+    }
 
     // TODO (Tuesday 30th SEP)
     //  1) MAKE FIND ALL DISHES FOR A RESTAURANT, THEN START WITH - DONE
-    //  2) PUBLISH/UNPUBLISH
-    //  3) APPLY_PUBLISH_ON_ALL_PENDING_MULTI
-    //  4) SCHEDULE SELECTED DISHES TO PUBLISH
-    //  5) MARK DISH IN_STOCK/OUT_OF_STOCK
+    //  2) PUBLISH/UNPUBLISH - DONE
+    //   3) MARK DISH IN_STOCK/OUT_OF_STOCK - DONE
+    //  4) APPLY_PUBLISH_ON_ALL_PENDING_MULTI
+    //  5) SCHEDULE SELECTED DISHES TO PUBLISH
 
 
 }

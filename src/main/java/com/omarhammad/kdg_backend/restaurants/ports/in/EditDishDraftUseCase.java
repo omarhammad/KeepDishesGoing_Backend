@@ -6,5 +6,5 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 
 public interface EditDishDraftUseCase {
 
-    void editDish(Id<Restaurant> restaurantId, Id<Dish> dishId, EditDishDraftCmd cmd);
+    void editDishDraft(Id<Restaurant> restaurantId, Id<Dish> dishId, EditDishDraftCmd cmd);
 }
