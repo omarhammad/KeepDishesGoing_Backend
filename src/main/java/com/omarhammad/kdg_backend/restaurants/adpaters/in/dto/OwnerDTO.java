@@ -1,6 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.dto;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Email;
+import com.omarhammad.kdg_backend.restaurants.domain.Email;
 
 public record OwnerDTO(String id,
                        String firstName,

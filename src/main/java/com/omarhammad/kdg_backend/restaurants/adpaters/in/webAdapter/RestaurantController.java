@@ -1,21 +1,24 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Id;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.DishDTO;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.OwnerDTO;
-import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.RestaurantDTO;
-import com.omarhammad.kdg_backend.restaurants.domain.Dish;
-import com.omarhammad.kdg_backend.restaurants.domain.Owner;
-import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.*;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.CreateDishDraftRequest;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.CreateRestaurantRequest;
+import com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter.request.EditDishDraftRequest;
+import com.omarhammad.kdg_backend.restaurants.domain.*;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
 import com.omarhammad.kdg_backend.restaurants.ports.in.*;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/restaurants")
@@ -29,7 +32,7 @@ public class RestaurantController {
     private final EditDishDraftUseCase editDishDraftUseCase;
     private final FindDishForRestaurantByIdUseCase findDishForRestaurantByIdUseCase;
     private final FindDishesByRestaurantIdUseCase findDishesByRestaurantIdUseCase;
-    private final Logger log = LoggerFactory.getLogger(RestaurantController.class);
+    private final RestaurantRequestMapper requestMapper;
 
     @GetMapping
     public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
@@ -82,23 +85,33 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(restaurantDTO);
     }
 
-    /* http POST :8080/api/restaurants   name="La Piazza"   email="contact@lapiazza.com"   resPictureUrl="https://example.com/images/lapiazza.jpg"   cuisine="ITALIAN"   defaultPrepTime:=30   ownerId="1494f798-c30a-4a6d-ac7d-502ff746c9b5"   address:='{
-                             "street": "Main Street",
-                             "number": "42",
-                             "postalCode": "2000",
-                             "city": "Antwerp",
-                             "country": "Belgium"
-                 }'   dayOpeningHours:='{
-                         "MONDAY": { "open": "11:00", "close": "22:00" },
-                         "TUESDAY": { "open": "11:00", "close": "22:00" },
-                         "WEDNESDAY": { "open": "11:00", "close": "22:00" },
-                         "THURSDAY": { "open": "11:00", "close": "22:00" },
-                         "FRIDAY": { "open": "11:00", "close": "23:00" },
-                         "SATURDAY": { "open": "12:00", "close": "23:00" },
-                         "SUNDAY": { "open": "12:00", "close": "21:00" }
-                         }'*/
+    /*http POST :8080/api/restaurants \
+    name="La Piazza" \
+    email="contact@lapiazza.com" \
+    resPictureUrl="https://example.com/images/lapiazza.jpg" \
+    cuisine="ITALIAN" \
+    defaultPrepTime:=30 \
+    ownerId="1494f798-c30a-4a6d-ac7d-502ff746c9b5" \
+    address:='{
+        "street": "Main Street",
+        "number": 42,
+        "postalCode": "2000",
+        "city": "Antwerp",
+        "country": "Belgium"
+    }' \
+    dayOpeningHoursMap:='{
+        "MONDAY": { "open": "11:00", "close": "22:00" },
+        "TUESDAY": { "open": "11:00", "close": "22:00" },
+        "WEDNESDAY": { "open": "11:00", "close": "22:00" },
+        "THURSDAY": { "open": "11:00", "close": "22:00" },
+        "FRIDAY": { "open": "11:00", "close": "23:00" },
+        "SATURDAY": { "open": "12:00", "close": "23:00" },
+        "SUNDAY": { "open": "12:00", "close": "21:00" }
+    }'
+    */
     @PostMapping
-    public ResponseEntity<Void> makeNewRestaurant(@RequestBody CreateRestaurantCmd cmd) {
+    public ResponseEntity<Void> makeNewRestaurant(@RequestBody CreateRestaurantRequest request) {
+        CreateRestaurantCmd cmd = requestMapper.toCreateRestaurantCmd(request);
         createRestaurantUseCase.CreateRestaurant(cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -145,7 +158,7 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    /* http POST :8080/api/restaurants/17b354fc-13b6-4eb0-b6f4-0a3fab83e615/dishes \
+    /* http POST :8080/api/restaurants/9163e064-bff1-4abc-b353-a28cabd1cf80/dishes \
                    name="Margherita Pizza" \
                    dishType="MAIN" \
                    foodTags:='["VEGAN","GLUTEN"]' \
@@ -154,38 +167,41 @@ public class RestaurantController {
                    pictureUrl="https://example.com/images/margherita.jpg"
     */
     @PostMapping("/{id}/dishes")
-    public ResponseEntity<Void> makeNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftCmd cmd) {
+    public ResponseEntity<Void> makeNewDishDraft(@PathVariable String id, @RequestBody CreateDishDraftRequest request) {
         Id<Restaurant> restaurntId = new Id<>(id);
+        CreateDishDraftCmd cmd = requestMapper.toCreateDishDraftCmd(request);
         createDishDraftUseCase.createDish(restaurntId, cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /*
-    http PUT :8080/api/restaurants/4b511c8c-d762-4d15-bcf4-9a691c0be90e/dishes/d707724f-8bb6-43d3-ba04-ecc74cc444bc \
-    id="d707724f-8bb6-43d3-ba04-ecc74cc444bc" \
+    http PUT :8080/api/restaurants/9163e064-bff1-4abc-b353-a28cabd1cf80/dishes/ddfbf7d6-156f-45f5-8e04-7265410fcd04 \
+    id="ddfbf7d6-156f-45f5-8e04-7265410fcd04" \
     name="Margherita Pizza - Updated" \
     dishType="MAIN" \
     foodTags:='["VEGAN","LACTOSE"]' \
     description="Updated description: with extra basil and olive oil" \
-    price:=13.75 \
+    price:=1000.75 \
     pictureUrl="https://example.com/images/margherita-updated.jpg"
     */
     @PutMapping("/{id}/dishes/{dId}")
-    public ResponseEntity<Void> editDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftCmd cmd) {
+    public ResponseEntity<Void> editDishDraft(@PathVariable String id, @PathVariable String dId, @RequestBody EditDishDraftRequest request) {
 
-        if (!dId.equals(cmd.id()))
+
+        if (!dId.equals(request.id()))
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dId);
+        EditDishDraftCmd cmd = requestMapper.toEditDishDraftCmd(request);
         editDishDraftUseCase.editDish(restaurantId, dishId, cmd);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 
-    // TODO (MONDAY 30th SEP)
-    //  1) MAKE FIND ALL DISHES FOR A RESTAURANT, THEN START WITH
-    //  2) PUBLISH/UNPUBLISH,
+    // TODO (Tuesday 30th SEP)
+    //  1) MAKE FIND ALL DISHES FOR A RESTAURANT, THEN START WITH - DONE
+    //  2) PUBLISH/UNPUBLISH
     //  3) APPLY_PUBLISH_ON_ALL_PENDING_MULTI
     //  4) SCHEDULE SELECTED DISHES TO PUBLISH
     //  5) MARK DISH IN_STOCK/OUT_OF_STOCK

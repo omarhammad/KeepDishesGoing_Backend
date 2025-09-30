@@ -1,8 +1,5 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Email;
-import com.omarhammad.kdg_backend.common.sharedDomain.Id;
-
 public class Owner {
 
     private Id<Owner> id;

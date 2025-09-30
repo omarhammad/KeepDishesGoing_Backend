@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.common.sharedDomain;
+package com.omarhammad.kdg_backend.restaurants.domain;
 
 public record Address(
         String street,

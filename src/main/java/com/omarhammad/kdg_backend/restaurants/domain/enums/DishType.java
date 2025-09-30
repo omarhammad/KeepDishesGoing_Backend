@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.restaurants.domain.utils;
+package com.omarhammad.kdg_backend.restaurants.domain.enums;
 
 public enum DishType {
     STARTER,

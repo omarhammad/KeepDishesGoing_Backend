@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.common.sharedDomain;
+package com.omarhammad.kdg_backend.restaurants.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

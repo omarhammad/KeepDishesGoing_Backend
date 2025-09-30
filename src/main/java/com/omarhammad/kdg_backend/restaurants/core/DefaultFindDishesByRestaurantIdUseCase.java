@@ -1,6 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Id;
+import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.Dish;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +29,12 @@ public class DefaultFindDishesByRestaurantIdUseCase implements FindDishesByResta
                 .orElseThrow(() ->
                         new EntityNotFoundException("Restaurant {%s} not found".formatted(restaurantId.value())));
 
-        return loadDishesByRestaurantIdPort.findDishesByRestaurantId(restaurantId).orElse(new ArrayList<>());
+        List<Dish> dishes = loadDishesByRestaurantIdPort.findDishesByRestaurantId(restaurantId);
+        if (Objects.isNull(dishes)) {
+            dishes = new ArrayList<>();
+        }
+
+        return dishes;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.omarhammad.kdg_backend.restaurants.ports.in;
 
-import com.omarhammad.kdg_backend.restaurants.domain.utils.DishType;
-import com.omarhammad.kdg_backend.restaurants.domain.utils.FoodTag;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.DishType;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.FoodTag;
 
 import java.math.BigDecimal;
 import java.util.List;

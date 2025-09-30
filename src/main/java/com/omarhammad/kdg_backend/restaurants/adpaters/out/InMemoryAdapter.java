@@ -1,7 +1,7 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.out;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Email;
-import com.omarhammad.kdg_backend.common.sharedDomain.Id;
+import com.omarhammad.kdg_backend.restaurants.domain.Email;
+import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.Dish;
 import com.omarhammad.kdg_backend.restaurants.domain.Owner;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
@@ -13,7 +13,7 @@ import java.util.*;
 
 @Repository
 @Slf4j
-public class inMemoryAdapter implements
+public class InMemoryAdapter implements
         SaveRestaurantPort, LoadRestaurantsPort, LoadOwnerPort,
         SaveDishDraftPort, EditDishDraftPort, LoadDishesByRestaurantIdPort,
         LoadDishByIdPort, LoadRestaurantByIdPort, LoadRestaurantByOwnerIdPort {
@@ -23,7 +23,7 @@ public class inMemoryAdapter implements
     private final Map<Id<Restaurant>, List<Dish>> dishesRestauarntMap;
 
 
-    public inMemoryAdapter() {
+    public InMemoryAdapter() {
         this.restaurants = new ArrayList<>();
         this.dishesRestauarntMap = new HashMap<>();
         this.owners = new ArrayList<>(List.of(new Owner(
@@ -115,7 +115,7 @@ public class inMemoryAdapter implements
     }
 
     @Override
-    public Optional<List<Dish>> findDishesByRestaurantId(Id<Restaurant> restaurantId) {
-        return Optional.ofNullable(dishesRestauarntMap.get(restaurantId));
+    public List<Dish> findDishesByRestaurantId(Id<Restaurant> restaurantId) {
+        return dishesRestauarntMap.get(restaurantId);
     }
 }

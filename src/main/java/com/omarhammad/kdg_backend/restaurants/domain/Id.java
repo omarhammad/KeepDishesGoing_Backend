@@ -1,6 +1,6 @@
-package com.omarhammad.kdg_backend.common.sharedDomain;
+package com.omarhammad.kdg_backend.restaurants.domain;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.exceptions.InvalidUUIDFormatException;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidUUIDFormatException;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -1,7 +1,8 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.omarhammad.kdg_backend.common.sharedDomain.exceptions.InvalidUUIDFormatException;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidEnumValueException;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidUUIDFormatException;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.ErrorResponseDTO;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.BusinessRuleViolationException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
@@ -56,23 +57,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception,
+    @ExceptionHandler(InvalidEnumValueException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidEnumValueException(InvalidEnumValueException exception,
                                                                                   WebRequest webRequest) {
 
-        String message = exception.getMessage();
-
-        Throwable cause = exception.getCause();
-        if (cause instanceof InvalidFormatException ife && ife.getTargetType().isEnum()) {
-            String invalidValue = ife.getValue().toString();
-            String enumType = ife.getTargetType().getSimpleName();
-            String enumValues = Arrays.toString(ife.getTargetType().getEnumConstants());
-            message = "Invalid value {%s} for enum {%s}. Allowed values %s".formatted(invalidValue, enumType, enumValues);
-        }
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false),
                 HttpStatus.BAD_REQUEST,
-                message,
+                exception.getMessage(),
                 LocalDateTime.now()
         );
 

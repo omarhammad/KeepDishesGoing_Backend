@@ -1,6 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Id;
+import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.Owner;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.BusinessRuleViolationException;

@@ -1,10 +1,7 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
-import com.omarhammad.kdg_backend.common.sharedDomain.Address;
-import com.omarhammad.kdg_backend.common.sharedDomain.Email;
-import com.omarhammad.kdg_backend.common.sharedDomain.Id;
-import com.omarhammad.kdg_backend.restaurants.domain.utils.Cuisine;
-import com.omarhammad.kdg_backend.restaurants.domain.utils.Day;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
 
 import java.util.*;
 
