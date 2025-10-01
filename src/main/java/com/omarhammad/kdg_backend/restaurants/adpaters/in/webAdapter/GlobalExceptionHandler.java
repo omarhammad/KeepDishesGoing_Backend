@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.adpaters.in.webAdapter;
 
+import com.omarhammad.kdg_backend.restaurants.core.exceptions.ListIsEmptyException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidEnumValueException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidUUIDFormatException;
 import com.omarhammad.kdg_backend.restaurants.adpaters.in.dto.generic.ErrorResponseDTO;
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEnumValueException.class)
     public ResponseEntity<ErrorResponseDTO> handleInvalidEnumValueException(InvalidEnumValueException exception,
-                                                                                  WebRequest webRequest) {
+                                                                            WebRequest webRequest) {
 
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
                 webRequest.getDescription(false),
@@ -68,4 +69,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
     }
 
+    @ExceptionHandler(ListIsEmptyException.class)
+    public ResponseEntity<ErrorResponseDTO> handleListIsEmptyException(ListIsEmptyException exception,
+                                                                       WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.NOT_FOUND,
+                        exception.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
 }

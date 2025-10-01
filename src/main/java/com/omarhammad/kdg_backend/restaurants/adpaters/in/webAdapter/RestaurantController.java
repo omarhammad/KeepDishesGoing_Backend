@@ -26,6 +26,7 @@ public class RestaurantController {
     private final FindDishesByRestaurantIdUseCase findDishesByRestaurantIdUseCase;
     private final SetDishPublishStatusUseCase setDishPublishStatusUseCase;
     private final SetDishStockStatusUseCase setDishStockStatusUseCase;
+    private final PublishAllPendingDishesUseCase publishAllPendingDishesUseCase;
     private final RestaurantRequestMapper requestMapper;
 
     @GetMapping
@@ -153,7 +154,7 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    /* http POST :8080/api/restaurants/c170ead7-c77c-40c3-8be6-17a5a8e17ea2/dishes \
+    /* http POST :8080/api/restaurants/4a5a2a19-572e-413c-baea-3f070ef1d772/dishes \
                    name="Margherita Pizza" \
                    dishType="MAIN" \
                    foodTags:='["VEGAN","GLUTEN"]' \
@@ -244,11 +245,20 @@ public class RestaurantController {
                 .body(new ResponseDTO(HttpStatus.OK.value(), message));
     }
 
+
+    @PostMapping("/{id}/dishes/publish-all")
+    public ResponseEntity<ResponseDTO> publishAllPendingDishes(@PathVariable String id) {
+        Id<Restaurant> restaurantId = new Id<>(id);
+        publishAllPendingDishesUseCase.publishAllPendingDishes(restaurantId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.NO_CONTENT.value(), "All pending dishes published successfully"));
+    }
+
     // TODO (Tuesday 30th SEP)
     //  1) MAKE FIND ALL DISHES FOR A RESTAURANT, THEN START WITH - DONE
     //  2) PUBLISH/UNPUBLISH - DONE
     //   3) MARK DISH IN_STOCK/OUT_OF_STOCK - DONE
-    //  4) APPLY_PUBLISH_ON_ALL_PENDING_MULTI
+    //  4) APPLY_PUBLISH_ON_ALL_PENDING_MULTI - DONE
     //  5) SCHEDULE SELECTED DISHES TO PUBLISH
 
 
