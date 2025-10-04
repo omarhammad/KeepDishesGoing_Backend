@@ -7,8 +7,8 @@ import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundEx
 import com.omarhammad.kdg_backend.restaurants.ports.in.SetDishStockStatusCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.SetDishStockStatusUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.out.EditDishPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadDishByIdPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantByIdPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadDishPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +16,17 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DefaultSetDishStockStatusUseCase implements SetDishStockStatusUseCase {
 
-    private LoadRestaurantByIdPort loadRestaurantByIdPort;
-    private LoadDishByIdPort loadDishByIdPort;
+    private LoadRestaurantPort loadRestaurantPort;
+    private LoadDishPort loadDishPort;
     private EditDishPort editDishPort;
 
     @Override
     public void setDishStockStatus(Id<Restaurant> restaurantId, Id<Dish> dishId, SetDishStockStatusCmd cmd) {
 
-        loadRestaurantByIdPort.findRestaurantById(restaurantId)
+        loadRestaurantPort.findRestaurantById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant {%s} not found".formatted(restaurantId.value())));
 
-        Dish dish = loadDishByIdPort.findById(restaurantId, dishId)
+        Dish dish = loadDishPort.findById(restaurantId, dishId)
                 .orElseThrow(() -> new EntityNotFoundException("Dish {%s} not found".formatted(dishId)));
 
         dish.setInStock(cmd.isInStock());

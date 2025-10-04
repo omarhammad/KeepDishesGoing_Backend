@@ -7,8 +7,10 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.modulith.Modulith;
 import org.springframework.modulith.core.ApplicationModules;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Modulith
+@EnableScheduling
 public class KdgBackendApplication {
 
     private final Logger log = LoggerFactory.getLogger(KdgBackendApplication.class);

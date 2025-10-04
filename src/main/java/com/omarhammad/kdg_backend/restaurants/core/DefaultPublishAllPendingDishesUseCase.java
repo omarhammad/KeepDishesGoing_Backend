@@ -7,12 +7,11 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.PublishAllPendingDishesUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.out.EditDishPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadDishesByRestaurantIdPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantByIdPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadDishPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,26 +20,26 @@ import java.util.Objects;
 public class DefaultPublishAllPendingDishesUseCase implements PublishAllPendingDishesUseCase {
 
 
-    private final LoadRestaurantByIdPort loadRestaurantByIdPort;
-    private final LoadDishesByRestaurantIdPort loadDishesByRestaurantIdPort;
+    private final LoadRestaurantPort loadRestaurantPort;
+    private final LoadDishPort loadDishPort;
     private final EditDishPort editDishPort;
 
     @Override
     public void publishAllPendingDishes(Id<Restaurant> restaurantId) {
 
-        Restaurant restaurant = loadRestaurantByIdPort.findRestaurantById(restaurantId)
+        Restaurant restaurant = loadRestaurantPort.findRestaurantById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant {%s} not found".formatted(restaurantId.value())));
 
-        List<Dish> dishes = loadDishesByRestaurantIdPort.findDishesByRestaurantId(restaurantId);
+        List<Dish> dishes = loadDishPort.findDishesByRestaurantId(restaurantId).stream()
+                .filter(dish -> Objects.nonNull(dish.getDraft()))
+                .toList();
 
-        if (Objects.isNull(dishes) || dishes.isEmpty())
-            throw new ListIsEmptyException("Restaurant {%s} has no dishes".formatted(restaurant.getName()));
+        if (dishes.isEmpty())
+            throw new ListIsEmptyException("Restaurant {%s} has no dishes drafts to publish".formatted(restaurant.getName()));
+
 
         for (Dish dish : dishes) {
-            if(dish.isPublished()) continue;
-
-            dish.setPublished(true);
-            dish.setPublishTime(LocalDateTime.now());
+            dish.publish();
             editDishPort.edit(restaurantId, dish);
         }
 

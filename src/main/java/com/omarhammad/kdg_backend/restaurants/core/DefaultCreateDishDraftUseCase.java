@@ -6,7 +6,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.CreateDishDraftCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.CreateDishDraftUseCase;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantByIdPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import com.omarhammad.kdg_backend.restaurants.ports.out.SaveDishDraftPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,24 @@ public class DefaultCreateDishDraftUseCase implements CreateDishDraftUseCase {
 
 
     private final SaveDishDraftPort saveDishDraftPort;
-    private final LoadRestaurantByIdPort loadRestaurantByIdPort;
+    private final LoadRestaurantPort loadRestaurantPort;
 
     @Override
     public void createDish(Id<Restaurant> restaurantId, CreateDishDraftCmd cmd) throws EntityNotFoundException {
 
-        loadRestaurantByIdPort.findRestaurantById(restaurantId)
+        loadRestaurantPort.findRestaurantById(restaurantId)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant {%s} not found".formatted(restaurantId.value())));
 
         Dish dish = new Dish();
-        dish.setId(Id.<Dish>createNewId());
-        dish.setName(cmd.name());
-        dish.setDishType(cmd.dishType());
-        cmd.foodTags().forEach(dish::addFoodTag);
-        dish.setDescription(cmd.description());
-        dish.setPrice(cmd.price());
-        dish.setPictureUrl(cmd.pictureUrl());
+        dish.setId(Id.createNewId());
+        dish.saveDraft(
+                cmd.name(),
+                cmd.dishType(),
+                cmd.foodTags(),
+                cmd.description(),
+                cmd.price(),
+                cmd.pictureUrl()
+        );
 
         saveDishDraftPort.save(restaurantId, dish);
 

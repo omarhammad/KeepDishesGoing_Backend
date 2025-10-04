@@ -21,6 +21,10 @@ public class Owner {
         this.id = id;
     }
 
+    public Owner(Id<Owner> id) {
+        this.id = id;
+    }
+
     public Owner() {
     }
 

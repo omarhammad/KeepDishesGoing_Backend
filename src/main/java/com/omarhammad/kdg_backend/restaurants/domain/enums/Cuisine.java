@@ -1,5 +1,5 @@
 package com.omarhammad.kdg_backend.restaurants.domain.enums;
 
 public enum Cuisine {
-    ITALIAN, FRENCH, JAPANESE, OTHER
+    ITALIAN, FRENCH, JAPANESE, MEXICAN,STEAKHOUSE, OTHER
 }
