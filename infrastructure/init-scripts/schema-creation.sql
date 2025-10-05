@@ -15,23 +15,23 @@ INSERT INTO restaurants (
 ) VALUES
       ('11111111-1111-1111-1111-111111111111', 'La Bella Italia', 'contact@labellaitalia.com',
        'Main Street', 12, '2000', 'Antwerp', 'Belgium',
-       'https://example.com/pics/italia.jpg', 0, 'Italian', 20, FALSE, '550e8400-e29b-41d4-a716-446655440000'),
+       'https://example.com/pics/italia.jpg', 'AUTO', 'Italian', 20, FALSE, '550e8400-e29b-41d4-a716-446655440000'),
 
       ('22222222-2222-2222-2222-222222222222', 'Sushi World', 'hello@sushiworld.com',
        'Harbor Road', 45, '9000', 'Ghent', 'Belgium',
-       'https://example.com/pics/sushi.jpg', 0, 'JAPANESE', 25, FALSE, '6fa459ea-ee8a-3ca4-894e-db77e160355e'),
+       'https://example.com/pics/sushi.jpg', 'AUTO', 'JAPANESE', 25, FALSE, '6fa459ea-ee8a-3ca4-894e-db77e160355e'),
 
       ('33333333-3333-3333-3333-333333333333', 'Taco Fiesta', 'info@tacofiesta.com',
        'Market Square', 7, '1000', 'Brussels', 'Belgium',
-       'https://example.com/pics/taco.jpg', 0, 'Mexican', 15, FALSE, '123e4567-e89b-12d3-a456-426614174000'),
+       'https://example.com/pics/taco.jpg', 'AUTO', 'Mexican', 15, FALSE, '123e4567-e89b-12d3-a456-426614174000'),
 
       ('44444444-4444-4444-4444-444444444444', 'Chez Diana', 'contact@chezdiana.be',
        'Grand Place', 19, '3000', 'Leuven', 'Belgium',
-       'https://example.com/pics/diana.jpg', 0, 'French', 30, FALSE, '9b2cf3a2-1e11-11ee-be56-0242ac120002'),
+       'https://example.com/pics/diana.jpg', 'AUTO', 'French', 30, FALSE, '9b2cf3a2-1e11-11ee-be56-0242ac120002'),
 
       ('55555555-5555-5555-5555-555555555555', 'Edward’s Grill', 'info@edgrill.com',
        'Park Avenue', 88, '3500', 'Hasselt', 'Belgium',
-       'https://example.com/pics/grill.jpg', 0, 'Steakhouse', 35, FALSE, 'f47ac10b-58cc-4372-a567-0e02b2c3d479');
+       'https://example.com/pics/grill.jpg', 'AUTO', 'Steakhouse', 35, FALSE, 'f47ac10b-58cc-4372-a567-0e02b2c3d479');
 
 
 -- Insert opening hours for all restaurants

@@ -2,12 +2,18 @@ package com.omarhammad.kdg_backend.restaurants.domain;
 
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.OpeningStatus;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
+@Slf4j
 public class Restaurant {
 
     @Setter
@@ -23,7 +29,7 @@ public class Restaurant {
 
     private final Map<Day, OpeningHours> dayOpeningHours;
     @Setter
-    private int manualOpening;
+    private OpeningStatus manualOpening;
     @Setter
     private Cuisine cuisine;
     @Setter
@@ -39,7 +45,7 @@ public class Restaurant {
         this.dishes = new ArrayList<>();
     }
 
-    public Restaurant(Id<Restaurant> id, String name, Email email, Address address, String resPictureUrl, int manualOpening, Cuisine cuisine, int defaultPrepTime, boolean hasScheduledPublish, Id<Owner> ownerId) {
+    public Restaurant(Id<Restaurant> id, String name, Email email, Address address, String resPictureUrl, OpeningStatus manualOpening, Cuisine cuisine, int defaultPrepTime, boolean hasScheduledPublish, Id<Owner> ownerId) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -91,7 +97,7 @@ public class Restaurant {
         this.dayOpeningHours.put(day, op);
     }
 
-    public int getManualOpening() {
+    public OpeningStatus getManualOpening() {
         return manualOpening;
     }
 
@@ -118,6 +124,32 @@ public class Restaurant {
     public Id<Owner> getOwnerId() {
         return this.ownerId;
     }
+
+
+    public boolean isOpen() {
+
+        boolean autoStatus = isAutoOpen();
+
+        if (autoStatus && manualOpening.equals(OpeningStatus.OPEN)) this.manualOpening = OpeningStatus.AUTO;
+        if (!autoStatus && manualOpening.equals(OpeningStatus.CLOSE)) this.manualOpening = OpeningStatus.AUTO;
+
+        if (manualOpening.equals(OpeningStatus.OPEN)) return true;
+        if (manualOpening.equals(OpeningStatus.CLOSE)) return false;
+        return autoStatus;
+    }
+
+    private boolean isAutoOpen() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime today = LocalDateTime.now();
+
+        OpeningHours todayOH = dayOpeningHours.get(Day.valueOf(today.getDayOfWeek().toString()));
+        int openHour = LocalTime.parse(todayOH.open(), formatter).getHour();
+        int closeHour = LocalTime.parse(todayOH.close(), formatter).getHour();
+        int currentHour = today.getHour();
+
+        return openHour <= currentHour && currentHour < closeHour;
+    }
+
 
     @Override
     public String toString() {

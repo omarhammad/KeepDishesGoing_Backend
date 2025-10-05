@@ -6,6 +6,7 @@ import com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.restu
 import com.omarhammad.kdg_backend.restaurants.domain.*;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.OpeningStatus;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.out.EditRestaurant;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
@@ -85,7 +86,7 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, EditRestaurant,
                 restaurant.getEmail().email(),
                 toAddressJpa(restaurant.getAddress()),
                 restaurant.getResPictureUrl(),
-                restaurant.getManualOpening(),
+                restaurant.getManualOpening().toString(),
                 restaurant.getCuisine().toString(),
                 restaurant.getDefaultPrepTime(),
                 restaurant.hasScheduledPublish(),
@@ -118,7 +119,7 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, EditRestaurant,
                 new Email(restaurantsJpaEntity.getEmail()),
                 toAddress(restaurantsJpaEntity.getAddress()),
                 restaurantsJpaEntity.getResPictureUrl(),
-                restaurantsJpaEntity.getManualOpening(),
+                OpeningStatus.valueOf(restaurantsJpaEntity.getManualOpening().toUpperCase()),
                 Cuisine.valueOf(restaurantsJpaEntity.getCuisine().toUpperCase()),
                 restaurantsJpaEntity.getDefaultPrepTime(),
                 restaurantsJpaEntity.isHasScheduledPublish(),

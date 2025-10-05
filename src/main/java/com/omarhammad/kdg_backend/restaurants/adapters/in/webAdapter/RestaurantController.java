@@ -3,6 +3,7 @@ package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.*;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.generic.ResponseDTO;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.InvalidDishStateValue;
+import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.WrongOpeningStatusValueException;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request.*;
 import com.omarhammad.kdg_backend.restaurants.domain.*;
 import com.omarhammad.kdg_backend.restaurants.ports.in.*;
@@ -32,6 +33,7 @@ public class RestaurantController {
     private final PublishAllPendingDishesUseCase publishAllPendingDishesUseCase;
     private final SchedulePublishToAllPendingDishesUseCase schedulePublishToAllPendingDishesUseCase;
     private final FindOwnerByIdUseCse findOwnerByIdUseCse;
+    private final ManualOpenCloseRestaurantUseCase manualOpenCloseRestaurantUseCase;
     private final RestaurantRequestMapper requestMapper;
 
     @GetMapping
@@ -92,6 +94,46 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDTO(HttpStatus.CREATED.value(), "Restaurant created successfully"));
     }
+
+    @GetMapping("/{id}/open-status")
+    public ResponseEntity<RestaurantOpeningStatusDTO> checkManualOpining(@PathVariable String id) {
+
+        Id<Restaurant> restaurantId = new Id<>(id);
+        Restaurant restaurant = findRestaurantByIdUseCase.findRestaurantById(restaurantId);
+
+        RestaurantOpeningStatusDTO dto = new RestaurantOpeningStatusDTO(restaurant.isOpen());
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+
+    @PostMapping("/{id}/open-status")
+    public ResponseEntity<ResponseDTO> setManualOpining(@PathVariable String id,@RequestBody RestaurantOpeningStatusRequest request) {
+
+        Id<Restaurant> restaurantId = new Id<>(id);
+        String message;
+        if (request.openStatus().equalsIgnoreCase("open")) {
+            manualOpenCloseRestaurantUseCase.open(restaurantId);
+            message = "Restaurant is set to OPEN";
+
+        } else if (request.openStatus().equalsIgnoreCase("close")) {
+            manualOpenCloseRestaurantUseCase.close(restaurantId);
+            message = "Restaurant is set to CLOSE";
+
+        } else if (request.openStatus().equalsIgnoreCase("auto")) {
+            manualOpenCloseRestaurantUseCase.auto(restaurantId);
+            message = "Restaurant is set to AUTO";
+        } else {
+            throw new WrongOpeningStatusValueException("openStatus should be ['AUTO', 'OPEN','CLOSE']");
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK.value(),
+                message
+        ));
+    }
+
 
     @GetMapping("/{id}/dishes")
     public ResponseEntity<List<DishDTO>> getAllRestaurantDishes(@PathVariable String id, @RequestParam String state) {
@@ -261,12 +303,10 @@ public class RestaurantController {
                 );
     }
 
-    // TODO (Tuesday 30th SEP)
-    //  1) MAKE FIND ALL DISHES FOR A RESTAURANT, THEN START WITH - DONE
-    //  2) PUBLISH/UNPUBLISH - DONE
-    //   3) MARK DISH IN_STOCK/OUT_OF_STOCK - DONE
-    //  4) APPLY_PUBLISH_ON_ALL_PENDING_MULTI - DONE
-    //  5) SCHEDULE SELECTED DISHES TO PUBLISH - DONE
+
+    // TODO (Tuesday 6th OCT)
+    //  1) Manual opening/closing use case - DONE
+
 
 
 }

@@ -33,7 +33,7 @@ public class RestaurantsJpaEntity {
     @MapKeyColumn(name = "day_of_week")
     private final Map<String, OpeningHoursJpa> dayOpeningHours;
 
-    private int manualOpening;
+    private String manualOpening;
 
     private String cuisine;
 
@@ -47,7 +47,7 @@ public class RestaurantsJpaEntity {
         dayOpeningHours = new HashMap<>();
     }
 
-    public RestaurantsJpaEntity(UUID id, String name, String email, AddressJpa address, String resPictureUrl, int manualOpening, String cuisine, int defaultPrepTime, boolean hasScheduledPublish, UUID owner) {
+    public RestaurantsJpaEntity(UUID id, String name, String email, AddressJpa address, String resPictureUrl, String manualOpening, String cuisine, int defaultPrepTime, boolean hasScheduledPublish, UUID owner) {
         this.id = id;
         this.name = name;
         this.email = email;

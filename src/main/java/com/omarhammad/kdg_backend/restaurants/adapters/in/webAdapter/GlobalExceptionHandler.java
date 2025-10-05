@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter;
 
+import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.WrongOpeningStatusValueException;
 import com.omarhammad.kdg_backend.restaurants.core.exceptions.ListIsEmptyException;
 import com.omarhammad.kdg_backend.restaurants.core.exceptions.NoDishesScheduledException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.*;
@@ -141,4 +142,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(WrongOpeningStatusValueException.class)
+    public ResponseEntity<ErrorResponseDTO> handleWrongOpeningStatusValueException(WrongOpeningStatusValueException e,
+                                                                           WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
 }
