@@ -68,3 +68,4 @@ $RECYCLE.BIN/
 # infrastructure
 infrastructure/postgres-data/
 infrastructure/rabbitmq-data/
+infrastructure/idp

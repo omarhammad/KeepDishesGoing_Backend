@@ -1,21 +1,26 @@
-package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter;
+package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI;
 
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.*;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.generic.ResponseDTO;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.InvalidDishStateValue;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.WrongOpeningStatusValueException;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request.*;
+import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.*;
 import com.omarhammad.kdg_backend.restaurants.domain.*;
 import com.omarhammad.kdg_backend.restaurants.ports.in.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/restaurants")
 @AllArgsConstructor
@@ -88,8 +93,10 @@ public class RestaurantController {
     }'
     */
     @PostMapping
-    public ResponseEntity<ResponseDTO> makeNewRestaurant(@RequestBody CreateRestaurantRequest request) {
-        CreateRestaurantCmd cmd = requestMapper.toCreateRestaurantCmd(request);
+    public ResponseEntity<ResponseDTO> makeNewRestaurant(@RequestBody CreateRestaurantRequest request, @AuthenticationPrincipal Jwt jwt) {
+
+        String ownerId = jwt.getSubject();
+        CreateRestaurantCmd cmd = requestMapper.toCreateRestaurantCmd(ownerId, request);
         createRestaurantUseCase.CreateRestaurant(cmd);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDTO(HttpStatus.CREATED.value(), "Restaurant created successfully"));
@@ -108,7 +115,7 @@ public class RestaurantController {
 
 
     @PostMapping("/{id}/open-status")
-    public ResponseEntity<ResponseDTO> setManualOpining(@PathVariable String id,@RequestBody RestaurantOpeningStatusRequest request) {
+    public ResponseEntity<ResponseDTO> setManualOpining(@PathVariable String id, @RequestBody RestaurantOpeningStatusRequest request) {
 
         Id<Restaurant> restaurantId = new Id<>(id);
         String message;
@@ -133,7 +140,6 @@ public class RestaurantController {
                 message
         ));
     }
-
 
     @GetMapping("/{id}/dishes")
     public ResponseEntity<List<DishDTO>> getAllRestaurantDishes(@PathVariable String id, @RequestParam String state) {
@@ -306,7 +312,11 @@ public class RestaurantController {
 
     // TODO (Tuesday 6th OCT)
     //  1) Manual opening/closing use case - DONE
-
+    //  2) Understand the KeyCloak for Auth
+    //  3) Implement the Owner Auth
+    //  4) Read the RabbitMQ
+    //  5) Make events
+    //  6) publish these events
 
 
 }

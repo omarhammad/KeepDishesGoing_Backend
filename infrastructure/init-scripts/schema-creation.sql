@@ -1,12 +1,3 @@
-INSERT INTO owners (id, email, first_name, last_name, password, phone_number, username)
-VALUES
-    ('550e8400-e29b-41d4-a716-446655440000', 'alice.smith@example.com', 'Alice', 'Smith', 'hashed_pwd_1', '+32475111222', 'alice_s'),
-    ('6fa459ea-ee8a-3ca4-894e-db77e160355e', 'bob.jones@example.com', 'Bob', 'Jones', 'hashed_pwd_2', '+32475222333', 'bobby_j'),
-    ('123e4567-e89b-12d3-a456-426614174000', 'charlie.brown@example.com', 'Charlie', 'Brown', 'hashed_pwd_3', '+32475333444', 'charlie_b'),
-    ('9b2cf3a2-1e11-11ee-be56-0242ac120002', 'diana.white@example.com', 'Diana', 'White', 'hashed_pwd_4', '+32475444555', 'diana_w'),
-    ('f47ac10b-58cc-4372-a567-0e02b2c3d479', 'edward.green@example.com', 'Edward', 'Green', 'hashed_pwd_5', '+32475555666', 'ed_green');
-
-
 -- Insert restaurants with embedded address fields
 INSERT INTO restaurants (
     id, name, email,

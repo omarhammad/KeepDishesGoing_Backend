@@ -1,9 +1,9 @@
-package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter;
+package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI;
 
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.*;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request.CreateDishDraftRequest;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request.CreateRestaurantRequest;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request.EditDishDraftRequest;
+import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.CreateDishDraftRequest;
+import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.CreateRestaurantRequest;
+import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.EditDishDraftRequest;
 import com.omarhammad.kdg_backend.restaurants.domain.*;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
@@ -39,7 +39,7 @@ public class RestaurantRequestMapper {
                         owner.getPhoneNumber()));
     }
 
-    public CreateRestaurantCmd toCreateRestaurantCmd(CreateRestaurantRequest request) {
+    public CreateRestaurantCmd toCreateRestaurantCmd(String ownerId, CreateRestaurantRequest request) {
 
         return new CreateRestaurantCmd(
                 request.name(),
@@ -49,7 +49,7 @@ public class RestaurantRequestMapper {
                 toDayOpeningHoursMap(request.dayOpeningHoursMap()),
                 toEnum(request.cuisine().toUpperCase(), Cuisine.class),
                 request.defaultPrepTime(),
-                request.ownerId()
+                ownerId
         );
 
     }
@@ -88,7 +88,7 @@ public class RestaurantRequestMapper {
         );
     }
 
-    public DishDTO toDishDTO(Id<Dish> dishId,boolean isInStock, DishData dishData) {
+    public DishDTO toDishDTO(Id<Dish> dishId, boolean isInStock, DishData dishData) {
         if (dishData == null) {
             return null;
         }

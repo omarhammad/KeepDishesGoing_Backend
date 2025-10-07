@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request;
+package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request;
 
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.AddressDTO;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.OpeningHoursDTO;
@@ -11,6 +11,5 @@ public record CreateRestaurantRequest(String name,
                                       String resPictureUrl,
                                       Map<String, OpeningHoursDTO> dayOpeningHoursMap,
                                       String cuisine,
-                                      int defaultPrepTime,
-                                      String ownerId) {
+                                      int defaultPrepTime) {
 }

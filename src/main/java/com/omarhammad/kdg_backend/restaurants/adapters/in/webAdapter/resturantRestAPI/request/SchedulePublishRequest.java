@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.request;
+package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request;
 
 import jakarta.validation.constraints.Future;
 

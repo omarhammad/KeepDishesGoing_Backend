@@ -21,12 +21,43 @@ services:
     restart: always
     ports:
       - "5672:5672"  # main RabbitMQ port
-      - "15672:15762" # management UI
+      - "15672:15672" # management UI
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - backend
+
+
+  idp_postgres:
+    image: postgres:17.6-alpine
+    volumes:
+      - ./idp/postgres/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    networks:
+      - backend
+
+  idp_keycloak:
+    image: quay.io/keycloak/keycloak:26.3
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=idp_postgres
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=password
+    command: start-dev
+    ports:
+      - "8180:8080"
+    depends_on:
+      - idp_postgres
+    networks:
+      - backend
+
 
 
 

@@ -1,6 +1,9 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter;
 
+import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.InvalidCredentialsException;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.exceptions.WrongOpeningStatusValueException;
+import com.omarhammad.kdg_backend.restaurants.adapters.out.exceptions.KeycloakServerException;
+import com.omarhammad.kdg_backend.restaurants.adapters.out.exceptions.OwnerAlreadyExistInKeycloakException;
 import com.omarhammad.kdg_backend.restaurants.core.exceptions.ListIsEmptyException;
 import com.omarhammad.kdg_backend.restaurants.core.exceptions.NoDishesScheduledException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.*;
@@ -144,7 +147,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WrongOpeningStatusValueException.class)
     public ResponseEntity<ErrorResponseDTO> handleWrongOpeningStatusValueException(WrongOpeningStatusValueException e,
-                                                                           WebRequest webRequest) {
+                                                                                   WebRequest webRequest) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponseDTO(
                         webRequest.getDescription(false),
@@ -153,4 +156,41 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()
                 ));
     }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidCredentialsException(InvalidCredentialsException e,
+                                                                              WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.UNAUTHORIZED,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(KeycloakServerException.class)
+    public ResponseEntity<ErrorResponseDTO> handleKeycloakServerException(KeycloakServerException e,
+                                                                              WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(OwnerAlreadyExistInKeycloakException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOwnerAlreadyExistInKeycloakException(OwnerAlreadyExistInKeycloakException e,
+                                                                          WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
 }

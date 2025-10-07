@@ -21,6 +21,15 @@ public class Owner {
         this.id = id;
     }
 
+    public Owner(String firstName, String lastName, Email email, String phoneNumber, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.password = password;
+    }
+
     public Owner(Id<Owner> id) {
         this.id = id;
     }

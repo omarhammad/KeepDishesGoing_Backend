@@ -8,9 +8,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.modulith.Modulith;
 import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Modulith
 @EnableScheduling
+@EnableWebSecurity
 public class KdgBackendApplication {
 
     private final Logger log = LoggerFactory.getLogger(KdgBackendApplication.class);
