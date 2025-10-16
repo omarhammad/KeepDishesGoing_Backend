@@ -32,7 +32,7 @@ public class DefaultCreateRestaurantUseCase implements CreateRestaurantUseCase {
         Owner owner = loadOwnerPort.findOwnerById(ownerId)
                 .orElseThrow(() -> new EntityNotFoundException("Owner {%s} not found ".formatted(cmd.ownerId())));
 
-        loadRestaurantPort.loadRestaurantByOwnerId(new Id<>(cmd.ownerId()))
+        loadRestaurantPort.findRestaurantByOwnerId(new Id<>(cmd.ownerId()))
                 .ifPresent((r) -> {
                     throw new OwnerAlreadyHaveRestaurantException("Owner already has a (%s) restaurant".formatted(r.getName()));
                 });

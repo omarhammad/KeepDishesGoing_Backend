@@ -26,7 +26,7 @@ public class AuthMapper {
         assert jwt.getExpiresAt() != null;
         return new JwtDTO(
                 jwt.getTokenValue(),
-                "%d mins".formatted((jwt.getExpiresAt().getEpochSecond() - Instant.now().getEpochSecond()) / 60),
+                (jwt.getExpiresAt().getEpochSecond() - Instant.now().getEpochSecond()),
                 jwt.getSubject(),
                 (String) claims.get("preferred_username"),
                 roles.toString()

@@ -14,7 +14,7 @@ public interface LoadRestaurantPort {
 
     Optional<Restaurant> findRestaurantById(Id<Restaurant> restaurantId);
 
-    Optional<Restaurant> loadRestaurantByOwnerId(Id<Owner> ownerId);
+    Optional<Restaurant> findRestaurantByOwnerId(Id<Owner> ownerId);
 
 
 }

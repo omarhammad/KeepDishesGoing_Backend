@@ -88,7 +88,7 @@ public class InMemoryAdapter implements
     }
 
     @Override
-    public Optional<Restaurant> loadRestaurantByOwnerId(Id<Owner> ownerId) {
+    public Optional<Restaurant> findRestaurantByOwnerId(Id<Owner> ownerId) {
         return restaurants.stream()
                 .filter((restaurant -> restaurant.getOwnerId().equals(ownerId)))
                 .findFirst();

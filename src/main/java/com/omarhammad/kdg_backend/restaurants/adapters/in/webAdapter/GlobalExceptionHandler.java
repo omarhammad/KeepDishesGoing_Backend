@@ -10,6 +10,8 @@ import com.omarhammad.kdg_backend.restaurants.domain.exceptions.*;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.generic.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -171,7 +173,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(KeycloakServerException.class)
     public ResponseEntity<ErrorResponseDTO> handleKeycloakServerException(KeycloakServerException e,
-                                                                              WebRequest webRequest) {
+                                                                          WebRequest webRequest) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponseDTO(
                         webRequest.getDescription(false),
@@ -183,7 +185,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OwnerAlreadyExistInKeycloakException.class)
     public ResponseEntity<ErrorResponseDTO> handleOwnerAlreadyExistInKeycloakException(OwnerAlreadyExistInKeycloakException e,
-                                                                          WebRequest webRequest) {
+                                                                                       WebRequest webRequest) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponseDTO(
                         webRequest.getDescription(false),
@@ -193,4 +195,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleGlobalExceptions(Exception e,
+                                                                   WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
 }

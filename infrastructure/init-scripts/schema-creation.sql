@@ -6,7 +6,7 @@ INSERT INTO restaurants (
 ) VALUES
       ('11111111-1111-1111-1111-111111111111', 'La Bella Italia', 'contact@labellaitalia.com',
        'Main Street', 12, '2000', 'Antwerp', 'Belgium',
-       'https://example.com/pics/italia.jpg', 'AUTO', 'Italian', 20, FALSE, '550e8400-e29b-41d4-a716-446655440000'),
+       'https://i.etsystatic.com/16895977/r/il/dbd742/5846514509/il_fullxfull.5846514509_ijhv.jpg', 'AUTO', 'Italian', 20, FALSE, '82d63058-20bc-4ab2-8fb7-36b352c6d67c'),
 
       ('22222222-2222-2222-2222-222222222222', 'Sushi World', 'hello@sushiworld.com',
        'Harbor Road', 45, '9000', 'Ghent', 'Belgium',
@@ -76,7 +76,7 @@ INSERT INTO restaurant_opening_hours (restaurants_id, day_of_week, open, close) 
 INSERT INTO dishes (id, is_in_stock, scheduled_time, restaurant)
 VALUES
     -- Draft-only dish
-    ('aaaa1111-aaaa-1111-aaaa-111111111111', true, '2025-10-05 12:00:00', '11111111-1111-1111-1111-111111111111'),
+    ('aaaa1111-aaaa-1111-aaaa-111111111111', true, NULL, '11111111-1111-1111-1111-111111111111'),
     -- Live-only dish
     ('bbbb2222-bbbb-2222-bbbb-222222222222', true, NULL, '11111111-1111-1111-1111-111111111111'),
     -- Dish with live + draft (pending update)
@@ -88,10 +88,9 @@ VALUES
 
 INSERT INTO dishes_drafts (id, name, dish_type, description, price, picture_url)
 VALUES
-    ('aaaa1111-aaaa-1111-aaaa-111111111111', 'Margherita Pizza', 'MAIN', 'Classic tomato, mozzarella & basil', 9.99, 'https://example.com/pics/margherita.jpg'),
-    ('cccc3333-cccc-3333-cccc-333333333333', 'Spicy Chicken Taco (New)', 'MAIN', 'Updated with extra jalapeños 🌶️', 7.50, 'https://example.com/pics/taco_spicy.jpg'),
-    ('dddd4444-dddd-4444-dddd-444444444444', 'Vegan Burger', 'MAIN', 'Plant-based patty with vegan cheese', 11.20, 'https://example.com/pics/vegan_burger.jpg');
-
+    ('aaaa1111-aaaa-1111-aaaa-111111111111', 'Margherita Pizza', 'MAIN', 'Classic tomato, mozzarella & basil', 9.99, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3FiSRjRmljQ7LbKE6_XNJitNqqzngEQ6r4WO_IgBGErDjTiexFeFF86y66jtJC5UGRWHCBuANmbwA4QoF4TgApwtgtMsEvXEu9Oj2a3pM'),
+    ('cccc3333-cccc-3333-cccc-333333333333', 'Spicy Chicken Taco (New)', 'MAIN', 'Updated with extra jalapeños 🌶️', 7.50, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrmhq0hkFaGElYid-mSYRp_0vlxvxlVhtzMA&s'),
+    ('dddd4444-dddd-4444-dddd-444444444444', 'Vegan Burger', 'MAIN', 'Plant-based patty with vegan cheese', 11.20, 'https://www.seriouseats.com/thmb/_c-xbP-tch4dpSTxKE1zY16sHo8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20231204-SEA-VeganBurger-FredHardy-00-dbf603c78b694bfd99489b85ab44f4c4.jpg');
 -- Draft food tags
 INSERT INTO dish_draft_food_tags (dish_draft_id, food_tags)
 VALUES
@@ -104,9 +103,9 @@ VALUES
 
 INSERT INTO dishes_lives (id, name, dish_type, description, price, picture_url)
 VALUES
-    ('bbbb2222-bbbb-2222-bbbb-222222222222', 'Sushi Platter', 'MAIN', 'Mixed nigiri, sashimi & maki rolls', 18.99, 'https://example.com/pics/sushi.jpg'),
-    ('cccc3333-cccc-3333-cccc-333333333333', 'Spicy Chicken Taco', 'MAIN', 'Taco with chicken, lettuce & salsa', 6.99, 'https://example.com/pics/taco.jpg'),
-    ('eeee5555-eeee-5555-eeee-555555555555', 'Ribeye Steak', 'MAIN', 'Grilled ribeye with herb butter', 24.50, 'https://example.com/pics/ribeye.jpg');
+    ('bbbb2222-bbbb-2222-bbbb-222222222222', 'Sushi Platter', 'MAIN', 'Mixed nigiri, sashimi & maki rolls', 18.99, 'https://www.wasabiko.com/wp-content/uploads/2023/02/Wasabiko-Sushi-Poke-Manassas-Virginia-Web-Menu-Header-Platter.jpg'),
+    ('cccc3333-cccc-3333-cccc-333333333333', 'Spicy Chicken Taco', 'MAIN', 'Taco with chicken, lettuce & salsa', 6.99, 'https://ortega.com/wp-content/uploads/recipe-spicycrispychickentacos-1-scaled.jpg'),
+    ('eeee5555-eeee-5555-eeee-555555555555', 'Ribeye Steak', 'MAIN', 'Grilled ribeye with herb butter', 24.50, 'https://diethood.com/wp-content/uploads/2021/02/ribeye-steak-5.jpg');
 
 -- Live food tags
 INSERT INTO dish_live_food_tags (dish_live_id, food_tags)

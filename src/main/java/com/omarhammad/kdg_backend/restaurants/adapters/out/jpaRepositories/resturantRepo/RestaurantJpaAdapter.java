@@ -45,7 +45,7 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, EditRestaurant,
     }
 
     @Override
-    public Optional<Restaurant> loadRestaurantByOwnerId(Id<Owner> ownerId) {
+    public Optional<Restaurant> findRestaurantByOwnerId(Id<Owner> ownerId) {
 
         Optional<RestaurantsJpaEntity> restaurantsJpaEntity =
                 repository.findRestaurantsJpaEntitiesByOwner(UUID.fromString(ownerId.value()));

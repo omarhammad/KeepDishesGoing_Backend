@@ -15,6 +15,7 @@ import com.omarhammad.kdg_backend.restaurants.ports.in.CreateRestaurantCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.EditDishDraftCmd;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class RestaurantRequestMapper {
                 restaurant.getDayOpeningHours(),
                 restaurant.getCuisine(),
                 restaurant.getDefaultPrepTime(),
+                restaurant.hasScheduledPublish(),
                 new OwnerDTO(owner.getId().value(),
                         owner.getFirstName(),
                         owner.getLastName(),
@@ -88,7 +90,7 @@ public class RestaurantRequestMapper {
         );
     }
 
-    public DishDTO toDishDTO(Id<Dish> dishId, boolean isInStock, DishData dishData) {
+    public DishDTO toDishDTO(Id<Dish> dishId, boolean isInStock, LocalDateTime scheduledTime, DishData dishData) {
         if (dishData == null) {
             return null;
         }
@@ -100,7 +102,8 @@ public class RestaurantRequestMapper {
                 dishData.description(),
                 dishData.price(),
                 dishData.pictureUrl(),
-                isInStock
+                isInStock,
+                scheduledTime
         );
     }
 

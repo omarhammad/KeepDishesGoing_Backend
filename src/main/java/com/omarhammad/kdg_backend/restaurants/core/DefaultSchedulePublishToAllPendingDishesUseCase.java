@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -35,10 +36,11 @@ public class DefaultSchedulePublishToAllPendingDishesUseCase implements Schedule
     @Override
     public void schedulePublish(Id<Restaurant> restaurantId, SchedulePublishCmd cmd) {
 
-        long scheduleDuration = Duration.between(LocalDateTime.now()
-                , cmd.scheduleTime()).toMinutes();
+        long scheduleDuration = Duration.between(LocalDateTime.now(), cmd.scheduleTime()).toHours();
+
 
         log.info("Duration is {}", scheduleDuration);
+        log.info("scheduleTime is {}",cmd.scheduleTime());
         if (scheduleDuration < 1L) {
             throw new ScheduleTooSoonException("Schedule time should be at least 1h from now");
         }
@@ -54,7 +56,7 @@ public class DefaultSchedulePublishToAllPendingDishesUseCase implements Schedule
                 .toList();
 
         if (dishes.isEmpty()) {
-            throw new ListIsEmptyException("Restaurant {%s} has no dishes drafts to publish!".formatted(restaurantId.value()));
+            throw new ListIsEmptyException("no dishes drafts to publish!");
         }
 
         for (Dish dish : dishes) {

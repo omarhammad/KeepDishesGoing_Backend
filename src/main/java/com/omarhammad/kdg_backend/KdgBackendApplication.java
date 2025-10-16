@@ -2,17 +2,23 @@ package com.omarhammad.kdg_backend;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.modulith.Modulith;
 import org.springframework.modulith.core.ApplicationModules;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Modulith
 @EnableScheduling
 @EnableWebSecurity
+@EnableAsync
+@EnableRabbit
+@EnableMethodSecurity(prePostEnabled = true)
 public class KdgBackendApplication {
 
     private final Logger log = LoggerFactory.getLogger(KdgBackendApplication.class);

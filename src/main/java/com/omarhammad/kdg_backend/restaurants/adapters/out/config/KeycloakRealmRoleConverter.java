@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.restaurants.config;
+package com.omarhammad.kdg_backend.restaurants.adapters.out.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;

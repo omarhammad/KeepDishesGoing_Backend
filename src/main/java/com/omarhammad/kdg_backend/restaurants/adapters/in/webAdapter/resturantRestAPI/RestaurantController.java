@@ -68,6 +68,7 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(restaurantDTO);
     }
 
+
     /*http POST :8080/api/restaurants \
     name="La Piazza" \
     email="contact@lapiazza.com" \
@@ -150,12 +151,12 @@ public class RestaurantController {
 
         if (state.equalsIgnoreCase("draft")) {
             dishDTOS = dishes.stream()
-                    .map(dish -> requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getDraft()))
+                    .map(dish -> requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getScheduledTime(), dish.getDraft()))
                     .filter(Objects::nonNull)
                     .toList();
         } else if (state.equalsIgnoreCase("live")) {
             dishDTOS = dishes.stream()
-                    .map(dish -> requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getLive()))
+                    .map(dish -> requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getScheduledTime(), dish.getLive()))
                     .filter(Objects::nonNull)
                     .toList();
         } else {
@@ -166,19 +167,20 @@ public class RestaurantController {
 
     }
 
-    @GetMapping("/{id}/dishes/{dhId}")
-    public ResponseEntity<DishDTO> getDishOfARestaurant(@PathVariable String dhId, @PathVariable String id, @RequestParam String state) {
+    @GetMapping("/{id}/dishes/{dId}")
+    public ResponseEntity<DishDTO> getDishOfARestaurant(@PathVariable String id, @PathVariable String dId, @RequestParam String state) {
 
         Id<Restaurant> restaurantId = new Id<>(id);
-        Id<Dish> dishId = new Id<>(dhId);
+        Id<Dish> dishId = new Id<>(dId);
         Dish dish = findDishForRestaurantByIdUseCase.findDishOfARestaurantById(restaurantId, dishId);
 
         DishDTO dto;
         if (state.equalsIgnoreCase("draft")) {
-            dto = requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getDraft());
+            dto = requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getScheduledTime(), dish.getDraft());
 
         } else if (state.equalsIgnoreCase("live")) {
-            dto = requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getLive());
+            dto = requestMapper.toDishDTO(dish.getId(), dish.isInStock(), dish.getScheduledTime()
+                    , dish.getLive());
         } else {
             throw new InvalidDishStateValue("State must be provided as { 'live' or 'draft' }");
         }
@@ -312,8 +314,8 @@ public class RestaurantController {
 
     // TODO (Tuesday 6th OCT)
     //  1) Manual opening/closing use case - DONE
-    //  2) Understand the KeyCloak for Auth
-    //  3) Implement the Owner Auth
+    //  2) Understand the KeyCloak for Auth - DONE
+    //  3) Implement the Owner Auth - DONE
     //  4) Read the RabbitMQ
     //  5) Make events
     //  6) publish these events

@@ -4,6 +4,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.enums.DishType;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.FoodTag;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record DishDTO(String id,
@@ -13,6 +14,7 @@ public record DishDTO(String id,
                       String description,
                       BigDecimal price,
                       String pictureUrl,
-                      boolean isInStock
+                      boolean isInStock,
+                      LocalDateTime scheduledTime
 ) {
 }
