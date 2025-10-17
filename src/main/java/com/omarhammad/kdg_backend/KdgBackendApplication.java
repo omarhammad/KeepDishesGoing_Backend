@@ -2,7 +2,6 @@ package com.omarhammad.kdg_backend;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
@@ -17,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableScheduling
 @EnableWebSecurity
 @EnableAsync
-@EnableRabbit
 @EnableMethodSecurity(prePostEnabled = true)
 public class KdgBackendApplication {
 

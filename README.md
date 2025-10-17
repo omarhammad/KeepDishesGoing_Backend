@@ -16,7 +16,7 @@ It is built with **DDD**, **Hexagonal Architecture**, and **Event Sourcing** to 
 ## Technologies Used
 - **Java + Spring Boot** – backend framework
 - **PostgreSQL** – relational database
-- **RabbitMQ** – messaging for incomingOrder and delivery events
+- **RabbitMQ** – messaging for orderProjection and delivery events
 - **Keycloak** – identity and access management
 - **Docker Compose** – local development setup
 - **Hexagonal Architecture (Ports & Adapters)** – clean separation of domain, application, and infrastructure layers

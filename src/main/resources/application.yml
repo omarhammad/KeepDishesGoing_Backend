@@ -26,12 +26,20 @@ spring:
         jwt:
           issuer-uri: http://localhost:8180/realms/keepdishesgoing
           jwk-set-uri: http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/certs
-
   rabbitmq:
     host: localhost
     port: 5672
     username: user
     password: password
+
+logging:
+  level:
+    org:
+      springframework:
+        amqp: DEBUG
+        modulith: DEBUG
+        modulith.events: DEBUG
+        modulith.events.amqp: DEBUG
 
 server:
   port: 8080
@@ -39,7 +47,5 @@ server:
 keycloak:
   client:
     secret-key: ${SECRET_KEY:wWGV7unVgdIH0g3vdpBrBjiypsHN5rLf}
-
-
 
 

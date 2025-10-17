@@ -171,6 +171,43 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+
+    @ExceptionHandler(OrderAlreadyAcceptedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyAcceptedException(OrderAlreadyAcceptedException e,
+                                                                                WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(OrderAlreadyRejectedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyRejectedException(OrderAlreadyRejectedException e,
+                                                                                WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(OrderAlreadyDeclinedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyDeclinedException(OrderAlreadyDeclinedException e,
+                                                                                WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
     @ExceptionHandler(KeycloakServerException.class)
     public ResponseEntity<ErrorResponseDTO> handleKeycloakServerException(KeycloakServerException e,
                                                                           WebRequest webRequest) {

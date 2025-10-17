@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.orders.adapters.out.messaging;
+package com.omarhammad.kdg_backend.orders.adapters.in.messaging;
 
 import com.omarhammad.kdg_backend.common.events.config.RabbitMQTopology;
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;

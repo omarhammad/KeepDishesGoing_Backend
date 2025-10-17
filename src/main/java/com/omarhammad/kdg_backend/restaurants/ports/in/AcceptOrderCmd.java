@@ -4,7 +4,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 
-import java.time.LocalDateTime;
+public record AcceptOrderCmd(Id<Restaurant> restaurantId,
+                             Id<OrderProjection> orderProjectionId) {
 
-public record OrderPlacedProjectionCmd(Id<OrderProjection> orderId, Id<Restaurant> restaurantId, LocalDateTime occurredAt) {
 }

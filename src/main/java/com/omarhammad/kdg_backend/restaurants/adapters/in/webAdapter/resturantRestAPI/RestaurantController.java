@@ -39,6 +39,8 @@ public class RestaurantController {
     private final SchedulePublishToAllPendingDishesUseCase schedulePublishToAllPendingDishesUseCase;
     private final FindOwnerByIdUseCse findOwnerByIdUseCse;
     private final ManualOpenCloseRestaurantUseCase manualOpenCloseRestaurantUseCase;
+    private final RejectOrderUseCase rejectOrderUseCase;
+    private final AcceptOrderUseCase acceptOrderUseCase;
     private final RestaurantRequestMapper requestMapper;
 
     @GetMapping
@@ -312,13 +314,44 @@ public class RestaurantController {
     }
 
 
+    @PostMapping("/{id}/reject-order")
+    public ResponseEntity<ResponseDTO> rejectOrder(@PathVariable String id, @RequestBody RejectOrderRequest request) {
+
+        Id<Restaurant> restaurantId = new Id<>(id);
+        RejectOrderCmd cmd = requestMapper.toRejectOrderCmd(restaurantId, request);
+        rejectOrderUseCase.reject(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK.value(),
+                "Order rejected"
+        ));
+    }
+
+
+    @PostMapping("/{id}/accept-order")
+    public ResponseEntity<ResponseDTO> acceptOrder(@PathVariable String id, @RequestBody AcceptOrderRequest request) {
+
+        Id<Restaurant> restaurantId = new Id<>(id);
+        AcceptOrderCmd cmd = requestMapper.toAcceptOrderCmd(restaurantId, request);
+        acceptOrderUseCase.accept(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK.value(),
+                "Order accepted"
+        ));
+    }
+
     // TODO (Tuesday 6th OCT)
     //  1) Manual opening/closing use case - DONE
     //  2) Understand the KeyCloak for Auth - DONE
     //  3) Implement the Owner Auth - DONE
-    //  4) Read the RabbitMQ
+    //  4) Read the RabbitMQ - DONE
     //  5) Make events
-    //  6) publish these events
+    //       ORDER_ACCEPTED
+    //       ORDER_REJECTED
+    //       DISH PUBLISHED
+    //       DISH_UNPUBLISHED
+    //       DISH_OUT_OF_STOCK
+    //       DISH_IN_STOCK
+    //  6) publish all these events
 
 
 }

@@ -1,12 +1,12 @@
 package com.omarhammad.kdg_backend.restaurants.ports.out;
 
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderAcceptedEvent;
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderDeclinedEvent;
+import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 
 public interface RestaurantEventPublisherPort {
 
+    void publishRestaurantEvents(Restaurant restaurant);
 
-    void publishOrderAccepted(OrderAcceptedEvent event);
+    void publishOrderDeclined(OrderDeclinedEvent event);
 
-    void publishOrderRejected(OrderRejectedEvent event);
 }

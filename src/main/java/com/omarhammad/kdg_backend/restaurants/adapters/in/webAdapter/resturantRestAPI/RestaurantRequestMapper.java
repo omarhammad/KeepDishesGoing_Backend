@@ -1,18 +1,14 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI;
 
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.*;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.CreateDishDraftRequest;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.CreateRestaurantRequest;
-import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.EditDishDraftRequest;
+import com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter.resturantRestAPI.request.*;
 import com.omarhammad.kdg_backend.restaurants.domain.*;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.DishType;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.FoodTag;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.InvalidEnumValueException;
-import com.omarhammad.kdg_backend.restaurants.ports.in.CreateDishDraftCmd;
-import com.omarhammad.kdg_backend.restaurants.ports.in.CreateRestaurantCmd;
-import com.omarhammad.kdg_backend.restaurants.ports.in.EditDishDraftCmd;
+import com.omarhammad.kdg_backend.restaurants.ports.in.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -142,4 +138,22 @@ public class RestaurantRequestMapper {
     }
 
 
+    public RejectOrderCmd toRejectOrderCmd(Id<Restaurant> restaurantId, RejectOrderRequest request) {
+
+        return new RejectOrderCmd(
+                restaurantId,
+                new Id<>(request.orderId()),
+                request.reason()
+        );
+
+    }
+
+    public AcceptOrderCmd toAcceptOrderCmd(Id<Restaurant> restaurantId, AcceptOrderRequest request) {
+
+        return new AcceptOrderCmd(
+                restaurantId,
+                new Id<>(request.orderId())
+        );
+
+    }
 }

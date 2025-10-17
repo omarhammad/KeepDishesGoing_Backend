@@ -15,6 +15,7 @@ public class RabbitMQTopology {
     public static final String KDG_EXCHANGE = "kdg.exchange";
     public static final String ORDER_PLACED_QUEUE = "order.placed";
     public static final String ORDER_REJECTED_QUEUE = "order.rejected";
+    public static final String ORDER_DECLINED_QUEUE = "order.declined";
     public static final String ORDER_ACCEPTED_QUEUE = "order.accepted";
 
     @Bean
@@ -29,6 +30,13 @@ public class RabbitMQTopology {
     public Queue orderPlacedQueue() {
         return QueueBuilder
                 .durable(ORDER_PLACED_QUEUE)
+                .build();
+    }
+
+    @Bean(ORDER_DECLINED_QUEUE)
+    public Queue orderDeclinedQueue() {
+        return QueueBuilder
+                .durable(ORDER_DECLINED_QUEUE)
                 .build();
     }
 
@@ -53,6 +61,15 @@ public class RabbitMQTopology {
                 .to(kdgExchange)
                 .with("kdg.*.order.placed");  //kdg.<ORDER_ID>.order.placed
     }
+
+    @Bean
+    public Binding orderDeclinedBinding(@Qualifier(ORDER_DECLINED_QUEUE) Queue orderDeclinedQueue, TopicExchange kdgExchange) {
+        return BindingBuilder
+                .bind(orderDeclinedQueue)
+                .to(kdgExchange)
+                .with("kdg.*.order.declined"); //kdg.<ORDER_ID>.order.declined
+    }
+
 
     @Bean
     public Binding orderRejectedBinding(@Qualifier(ORDER_REJECTED_QUEUE) Queue orderRejectedQueue, TopicExchange kdgExchange) {

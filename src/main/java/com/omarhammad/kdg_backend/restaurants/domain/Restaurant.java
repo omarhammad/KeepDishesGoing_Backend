@@ -1,8 +1,14 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
+import com.omarhammad.kdg_backend.common.events.DomainEvent;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderAcceptedEvent;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OpeningStatus;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyAcceptedException;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyRejectedException;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +46,11 @@ public class Restaurant {
     @Setter
     private Id<Owner> ownerId;
 
+    private List<DomainEvent> domainEvents;
+
     public Restaurant() {
         this.dayOpeningHours = new HashMap<>();
+        this.domainEvents = new ArrayList<>();
         this.dishes = new ArrayList<>();
     }
 
@@ -58,6 +67,7 @@ public class Restaurant {
         this.hasScheduledPublish = hasScheduledPublish;
         this.dayOpeningHours = new HashMap<>();
         this.ownerId = ownerId;
+        this.domainEvents = new ArrayList<>();
     }
 
     public Id<Restaurant> getId() {
@@ -125,6 +135,9 @@ public class Restaurant {
         return this.ownerId;
     }
 
+    public List<DomainEvent> getDomainEvents() {
+        return domainEvents;
+    }
 
     public boolean isOpen() {
 
@@ -148,6 +161,25 @@ public class Restaurant {
         int currentHour = today.getHour();
 
         return openHour <= currentHour && currentHour < closeHour;
+    }
+
+
+    public void rejectOrder(String orderId, String reason, LocalDateTime occurredAt) {
+
+        this.domainEvents.add(new OrderRejectedEvent(
+                orderId,
+                reason,
+                occurredAt
+        ));
+
+    }
+
+    public void acceptOrder(String orderId, LocalDateTime occurredAt) {
+        this.domainEvents.add(new OrderAcceptedEvent(
+                orderId,
+                occurredAt
+        ));
+
     }
 
 

@@ -1,18 +1,20 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
-import com.omarhammad.kdg_backend.restaurants.domain.IncomingOrder;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.IncomingOrderStatus;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderDeclinedEvent;
+import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
 import com.omarhammad.kdg_backend.restaurants.ports.in.OrderPlacedProjectionCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.OrderPlacedProjector;
+import com.omarhammad.kdg_backend.restaurants.ports.out.LoadOrderProjection;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import com.omarhammad.kdg_backend.restaurants.ports.out.RestaurantEventPublisherPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.SaveIncomingOrder;
+import com.omarhammad.kdg_backend.restaurants.ports.out.SaveOrderProjection;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -20,7 +22,8 @@ import java.time.LocalDateTime;
 public class DefaultOrderPlacedProjector implements OrderPlacedProjector {
 
 
-    private final SaveIncomingOrder saveIncomingOrder;
+    private final SaveOrderProjection saveOrderProjection;
+    private final LoadOrderProjection loadOrderProjection;
     private final LoadRestaurantPort loadRestaurantPort;
     private final RestaurantEventPublisherPort eventPublisherPort;
 
@@ -28,20 +31,28 @@ public class DefaultOrderPlacedProjector implements OrderPlacedProjector {
     @Override
     public void project(OrderPlacedProjectionCmd cmd) {
 
+        boolean isOrderProjectionExist = loadOrderProjection.findByOrderId(cmd.orderId()).isPresent();
         boolean restaurantExit = loadRestaurantPort.findRestaurantById(cmd.restaurantId()).isPresent();
 
-        if (!restaurantExit) {
-            log.info("Restaurant not found");
-            eventPublisherPort.publishOrderRejected(
-                    new OrderRejectedEvent(cmd.orderId().value(), "Restaurant not found", LocalDateTime.now()));
+        if (isOrderProjectionExist) {
+            eventPublisherPort.publishOrderDeclined(
+                    new OrderDeclinedEvent(cmd.orderId().value(), OrderDeclinedEvent.ERROR_ORDER_ALREADY_EXIST, LocalDateTime.now()));
             return;
         }
-        IncomingOrder incomingOrder = new IncomingOrder(
+
+        if (!restaurantExit) {
+            eventPublisherPort.publishOrderDeclined(
+                    new OrderDeclinedEvent(cmd.orderId().value(), OrderDeclinedEvent.ERROR_RESTAURANT_NOT_FOUND, LocalDateTime.now()));
+            return;
+        }
+
+        OrderProjection newOrderProjection = new OrderProjection(
                 cmd.orderId(),
                 cmd.restaurantId(),
-                IncomingOrderStatus.PLACED,
-                cmd.occurredAt()
-        );
-        saveIncomingOrder.save(incomingOrder);
+                OrderProjectionStatus.PLACED,
+                cmd.occurredAt());
+
+
+        saveOrderProjection.save(newOrderProjection);
     }
 }

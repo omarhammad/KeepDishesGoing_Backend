@@ -1,8 +1,9 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.out.messaging;
 
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderAcceptedEvent;
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderDeclinedEvent;
+import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.ports.out.RestaurantEventPublisherPort;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,15 @@ public class RestaurantEventPublisherAdapter implements RestaurantEventPublisher
 
 
     @Override
-    public void publishOrderAccepted(OrderAcceptedEvent event) {
-        applicationEventPublisher.publishEvent(event);
+    @Transactional
+    public void publishRestaurantEvents(Restaurant restaurant) {
+        restaurant.getDomainEvents().forEach(applicationEventPublisher::publishEvent);
     }
 
     @Override
-    public void publishOrderRejected(OrderRejectedEvent event) {
+    @Transactional
+    public void publishOrderDeclined(OrderDeclinedEvent event) {
         applicationEventPublisher.publishEvent(event);
+
     }
 }
