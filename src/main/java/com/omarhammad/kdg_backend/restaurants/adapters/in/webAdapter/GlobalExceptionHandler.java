@@ -6,6 +6,7 @@ import com.omarhammad.kdg_backend.restaurants.adapters.out.exceptions.KeycloakSe
 import com.omarhammad.kdg_backend.restaurants.adapters.out.exceptions.OwnerAlreadyExistInKeycloakException;
 import com.omarhammad.kdg_backend.restaurants.core.exceptions.ListIsEmptyException;
 import com.omarhammad.kdg_backend.restaurants.core.exceptions.NoDishesScheduledException;
+import com.omarhammad.kdg_backend.restaurants.core.exceptions.OrderBusinessRuleException;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.*;
 import com.omarhammad.kdg_backend.restaurants.adapters.in.dto.generic.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
@@ -172,8 +173,8 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(OrderAlreadyAcceptedException.class)
-    public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyAcceptedException(OrderAlreadyAcceptedException e,
+    @ExceptionHandler(OrderBusinessRuleException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderBusinessRuleException(OrderBusinessRuleException e,
                                                                                 WebRequest webRequest) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponseDTO(
@@ -184,29 +185,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(OrderAlreadyRejectedException.class)
-    public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyRejectedException(OrderAlreadyRejectedException e,
-                                                                                WebRequest webRequest) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponseDTO(
-                        webRequest.getDescription(false),
-                        HttpStatus.BAD_REQUEST,
-                        e.getMessage(),
-                        LocalDateTime.now()
-                ));
-    }
-
-    @ExceptionHandler(OrderAlreadyDeclinedException.class)
-    public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyDeclinedException(OrderAlreadyDeclinedException e,
-                                                                                WebRequest webRequest) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponseDTO(
-                        webRequest.getDescription(false),
-                        HttpStatus.BAD_REQUEST,
-                        e.getMessage(),
-                        LocalDateTime.now()
-                ));
-    }
 
     @ExceptionHandler(KeycloakServerException.class)
     public ResponseEntity<ErrorResponseDTO> handleKeycloakServerException(KeycloakServerException e,

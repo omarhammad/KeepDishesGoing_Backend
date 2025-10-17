@@ -41,6 +41,8 @@ public class RestaurantController {
     private final ManualOpenCloseRestaurantUseCase manualOpenCloseRestaurantUseCase;
     private final RejectOrderUseCase rejectOrderUseCase;
     private final AcceptOrderUseCase acceptOrderUseCase;
+    private final ManualMarkOrderReadyForPickup manualMarkOrderReadyForPickup;
+
     private final RestaurantRequestMapper requestMapper;
 
     @GetMapping
@@ -336,6 +338,19 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
                 HttpStatus.OK.value(),
                 "Order accepted"
+        ));
+    }
+
+    @PostMapping("/{id}/mark-ready-for-pickup-order")
+    public ResponseEntity<ResponseDTO> markReadyForPickupOrder(@PathVariable String id, @RequestBody ReadyForPickupRequest request) {
+
+        Id<Restaurant> restaurantId = new Id<>(id);
+        ReadyForPickupCmd cmd = requestMapper.toReadyForPickupCmd(restaurantId,
+                request);
+        manualMarkOrderReadyForPickup.readyForPickup(cmd);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK.value(),
+                "Order ready for pickup"
         ));
     }
 

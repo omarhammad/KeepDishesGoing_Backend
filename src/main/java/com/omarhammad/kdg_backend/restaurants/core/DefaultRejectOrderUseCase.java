@@ -1,12 +1,10 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
+import com.omarhammad.kdg_backend.restaurants.core.exceptions.OrderBusinessRuleException;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
-import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyAcceptedException;
-import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyDeclinedException;
-import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyRejectedException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.RejectOrderCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.RejectOrderUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.out.*;
@@ -35,9 +33,10 @@ public class DefaultRejectOrderUseCase implements RejectOrderUseCase {
 
 
         switch (orderProjection.getStatus()) {
-            case REJECTED -> throw new OrderAlreadyRejectedException("Order already rejected");
-            case ACCEPTED -> throw new OrderAlreadyAcceptedException("Order already accepted");
-            case DECLINED -> throw new OrderAlreadyDeclinedException("Order already accepted");
+            case REJECTED -> throw new OrderBusinessRuleException("Order already rejected");
+            case ACCEPTED -> throw new OrderBusinessRuleException("Order already accepted");
+            case DECLINED -> throw new OrderBusinessRuleException("Order already declined");
+            case READY_FOR_PICKUP -> throw new OrderBusinessRuleException("Order already ready for pickup");
         }
 
 

@@ -156,4 +156,12 @@ public class RestaurantRequestMapper {
         );
 
     }
+
+    public ReadyForPickupCmd toReadyForPickupCmd(Id<Restaurant> restaurantId, ReadyForPickupRequest request) {
+        return new ReadyForPickupCmd(
+                restaurantId,
+                new Id<>(request.orderId())
+        );
+    }
+
 }
