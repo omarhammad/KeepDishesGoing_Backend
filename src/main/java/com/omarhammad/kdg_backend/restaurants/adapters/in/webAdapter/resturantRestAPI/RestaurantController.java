@@ -348,6 +348,7 @@ public class RestaurantController {
     //       ORDER_ACCEPTED -DONE
     //       ORDER_REJECTED - DONE
     //       ORDER_DECLINED AFTER 5MIN - DONE
+    //       ORDER_READY_FOR_PICKUP MANUAL/AUTO
     //       DISH PUBLISHED
     //       DISH_UNPUBLISHED
     //       DISH_OUT_OF_STOCK

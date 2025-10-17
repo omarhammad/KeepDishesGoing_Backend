@@ -1,5 +1,5 @@
 package com.omarhammad.kdg_backend.restaurants.domain.enums;
 
 public enum OrderProjectionStatus {
-    PLACED, ACCEPTED, REJECTED, DECLINED
+    PLACED, ACCEPTED, REJECTED, DECLINED, READY_FOR_PICKUP
 }

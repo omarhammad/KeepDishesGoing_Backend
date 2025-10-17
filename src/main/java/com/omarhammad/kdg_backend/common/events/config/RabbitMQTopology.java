@@ -17,6 +17,7 @@ public class RabbitMQTopology {
     public static final String ORDER_REJECTED_QUEUE = "order.rejected";
     public static final String ORDER_DECLINED_QUEUE = "order.declined";
     public static final String ORDER_ACCEPTED_QUEUE = "order.accepted";
+    public static final String ORDER_READY_FOR_PICKUP_QUEUE = "order.ready-for-pickup";
 
     @Bean
     public TopicExchange kdgExchange() {
@@ -54,6 +55,13 @@ public class RabbitMQTopology {
                 .build();
     }
 
+    @Bean(ORDER_READY_FOR_PICKUP_QUEUE)
+    public Queue orderReadyForPickUpQueue() {
+        return QueueBuilder
+                .durable(ORDER_READY_FOR_PICKUP_QUEUE)
+                .build();
+    }
+
     @Bean
     public Binding orderPlacedBinding(@Qualifier(ORDER_PLACED_QUEUE) Queue orderPlacedQueue, TopicExchange kdgExchange) {
         return BindingBuilder
@@ -85,6 +93,14 @@ public class RabbitMQTopology {
                 .bind(orderAcceptedQueue)
                 .to(kdgExchange)
                 .with("kdg.*.order.accepted"); //kdg.<ORDER_ID>.order.accepted
+    }
+
+    @Bean
+    public Binding orderReadyForPickUpBinding(@Qualifier(ORDER_READY_FOR_PICKUP_QUEUE) Queue orderReadyForPickUpQueue, TopicExchange kdgExchange) {
+        return BindingBuilder
+                .bind(orderReadyForPickUpQueue)
+                .to(kdgExchange)
+                .with("kdg.*.order.ready-for-pickup"); //kdg.<ORDER_ID>.order.ready-for-pick-up
     }
 
 

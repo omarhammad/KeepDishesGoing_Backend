@@ -2,14 +2,11 @@ package com.omarhammad.kdg_backend.restaurants.domain;
 
 import com.omarhammad.kdg_backend.common.events.DomainEvent;
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderAcceptedEvent;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderReadyForPickUpEvent;
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OpeningStatus;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
-import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyAcceptedException;
-import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderAlreadyRejectedException;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -183,6 +180,15 @@ public class Restaurant {
     }
 
 
+    public void readyForPickUp(String orderId, LocalDateTime occurredAt) {
+
+        this.domainEvents.add(new OrderReadyForPickUpEvent(
+                orderId,
+                occurredAt
+        ));
+    }
+
+
     @Override
     public String toString() {
         return "Restaurant{" +
@@ -199,4 +205,5 @@ public class Restaurant {
                 ", owner=" + ownerId +
                 '}';
     }
+
 }

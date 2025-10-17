@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.in.scheduler;
 
+import com.omarhammad.kdg_backend.restaurants.ports.in.AutoMarkOrdersReadyForPickUpUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.in.DeclineOrdersBeyondResponseWindowUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.in.DeclineOrdersCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.TriggerScheduledPublishAllPendingDishesUseCase;
@@ -14,7 +15,7 @@ public class SchedulerAdapter {
 
     private final TriggerScheduledPublishAllPendingDishesUseCase triggerScheduledPublishAllPendingDishesUseCase;
     private final DeclineOrdersBeyondResponseWindowUseCase declineOrdersBeyondResponseWindowUseCase;
-
+    private final AutoMarkOrdersReadyForPickUpUseCase autoMarkOrdersReadyForPickUpUseCase;
 
     @Scheduled(cron = "0 * * * * *")
     public void triggerScheduledPublishToMakeDishesLive() {
@@ -28,6 +29,11 @@ public class SchedulerAdapter {
         DeclineOrdersCmd cmd = new DeclineOrdersCmd(5);
         declineOrdersBeyondResponseWindowUseCase.decline(cmd);
 
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void markOrdersReadyForPickUp() {
+        autoMarkOrdersReadyForPickUpUseCase.readyForPickUp();
     }
 
 
