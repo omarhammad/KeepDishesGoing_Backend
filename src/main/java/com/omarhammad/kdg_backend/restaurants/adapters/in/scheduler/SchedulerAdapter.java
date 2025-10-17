@@ -1,5 +1,7 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.in.scheduler;
 
+import com.omarhammad.kdg_backend.restaurants.ports.in.DeclineOrdersBeyondResponseWindowUseCase;
+import com.omarhammad.kdg_backend.restaurants.ports.in.DeclineOrdersCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.TriggerScheduledPublishAllPendingDishesUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,11 +13,21 @@ public class SchedulerAdapter {
 
 
     private final TriggerScheduledPublishAllPendingDishesUseCase triggerScheduledPublishAllPendingDishesUseCase;
+    private final DeclineOrdersBeyondResponseWindowUseCase declineOrdersBeyondResponseWindowUseCase;
+
 
     @Scheduled(cron = "0 * * * * *")
-    private void triggerScheduledPublishToMakeDishesLive() {
+    public void triggerScheduledPublishToMakeDishesLive() {
         triggerScheduledPublishAllPendingDishesUseCase
                 .triggerScheduledPublish();
+    }
+
+
+    @Scheduled(cron = "0 * * * * *")
+    public void declineOrdersPlacedInFiveMinutes() {
+        DeclineOrdersCmd cmd = new DeclineOrdersCmd(5);
+        declineOrdersBeyondResponseWindowUseCase.decline(cmd);
+
     }
 
 

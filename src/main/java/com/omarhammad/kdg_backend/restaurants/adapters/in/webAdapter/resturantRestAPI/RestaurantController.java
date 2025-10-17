@@ -345,8 +345,9 @@ public class RestaurantController {
     //  3) Implement the Owner Auth - DONE
     //  4) Read the RabbitMQ - DONE
     //  5) Make events
-    //       ORDER_ACCEPTED
-    //       ORDER_REJECTED
+    //       ORDER_ACCEPTED -DONE
+    //       ORDER_REJECTED - DONE
+    //       ORDER_DECLINED AFTER 5MIN - DONE
     //       DISH PUBLISHED
     //       DISH_UNPUBLISHED
     //       DISH_OUT_OF_STOCK

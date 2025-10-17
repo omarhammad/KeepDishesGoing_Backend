@@ -1,7 +1,5 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
-import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
@@ -21,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class DefaultRejectOrderUseCase implements RejectOrderUseCase {
 
-    private final RestaurantEventPublisherPort eventPublisherPort;
+    private final EventPublisherPort eventPublisherPort;
     private final UpdateOrderProjection updateOrderProjection;
     private final LoadOrderProjection loadOrderProjection;
     private final LoadRestaurantPort loadRestaurantPort;

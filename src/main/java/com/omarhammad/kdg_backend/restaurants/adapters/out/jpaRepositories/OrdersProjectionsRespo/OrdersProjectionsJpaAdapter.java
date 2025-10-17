@@ -11,6 +11,7 @@ import com.omarhammad.kdg_backend.restaurants.ports.out.UpdateOrderProjection;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +22,11 @@ public class OrdersProjectionsJpaAdapter implements SaveOrderProjection, UpdateO
 
     private final OrdersProjectionsRepository repository;
 
+
+    @Override
+    public List<OrderProjection> findAll() {
+        return repository.findAll().stream().map(this::toOrderProjection).toList();
+    }
 
     @Override
     public Optional<OrderProjection> findOrderProjectionByIdAndRestaurantId(Id<OrderProjection> orderProjectionId, Id<Restaurant> restaurantId) {
@@ -34,6 +40,8 @@ public class OrdersProjectionsJpaAdapter implements SaveOrderProjection, UpdateO
         return repository.findById(UUID.fromString(orderProjectionId.value()))
                 .map(this::toOrderProjection);
     }
+
+
 
     @Override
     public Optional<OrderProjection> save(OrderProjection orderProjection) {

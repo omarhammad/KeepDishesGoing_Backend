@@ -11,7 +11,7 @@ import com.omarhammad.kdg_backend.restaurants.ports.in.AcceptOrderCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.AcceptOrderUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadOrderProjection;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.RestaurantEventPublisherPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.EventPublisherPort;
 import com.omarhammad.kdg_backend.restaurants.ports.out.UpdateOrderProjection;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class DefaultAcceptOrderUseCase implements AcceptOrderUseCase {
 
     private LoadRestaurantPort loadRestaurantPort;
     private LoadOrderProjection loadOrderProjection;
-    private RestaurantEventPublisherPort eventPublisherPort;
+    private EventPublisherPort eventPublisherPort;
     private UpdateOrderProjection updateOrderProjection;
 
 
