@@ -5,7 +5,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OpeningStatus;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.ManualOpenCloseRestaurantUseCase;
-import com.omarhammad.kdg_backend.restaurants.ports.out.EditRestaurant;
+import com.omarhammad.kdg_backend.restaurants.ports.out.EditRestaurantPort;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,17 @@ import org.springframework.stereotype.Service;
 public class DefaultManualOpenCloseRestaurantUseCase implements ManualOpenCloseRestaurantUseCase {
 
 
-    private EditRestaurant editRestaurant;
+    private EditRestaurantPort editRestaurantPort;
     private LoadRestaurantPort loadRestaurantPort;
 
     @Override
     public void open(Id<Restaurant> restaurantId) {
 
         Restaurant restaurant = getRestaurant(restaurantId);
+
+
         restaurant.setManualOpening(OpeningStatus.OPEN);
-        editRestaurant.edit(restaurant);
+        editRestaurantPort.edit(restaurant);
 
     }
 
@@ -32,7 +34,7 @@ public class DefaultManualOpenCloseRestaurantUseCase implements ManualOpenCloseR
 
         Restaurant restaurant = getRestaurant(restaurantId);
         restaurant.setManualOpening(OpeningStatus.CLOSE);
-        editRestaurant.edit(restaurant);
+        editRestaurantPort.edit(restaurant);
 
     }
 
@@ -41,7 +43,7 @@ public class DefaultManualOpenCloseRestaurantUseCase implements ManualOpenCloseR
 
         Restaurant restaurant = getRestaurant(restaurantId);
         restaurant.setManualOpening(OpeningStatus.AUTO);
-        editRestaurant.edit(restaurant);
+        editRestaurantPort.edit(restaurant);
     }
 
     private Restaurant getRestaurant(Id<Restaurant> restaurantId) {

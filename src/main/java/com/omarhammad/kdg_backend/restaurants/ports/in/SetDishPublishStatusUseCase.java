@@ -6,5 +6,5 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 
 public interface SetDishPublishStatusUseCase {
 
-    void setPublishDishStatus(Id<Restaurant> restaurantId, Id<Dish> dishId,SetDishPublishStatusCmd cmd);
+    void setPublishDishStatus(SetDishPublishStatusCmd cmd);
 }

@@ -2,7 +2,6 @@ package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.rest
 
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,9 +40,14 @@ public class RestaurantsJpaEntity {
 
     private boolean hasScheduledPublish;
 
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<DishJpaEntity> dishJpaEntities;
+
     private UUID owner;
 
+
     public RestaurantsJpaEntity() {
+        this.dishJpaEntities = new ArrayList<>();
         dayOpeningHours = new HashMap<>();
     }
 
@@ -57,12 +61,20 @@ public class RestaurantsJpaEntity {
         this.cuisine = cuisine;
         this.defaultPrepTime = defaultPrepTime;
         this.hasScheduledPublish = hasScheduledPublish;
+        this.dishJpaEntities = new ArrayList<>();
         this.owner = owner;
         this.dayOpeningHours = new HashMap<>();
     }
 
     public void addDayOpeningHours(String day, OpeningHoursJpa openingHoursJpa) {
         this.dayOpeningHours.put(day, openingHoursJpa);
+    }
+
+    public void addDishJpaEntity(DishJpaEntity dishJpaEntity) {
+        dishJpaEntity.setRestaurant(this);
+        this.dishJpaEntities.add(dishJpaEntity);
+
+
     }
 
 

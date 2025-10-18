@@ -4,12 +4,13 @@ import com.omarhammad.kdg_backend.common.events.DomainEvent;
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderAcceptedEvent;
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderReadyForPickUpEvent;
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.Cuisine;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.Day;
-import com.omarhammad.kdg_backend.restaurants.domain.enums.OpeningStatus;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.ListIsEmptyException;
+import com.omarhammad.kdg_backend.restaurants.domain.enums.*;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +32,6 @@ public class Restaurant {
     private String resPictureUrl;
 
     private final Map<Day, OpeningHours> dayOpeningHours;
-    @Setter
     private OpeningStatus manualOpening;
     @Setter
     private Cuisine cuisine;
@@ -43,7 +43,7 @@ public class Restaurant {
     @Setter
     private Id<Owner> ownerId;
 
-    private List<DomainEvent> domainEvents;
+    private final List<DomainEvent> domainEvents;
 
     public Restaurant() {
         this.dayOpeningHours = new HashMap<>();
@@ -71,37 +71,34 @@ public class Restaurant {
         return id;
     }
 
-
     public String getName() {
         return name;
     }
-
 
     public Email getEmail() {
         return email;
     }
 
-
     public Address getAddress() {
         return address;
     }
-
 
     public String getResPictureUrl() {
         return resPictureUrl;
     }
 
-
     public Map<Day, OpeningHours> getDayOpeningHours() {
         return dayOpeningHours;
     }
 
-    public OpeningHours getOneDayOpeningHours(Day day) {
-        return this.dayOpeningHours.get(day);
-    }
-
     public void addOpeningHoursForDay(Day day, OpeningHours op) {
         this.dayOpeningHours.put(day, op);
+    }
+
+    public void setManualOpening(OpeningStatus openingStatus) {
+        if (isAutoOpen() && openingStatus.equals(OpeningStatus.OPEN)) this.manualOpening = OpeningStatus.AUTO;
+        else if (!isAutoOpen() && openingStatus.equals(OpeningStatus.CLOSE)) this.manualOpening = OpeningStatus.AUTO;
+        else this.manualOpening = openingStatus;
     }
 
     public OpeningStatus getManualOpening() {
@@ -116,7 +113,19 @@ public class Restaurant {
         return defaultPrepTime;
     }
 
-    public List<Dish> getDishes() {
+    public Id<Owner> getOwnerId() {
+        return this.ownerId;
+    }
+
+    public List<DomainEvent> getDomainEvents() {
+        return domainEvents;
+    }
+
+    public OpeningHours findOneDayOpeningHours(Day day) {
+        return this.dayOpeningHours.get(day);
+    }
+
+    public List<Dish> findAllDishes() {
         return dishes;
     }
 
@@ -124,16 +133,132 @@ public class Restaurant {
         this.dishes.add(dish);
     }
 
+
+    public Dish findDishById(Id<Dish> dishId) {
+        return this.dishes
+                .stream()
+                .filter(d -> d.getId().equals(dishId))
+                .findFirst().orElseThrow(() -> new EntityNotFoundException("Dish {%s} not found".formatted(dishId.value())));
+    }
+
+    private List<Dish> findAllDishesHasDraftVersion() {
+        return this.dishes
+                .stream()
+                .filter(dish -> Objects.nonNull(dish.getDraft()))
+                .toList();
+    }
+
+    private List<Dish> findAllDishesHasScheduledTime() {
+        return this.dishes
+                .stream()
+                .filter(dish -> Objects.nonNull(dish.getScheduledTime()))
+                .toList();
+    }
+
+
+    public void createDish(String name, DishType dishType, List<FoodTag> foodTags,
+                           String description, BigDecimal price, String pictureUrl) {
+
+        Dish dish = new Dish();
+        dish.createId();
+
+        dish.saveDraft(
+                name,
+                dishType,
+                foodTags,
+                description,
+                price,
+                pictureUrl
+        );
+        this.dishes.add(dish);
+
+    }
+
+    public void editDishDraft(Id<Dish> dishId, String name, DishType dishType,
+                              List<FoodTag> foodTags, String description, BigDecimal price, String pictureUrl) {
+
+        Dish dish = findDishById(dishId);
+        dish.saveDraft(
+                name,
+                dishType,
+                foodTags,
+                description,
+                price,
+                pictureUrl
+        );
+    }
+
+    public void publishDish(Id<Dish> dishId) {
+
+        Dish dish = findDishById(dishId);
+        dish.publish();
+
+    }
+
+    public void unpublishDish(Id<Dish> dishId) {
+
+        Dish dish = findDishById(dishId);
+        dish.unpublish();
+
+    }
+
+    public void publishAllDishesPendingChanges() {
+
+        List<Dish> dishesHasDraftVersion = findAllDishesHasDraftVersion();
+
+        if (dishesHasDraftVersion.isEmpty())
+            throw new ListIsEmptyException("Restaurant {%s} has no dishes drafts to publish".formatted(this.getName()));
+
+        for (Dish dish : dishesHasDraftVersion) {
+            dish.publish();
+        }
+        this.setHasScheduledPublish(false);
+    }
+
+    public void schedulePublishToALlPendingDishes(LocalDateTime scheduleTime) {
+
+        List<Dish> dishesHasDraftVersion = findAllDishesHasDraftVersion();
+
+        if (dishesHasDraftVersion.isEmpty()) {
+            throw new ListIsEmptyException("no dishes drafts to publish!");
+        }
+
+        for (Dish dish : dishesHasDraftVersion) {
+            dish.setScheduledTime(scheduleTime);
+        }
+
+        this.setHasScheduledPublish(true);
+
+    }
+
+    public void publishAllScheduledDishes() {
+
+        List<Dish> dishesHasScheduledTime = findAllDishesHasScheduledTime();
+
+        boolean stillHasScheduled = false;
+        for (Dish dish : dishesHasScheduledTime) {
+            if (dish.getScheduledTime().isAfter(LocalDateTime.now())) {
+                stillHasScheduled = true;
+                continue;
+            }
+            dish.publish();
+        }
+        this.setHasScheduledPublish(stillHasScheduled);
+    }
+
+    public void setDishInStockStatus(Id<Dish> dishId) {
+
+        Dish dish = findDishById(dishId);
+        dish.markInStock();
+    }
+
+    public void setDishOutOfStockStatus(Id<Dish> dishId) {
+        Dish dish = findDishById(dishId);
+        dish.markOutOfStock();
+    }
+
     public boolean hasScheduledPublish() {
         return hasScheduledPublish;
-    }
-
-    public Id<Owner> getOwnerId() {
-        return this.ownerId;
-    }
-
-    public List<DomainEvent> getDomainEvents() {
-        return domainEvents;
     }
 
     public boolean isOpen() {
@@ -160,7 +285,6 @@ public class Restaurant {
         return openHour <= currentHour && currentHour < closeHour;
     }
 
-
     public void rejectOrder(String orderId, String reason, LocalDateTime occurredAt) {
 
         this.domainEvents.add(new OrderRejectedEvent(
@@ -179,7 +303,6 @@ public class Restaurant {
 
     }
 
-
     public void readyForPickUp(String orderId, LocalDateTime occurredAt) {
 
         this.domainEvents.add(new OrderReadyForPickUpEvent(
@@ -187,7 +310,6 @@ public class Restaurant {
                 occurredAt
         ));
     }
-
 
     @Override
     public String toString() {
@@ -205,5 +327,6 @@ public class Restaurant {
                 ", owner=" + ownerId +
                 '}';
     }
+
 
 }

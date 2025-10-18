@@ -1,4 +1,4 @@
-package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.dishesRepo.entites;
+package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.resturantRepo.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 @Setter
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "dishes_lives")
-public class DishLiveJpa {
+@Table(name = "dishes_drafts")
+public class DishDraftJpa {
 
     @Id
     private UUID id;
@@ -26,8 +27,8 @@ public class DishLiveJpa {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
-            name = "dish_live_food_tags",
-            joinColumns = @JoinColumn(name = "dish_live_id")
+            name = "dish_draft_food_tags",
+            joinColumns = @JoinColumn(name = "dish_draft_id")
     )
     private List<String> foodTags;
 
@@ -42,8 +43,7 @@ public class DishLiveJpa {
     @JoinColumn(name = "id")
     private DishJpaEntity dish;
 
-
-    public DishLiveJpa(String name, String dishType, String description, BigDecimal price, String pictureUrl) {
+    public DishDraftJpa(String name, String dishType, String description, BigDecimal price, String pictureUrl) {
         this.name = name;
         this.dishType = dishType;
         this.foodTags = new ArrayList<>();

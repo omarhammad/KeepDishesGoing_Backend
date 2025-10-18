@@ -20,7 +20,6 @@ public class Dish {
 
     @Setter
     private Id<Dish> id;
-    @Setter
     private boolean isInStock;
     private LocalDateTime scheduledTime;
     private DishData live;
@@ -73,6 +72,10 @@ public class Dish {
         return id;
     }
 
+    public void createId() {
+        this.id = Id.createNewId();
+    }
+
     public boolean isPublished() {
         return Objects.nonNull(this.live);
     }
@@ -100,4 +103,11 @@ public class Dish {
     }
 
 
+    public void markInStock() {
+        this.isInStock = true;
+    }
+
+    public void markOutOfStock() {
+        this.isInStock = false;
+    }
 }

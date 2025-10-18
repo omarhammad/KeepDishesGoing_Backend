@@ -1,13 +1,11 @@
-package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.dishesRepo.entites;
+package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.resturantRepo.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,14 +31,14 @@ public class DishJpaEntity {
     @OneToOne(mappedBy = "dish", cascade = CascadeType.ALL, orphanRemoval = true)
     private DishDraftJpa draft;
 
-    private UUID restaurant;
+    @ManyToOne
+    private RestaurantsJpaEntity restaurant;
 
 
-    public DishJpaEntity(UUID id, boolean isInStock, LocalDateTime scheduledTime, UUID restaurant) {
+    public DishJpaEntity(UUID id, boolean isInStock, LocalDateTime scheduledTime) {
         this.id = id;
         this.isInStock = isInStock;
         this.scheduledTime = scheduledTime;
-        this.restaurant = restaurant;
     }
 
 

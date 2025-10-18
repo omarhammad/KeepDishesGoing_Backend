@@ -72,7 +72,6 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(restaurantDTO);
     }
 
-
     /*http POST :8080/api/restaurants \
     name="La Piazza" \
     email="contact@lapiazza.com" \
@@ -246,8 +245,8 @@ public class RestaurantController {
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dId);
 
-        SetDishPublishStatusCmd cmd = new SetDishPublishStatusCmd(request.isPublished());
-        setDishPublishStatusUseCase.setPublishDishStatus(restaurantId, dishId, cmd);
+        SetDishPublishStatusCmd cmd = new SetDishPublishStatusCmd(restaurantId, dishId, request.isPublished());
+        setDishPublishStatusUseCase.setPublishDishStatus(cmd);
 
         String message;
         if (request.isPublished()) {
@@ -269,8 +268,8 @@ public class RestaurantController {
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dId);
 
-        SetDishStockStatusCmd cmd = new SetDishStockStatusCmd(request.isInStock());
-        setDishStockStatusUseCase.setDishStockStatus(restaurantId, dishId, cmd);
+        SetDishStockStatusCmd cmd = new SetDishStockStatusCmd(restaurantId,dishId,request.isInStock());
+        setDishStockStatusUseCase.setDishStockStatus(cmd);
         String message;
 
         if (request.isInStock()) {
@@ -359,16 +358,15 @@ public class RestaurantController {
     //  2) Understand the KeyCloak for Auth - DONE
     //  3) Implement the Owner Auth - DONE
     //  4) Read the RabbitMQ - DONE
-    //  5) Make events
+    //  5) Make events &  publish all these events
     //       ORDER_ACCEPTED -DONE
     //       ORDER_REJECTED - DONE
     //       ORDER_DECLINED AFTER 5MIN - DONE
-    //       ORDER_READY_FOR_PICKUP MANUAL/AUTO
+    //       ORDER_READY_FOR_PICKUP MANUAL/AUTO - DONE
     //       DISH PUBLISHED
     //       DISH_UNPUBLISHED
     //       DISH_OUT_OF_STOCK
     //       DISH_IN_STOCK
-    //  6) publish all these events
 
 
 }

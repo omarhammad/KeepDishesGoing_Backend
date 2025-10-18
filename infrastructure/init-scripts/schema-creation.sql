@@ -73,17 +73,12 @@ INSERT INTO restaurant_opening_hours (restaurants_id, day_of_week, open, close) 
                                                                                     ('55555555-5555-5555-5555-555555555555', 'Sunday', '12:00', '22:30');
 
 
-INSERT INTO dishes (id, is_in_stock, scheduled_time, restaurant)
+INSERT INTO dishes (id, is_in_stock, scheduled_time, restaurant_id)
 VALUES
-    -- Draft-only dish
     ('aaaa1111-aaaa-1111-aaaa-111111111111', true, NULL, '11111111-1111-1111-1111-111111111111'),
-    -- Live-only dish
     ('bbbb2222-bbbb-2222-bbbb-222222222222', true, NULL, '11111111-1111-1111-1111-111111111111'),
-    -- Dish with live + draft (pending update)
     ('cccc3333-cccc-3333-cccc-333333333333', true, NULL, '11111111-1111-1111-1111-111111111111'),
-    -- Another draft-only dish
     ('dddd4444-dddd-4444-dddd-444444444444', false, NULL, '11111111-1111-1111-1111-111111111111'),
-    -- Another live-only dish
     ('eeee5555-eeee-5555-eeee-555555555555', true, NULL, '11111111-1111-1111-1111-111111111111');
 
 INSERT INTO dishes_drafts (id, name, dish_type, description, price, picture_url)

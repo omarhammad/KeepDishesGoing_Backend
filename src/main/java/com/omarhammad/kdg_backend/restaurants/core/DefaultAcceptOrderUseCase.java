@@ -1,6 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
-import com.omarhammad.kdg_backend.restaurants.core.exceptions.OrderBusinessRuleException;
+import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderBusinessRuleException;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
