@@ -1,9 +1,7 @@
 package com.omarhammad.kdg_backend.restaurants.domain;
 
 import com.omarhammad.kdg_backend.common.events.DomainEvent;
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderAcceptedEvent;
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderReadyForPickUpEvent;
-import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderRejectedEvent;
+import com.omarhammad.kdg_backend.common.events.restaurantEvents.*;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.ListIsEmptyException;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.*;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
@@ -192,6 +190,11 @@ public class Restaurant {
 
         Dish dish = findDishById(dishId);
         dish.publish();
+        this.domainEvents.add(new DishPublishedEvent(
+                dish.getId().value(),
+                this.getId().value(),
+                LocalDateTime.now()
+        ));
 
     }
 
@@ -199,6 +202,11 @@ public class Restaurant {
 
         Dish dish = findDishById(dishId);
         dish.unpublish();
+        this.domainEvents.add(new DishUnPublishedEvent(
+                dish.getId().value(),
+                this.getId().value(),
+                LocalDateTime.now()
+        ));
 
     }
 
@@ -211,6 +219,11 @@ public class Restaurant {
 
         for (Dish dish : dishesHasDraftVersion) {
             dish.publish();
+            this.domainEvents.add(new DishPublishedEvent(
+                    dish.getId().value(),
+                    this.getId().value(),
+                    LocalDateTime.now()
+            ));
         }
         this.setHasScheduledPublish(false);
     }
@@ -242,6 +255,11 @@ public class Restaurant {
                 continue;
             }
             dish.publish();
+            this.domainEvents.add(new DishPublishedEvent(
+                    dish.getId().value(),
+                    this.getId().value(),
+                    LocalDateTime.now()
+            ));
         }
         this.setHasScheduledPublish(stillHasScheduled);
     }
@@ -250,11 +268,21 @@ public class Restaurant {
 
         Dish dish = findDishById(dishId);
         dish.markInStock();
+        this.domainEvents.add(new DishInStockEvent(
+                dish.getId().value(),
+                this.getId().value(),
+                LocalDateTime.now()
+        ));
     }
 
     public void setDishOutOfStockStatus(Id<Dish> dishId) {
         Dish dish = findDishById(dishId);
         dish.markOutOfStock();
+        this.domainEvents.add(new DishOutOfStockEvent(
+                dish.getId().value(),
+                this.getId().value(),
+                LocalDateTime.now()
+        ));
     }
 
     public boolean hasScheduledPublish() {

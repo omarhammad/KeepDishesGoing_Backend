@@ -268,7 +268,7 @@ public class RestaurantController {
         Id<Restaurant> restaurantId = new Id<>(id);
         Id<Dish> dishId = new Id<>(dId);
 
-        SetDishStockStatusCmd cmd = new SetDishStockStatusCmd(restaurantId,dishId,request.isInStock());
+        SetDishStockStatusCmd cmd = new SetDishStockStatusCmd(restaurantId, dishId, request.isInStock());
         setDishStockStatusUseCase.setDishStockStatus(cmd);
         String message;
 
@@ -363,10 +363,10 @@ public class RestaurantController {
     //       ORDER_REJECTED - DONE
     //       ORDER_DECLINED AFTER 5MIN - DONE
     //       ORDER_READY_FOR_PICKUP MANUAL/AUTO - DONE
-    //       DISH PUBLISHED
-    //       DISH_UNPUBLISHED
-    //       DISH_OUT_OF_STOCK
-    //       DISH_IN_STOCK
+    //       DISH PUBLISHED - DONE
+    //       DISH_UNPUBLISHED - DONE
+    //       DISH_OUT_OF_STOCK - DONE
+    //       DISH_IN_STOCK - DONE
 
 
 }

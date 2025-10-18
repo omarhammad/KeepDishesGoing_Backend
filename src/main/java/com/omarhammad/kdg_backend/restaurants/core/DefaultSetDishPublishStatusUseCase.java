@@ -5,6 +5,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundEx
 import com.omarhammad.kdg_backend.restaurants.ports.in.SetDishPublishStatusUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.in.SetDishPublishStatusCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.out.EditRestaurantPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.EventPublisherPort;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class DefaultSetDishPublishStatusUseCase implements SetDishPublishStatusU
 
     private final LoadRestaurantPort loadRestaurantPort;
     private final EditRestaurantPort editRestaurantPort;
+    private final EventPublisherPort eventPublisherPort;
 
 
     @Override
@@ -30,7 +32,9 @@ public class DefaultSetDishPublishStatusUseCase implements SetDishPublishStatusU
             restaurant.unpublishDish(cmd.dishId());
         }
 
+
         editRestaurantPort.edit(restaurant);
+        eventPublisherPort.publishRestaurantEvents(restaurant);
 
     }
 }

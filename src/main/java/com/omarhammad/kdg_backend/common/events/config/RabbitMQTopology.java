@@ -18,6 +18,10 @@ public class RabbitMQTopology {
     public static final String ORDER_DECLINED_QUEUE = "order.declined";
     public static final String ORDER_ACCEPTED_QUEUE = "order.accepted";
     public static final String ORDER_READY_FOR_PICKUP_QUEUE = "order.ready-for-pickup";
+    public static final String DISH_PUBLISHED_QUEUE = "dish.published";
+    public static final String DISH_UNPUBLISHED_QUEUE = "dish.unpublished";
+    public static final String DISH_OUT_OF_STOCK_QUEUE = "dish.out-of-stock";
+    public static final String DISH_IN_STOCK_QUEUE = "dish.in-stock";
 
     @Bean
     public TopicExchange kdgExchange() {
@@ -62,6 +66,37 @@ public class RabbitMQTopology {
                 .build();
     }
 
+    @Bean(DISH_PUBLISHED_QUEUE)
+    public Queue dishPublishedQueue() {
+        return QueueBuilder
+                .durable(DISH_PUBLISHED_QUEUE)
+                .build();
+    }
+
+
+    @Bean(DISH_UNPUBLISHED_QUEUE)
+    public Queue dishUnpublishedQueue() {
+        return QueueBuilder
+                .durable(DISH_UNPUBLISHED_QUEUE)
+                .build();
+    }
+
+
+    @Bean(DISH_IN_STOCK_QUEUE)
+    public Queue dishInStockQueue() {
+        return QueueBuilder
+                .durable(DISH_IN_STOCK_QUEUE)
+                .build();
+    }
+
+
+    @Bean(DISH_OUT_OF_STOCK_QUEUE)
+    public Queue dishOutOfStockQueue() {
+        return QueueBuilder
+                .durable(DISH_OUT_OF_STOCK_QUEUE)
+                .build();
+    }
+
     @Bean
     public Binding orderPlacedBinding(@Qualifier(ORDER_PLACED_QUEUE) Queue orderPlacedQueue, TopicExchange kdgExchange) {
         return BindingBuilder
@@ -101,6 +136,39 @@ public class RabbitMQTopology {
                 .bind(orderReadyForPickUpQueue)
                 .to(kdgExchange)
                 .with("kdg.*.order.ready-for-pickup"); //kdg.<ORDER_ID>.order.ready-for-pick-up
+    }
+
+    @Bean
+    public Binding dishPublishedBinding(@Qualifier(DISH_PUBLISHED_QUEUE) Queue dishPublishedQueue, TopicExchange kdgExchange) {
+        return BindingBuilder
+                .bind(dishPublishedQueue)
+                .to(kdgExchange)
+                .with("kdg.*.dish.published"); //kdg.<DISH_ID>.dish.published
+    }
+
+    @Bean
+    public Binding dishUnPublishedBinding(@Qualifier(DISH_UNPUBLISHED_QUEUE) Queue dishUnPublishedQueue, TopicExchange kdgExchange) {
+        return BindingBuilder
+                .bind(dishUnPublishedQueue)
+                .to(kdgExchange)
+                .with("kdg.*.dish.unpublished"); //kdg.<DISH_ID>.dish.unpublished
+    }
+
+
+    @Bean
+    public Binding dishInStockBinding(@Qualifier(DISH_IN_STOCK_QUEUE) Queue dishInStockQueue, TopicExchange kdgExchange) {
+        return BindingBuilder
+                .bind(dishInStockQueue)
+                .to(kdgExchange)
+                .with("kdg.*.dish.in-stock"); //kdg.<DISH_ID>.dish.in-stock
+    }
+
+    @Bean
+    public Binding dishOutOfStockBinding(@Qualifier(DISH_OUT_OF_STOCK_QUEUE) Queue dishOutOfStockQueue, TopicExchange kdgExchange) {
+        return BindingBuilder
+                .bind(dishOutOfStockQueue)
+                .to(kdgExchange)
+                .with("kdg.*.dish.out-of-stock"); //kdg.<DISH_ID>.dish.out-of-stock
     }
 
 

@@ -5,6 +5,7 @@ import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.PublishAllPendingDishesUseCase;
 import com.omarhammad.kdg_backend.restaurants.ports.out.EditRestaurantPort;
+import com.omarhammad.kdg_backend.restaurants.ports.out.EventPublisherPort;
 import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class DefaultPublishAllPendingDishesUseCase implements PublishAllPendingD
 
 
     private final LoadRestaurantPort loadRestaurantPort;
+    private final EventPublisherPort eventPublisherPort;
     private EditRestaurantPort editRestaurantPort;
 
     @Override
@@ -25,7 +27,10 @@ public class DefaultPublishAllPendingDishesUseCase implements PublishAllPendingD
 
 
         restaurant.publishAllDishesPendingChanges();
+
+
         editRestaurantPort.edit(restaurant);
+        eventPublisherPort.publishRestaurantEvents(restaurant);
 
 
     }
