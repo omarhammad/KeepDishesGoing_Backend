@@ -353,20 +353,9 @@ public class RestaurantController {
         ));
     }
 
-    // TODO (Tuesday 6th OCT)
-    //  1) Manual opening/closing use case - DONE
-    //  2) Understand the KeyCloak for Auth - DONE
-    //  3) Implement the Owner Auth - DONE
-    //  4) Read the RabbitMQ - DONE
-    //  5) Make events &  publish all these events
-    //       ORDER_ACCEPTED -DONE
-    //       ORDER_REJECTED - DONE
-    //       ORDER_DECLINED AFTER 5MIN - DONE
-    //       ORDER_READY_FOR_PICKUP MANUAL/AUTO - DONE
-    //       DISH PUBLISHED - DONE
-    //       DISH_UNPUBLISHED - DONE
-    //       DISH_OUT_OF_STOCK - DONE
-    //       DISH_IN_STOCK - DONE
+    // TODO (Tuesday 18th OCT)
+    //   1) REQUEST ALL ORDERS PROJECTIONS FOR TODAY , AS ALL
+    //   2) REQUEST THE MENU OF 10 DISHES ONLY.
 
 
 }
