@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +18,9 @@ import java.util.UUID;
 public class OrderJpaEntity {
     @Id
     private UUID id;
+
     private String orderStatus;
+    private LocalDateTime statusOccurredAt;
 
     @Column(name = "restaurant_id")
     private UUID restaurant;
@@ -35,7 +38,6 @@ public class OrderJpaEntity {
 
     @OneToOne
     private CustomerJpaEntity customer;
-
 
 
 }

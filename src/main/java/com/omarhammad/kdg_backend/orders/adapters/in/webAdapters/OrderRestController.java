@@ -12,7 +12,8 @@ public class OrderRestController {
 
     /*
      * TODO:
-     *  1) Make the projection for all [orders status on the domain object] and the [dish status on the dish_view]
+     *  1) Make the projection for all [orders status on the domain object]
+     *     and the [dish status on the dish_view] - DONE
      *  2) ENDPOINT TO REQUEST ORDER CREATION - [CUSTOMER_DATA, ORDER_DETAILS, PAYMENT_DETAILS]
      *     - A) check the dishes are from the same restaurant
      *     - B) check if the restaurant is open
