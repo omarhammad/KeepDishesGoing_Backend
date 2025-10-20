@@ -107,7 +107,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}/open-status")
-    public ResponseEntity<RestaurantOpeningStatusDTO> checkManualOpining(@PathVariable String id) {
+    public ResponseEntity<RestaurantOpeningStatusDTO> checkRestaurantOpenStatus(@PathVariable String id) {
 
         Id<Restaurant> restaurantId = new Id<>(id);
         Restaurant restaurant = findRestaurantByIdUseCase.findRestaurantById(restaurantId);

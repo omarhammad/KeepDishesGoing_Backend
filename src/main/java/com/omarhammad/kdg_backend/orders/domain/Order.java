@@ -4,14 +4,17 @@ import com.omarhammad.kdg_backend.orders.domain.enums.OrderStatus;
 import com.sun.source.util.DocTreeFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
     private Id<Order> id;
@@ -22,22 +25,20 @@ public class Order {
     private Payment payment;
     private Customer customer;
 
-    public Order(OrderStatus orderStatus, LocalDateTime statusOccurredAt, Id restaurant, List<Id> dishes, Payment payment, Customer customer) {
-        this.orderStatus = orderStatus;
-        this.statusOccurredAt = statusOccurredAt;
-        this.restaurant = restaurant;
-        this.dishes = dishes;
-        this.payment = payment;
-        this.customer = customer;
-    }
-
     public Order changeStatusTo(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
         return this;
     }
 
-
     public void at(LocalDateTime statusOccurredAt) {
         this.statusOccurredAt = statusOccurredAt;
+    }
+
+
+    public void createOrder(List<Id> dishes, Id restaurant) {
+        this.dishes = dishes;
+        this.restaurant = restaurant;
+        this.orderStatus = OrderStatus.PENDING_PAYMENT;
+        this.statusOccurredAt = LocalDateTime.now();
     }
 }

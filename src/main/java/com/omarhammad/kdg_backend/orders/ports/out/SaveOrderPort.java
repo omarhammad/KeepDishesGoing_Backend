@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface SaveOrderPort {
 
-    Optional<Order> save(Order order);
+    Order save(Order order);
 
 }

@@ -21,7 +21,6 @@ public class DishProjection {
     private DishLiveStatus liveStatus;
     private DishStockStatus stockStatus;
 
-
     public DishProjection(Id<DishProjection> dishId, Id restaurantId, LocalDateTime occurredAt, DishLiveStatus liveStatus) {
         this.dishId = dishId;
         this.restaurantId = restaurantId;
@@ -49,6 +48,5 @@ public class DishProjection {
     public void at(LocalDateTime occurredAt) {
         this.occurredAt = occurredAt;
     }
-
 
 }

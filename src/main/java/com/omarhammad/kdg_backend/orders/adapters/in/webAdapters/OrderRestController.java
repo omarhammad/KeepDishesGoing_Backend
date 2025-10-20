@@ -1,14 +1,41 @@
 package com.omarhammad.kdg_backend.orders.adapters.in.webAdapters;
 
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.OrderDTO;
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.OrderIdDTO;
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.ResponseDTO;
+import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CheckoutRequest;
+import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CreateOrderRequest;
+import com.omarhammad.kdg_backend.orders.domain.Id;
+import com.omarhammad.kdg_backend.orders.domain.Order;
+import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderCmd;
+import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderUseCase;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/orders")
 @AllArgsConstructor
 public class OrderRestController {
 
+
+    private CreateOrderUseCase createOrderUseCase;
+    private OrderRequestMapper mapper;
+
+    @PostMapping("")
+    public ResponseEntity<OrderIdDTO> createNewOrder(@RequestBody CreateOrderRequest request) {
+
+        CreateOrderCmd cmd = mapper.toCreateOrderCmd(request);
+        Id<Order> orderId = createOrderUseCase.createOrder(cmd);
+
+        return ResponseEntity.ok(new OrderIdDTO(orderId.value()));
+
+    }
+
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<ResponseDTO> checkout(@PathVariable String id, @RequestBody CheckoutRequest request) {
+        return null;
+    }
 
     /*
      * TODO:
