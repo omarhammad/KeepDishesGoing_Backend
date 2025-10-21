@@ -4,5 +4,20 @@
       "name": "keycloak.client.secret-key",
       "type": "java.lang.String",
       "description": "Description for keycloak.client.secret-key."
-  }
-] }
+    },
+    {
+      "name": "sendgrid.email.from",
+      "type": "java.lang.String",
+      "description": "Description for sendgrid.email.from."
+    },
+    {
+      "name": "sendgrid.api.key",
+      "type": "java.lang.String",
+      "description": "Description for sendgrid.api.key."
+    },
+    {
+      "name": "sendgrid.template.id",
+      "type": "java.lang.String",
+      "description": "Description for sendgrid.template.id."
+    }
+  ] }

@@ -48,4 +48,13 @@ keycloak:
   client:
     secret-key: ${SECRET_KEY:wWGV7unVgdIH0g3vdpBrBjiypsHN5rLf}
 
+sendgrid:
+  api:
+    key: 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
+  email:
+    from: omar.hammad@student.kdg.be
+  template:
+    id: d-e3f06d52cea04b009fa8ad6581f4226e
+
+
 

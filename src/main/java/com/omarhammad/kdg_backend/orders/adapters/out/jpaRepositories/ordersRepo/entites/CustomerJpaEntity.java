@@ -1,10 +1,7 @@
 package com.omarhammad.kdg_backend.orders.adapters.out.jpaRepositories.ordersRepo.entites;
 
-import com.omarhammad.kdg_backend.orders.domain.DeliveryAddress;
-import com.omarhammad.kdg_backend.orders.domain.Email;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +12,8 @@ import java.util.UUID;
 @Entity(name = "customers")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CustomerJpaEntity {
     @Id
     private UUID id;

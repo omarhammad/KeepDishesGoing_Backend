@@ -20,9 +20,14 @@ public class Payment {
     private PaymentResult paymentResult;
 
 
-    public Payment(PaymentMethod method, BigDecimal amount, String paymentToken) {
+    public Payment(Id<Payment> id, PaymentMethod method, BigDecimal amount, String paymentToken) {
+        this.id = id;
         this.method = method;
         this.amount = amount;
         this.paymentToken = paymentToken;
+    }
+
+    public void paymentSuccessful(PaymentResult paymentResult) {
+        this.paymentResult = paymentResult;
     }
 }

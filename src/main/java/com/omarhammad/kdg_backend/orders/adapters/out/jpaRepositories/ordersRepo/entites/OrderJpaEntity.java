@@ -25,7 +25,7 @@ public class OrderJpaEntity {
     @Column(name = "restaurant_id")
     private UUID restaurant;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "order_dishes",
             joinColumns = @JoinColumn(name = "order_id")
@@ -33,11 +33,14 @@ public class OrderJpaEntity {
     @Column(name = "dish_Id")
     private List<UUID> dishes;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "payment_id")
     private PaymentJpaEntity payment;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "customer_id")
     private CustomerJpaEntity customer;
+
 
 
 

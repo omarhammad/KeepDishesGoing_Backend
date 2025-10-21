@@ -6,9 +6,12 @@ import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.Checko
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CreateOrderRequest;
 import com.omarhammad.kdg_backend.orders.domain.Id;
 import com.omarhammad.kdg_backend.orders.domain.Order;
+import com.omarhammad.kdg_backend.orders.ports.in.CheckoutCmd;
+import com.omarhammad.kdg_backend.orders.ports.in.CheckoutUseCase;
 import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderCmd;
 import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderUseCase;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +21,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrderRestController {
 
 
-    private CreateOrderUseCase createOrderUseCase;
-    private OrderRequestMapper mapper;
+    private final CreateOrderUseCase createOrderUseCase;
+    private final CheckoutUseCase checkoutUseCase;
+    private final OrderRequestMapper mapper;
 
     @PostMapping("")
     public ResponseEntity<OrderIdDTO> createNewOrder(@RequestBody CreateOrderRequest request) {
@@ -34,13 +38,14 @@ public class OrderRestController {
     @PostMapping("/{id}/checkout")
     public ResponseEntity<ResponseDTO> checkout(@PathVariable String id, @RequestBody CheckoutRequest request) {
 
-        /*TODO
-            1) All domain and core exceptions must be handled
-            2) create customer entity object
-            3) make payment entity object
-            4) publish ORDER PLACED IF ALL SUCCESS.
-         */
-        return null;
+        Id<Order> orderId = new Id<>(id);
+        CheckoutCmd cmd = mapper.toCheckoutCmd(orderId, request);
+        checkoutUseCase.checkout(cmd);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK.value(),
+                "Checkout completed successfully"
+        ));
     }
 
     /*
@@ -51,11 +56,14 @@ public class OrderRestController {
      *     - A) check the dishes are from the same restaurant - DONE
      *     - B) check if the restaurant is open - DONE
      *     - C) check if all dishes are in_stock and published - DONE
-     *     - D) create customer entity object
-     *     - E) make payment entity object
-     *     - F) create Order and save then return the id of the order for the tracking page
+     *     - D) create customer entity object - DONE
+     *     - E) make payment entity object - DONE
+     *     - F) publish ORDER PLACED IF ALL SUCCESS - DONE
+           - G) SEND EMAIL WITH THE TRACKING LINK FOR THE CUSTOMER - DONE
+           - H) TBC-> paidAmount == total_dishes_price
      *  3) ENDPOINT TO RETURN ORDER STATUS FOR THE TRACKING PAGE
      *  4) ENDPOINT TO RETURN ORDER DETAILS FOR THE CUSTOMER/OWNER
+     *  5) Integrate delivery with the system to finalize it
      *  5) As KDG, I want to publish messages for the delivery service when an order is accepted
      *     and when it is ready for pickup.
      */
