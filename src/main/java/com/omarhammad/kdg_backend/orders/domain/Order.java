@@ -1,7 +1,6 @@
 package com.omarhammad.kdg_backend.orders.domain;
 
 import com.omarhammad.kdg_backend.orders.domain.enums.OrderStatus;
-import com.sun.source.util.DocTreeFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -36,6 +34,7 @@ public class Order {
 
 
     public void createOrder(List<Id> dishes, Id restaurant) {
+        this.id = Id.createNewId();
         this.dishes = dishes;
         this.restaurant = restaurant;
         this.orderStatus = OrderStatus.PENDING_PAYMENT;

@@ -5,6 +5,5 @@ import java.math.BigDecimal;
 public record PaymentInfoRequest(
         String method,
         BigDecimal amount,
-        String paymentToken,
-        String paymentStatus) {
+        String paymentToken) {
 }

@@ -306,11 +306,15 @@ public class Restaurant {
         LocalDateTime today = LocalDateTime.now();
 
         OpeningHours todayOH = dayOpeningHours.get(Day.valueOf(today.getDayOfWeek().toString()));
-        int openHour = LocalTime.parse(todayOH.open(), formatter).getHour();
-        int closeHour = LocalTime.parse(todayOH.close(), formatter).getHour();
-        int currentHour = today.getHour();
+        LocalTime openTime = LocalTime.parse(todayOH.open(), formatter);
+        LocalTime closeTime = LocalTime.parse(todayOH.close(), formatter);
+        LocalTime currentTime = today.toLocalTime();
 
-        return openHour <= currentHour && currentHour < closeHour;
+        if (openTime.isBefore(closeTime)) {
+            return !currentTime.isBefore(openTime) && currentTime.isBefore(closeTime);
+        } else {
+            return !currentTime.isBefore(openTime) || currentTime.isBefore(closeTime);
+        }
     }
 
     public void rejectOrder(String orderId, String reason, LocalDateTime occurredAt) {

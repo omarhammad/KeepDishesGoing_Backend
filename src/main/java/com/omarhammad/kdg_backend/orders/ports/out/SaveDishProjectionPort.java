@@ -5,5 +5,5 @@ import com.omarhammad.kdg_backend.orders.domain.DishProjection;
 import java.util.Optional;
 
 public interface SaveDishProjectionPort {
-    Optional<DishProjection> save(DishProjection dishProjection);
+    DishProjection save(DishProjection dishProjection);
 }

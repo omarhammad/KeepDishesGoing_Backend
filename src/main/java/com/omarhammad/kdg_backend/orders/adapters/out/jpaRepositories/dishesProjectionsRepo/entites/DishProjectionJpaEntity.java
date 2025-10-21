@@ -10,11 +10,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity(name = "dish_projection")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity(name = "dish_projection")
 public class DishProjectionJpaEntity {
 
 
@@ -24,11 +24,4 @@ public class DishProjectionJpaEntity {
     private LocalDateTime occurredAt;
     private String liveStatus;
     private String stockStatus;
-
-    public DishProjectionJpaEntity(UUID restaurantId, LocalDateTime occurredAt, String liveStatus, String stockStatus) {
-        this.restaurantId = restaurantId;
-        this.occurredAt = occurredAt;
-        this.liveStatus = liveStatus;
-        this.stockStatus = stockStatus;
-    }
 }

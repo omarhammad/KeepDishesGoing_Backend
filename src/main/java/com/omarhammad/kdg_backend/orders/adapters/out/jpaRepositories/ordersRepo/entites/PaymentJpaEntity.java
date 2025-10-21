@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.orders.adapters.out.jpaRepositories.ordersRepo.entites;
 
+import com.omarhammad.kdg_backend.orders.domain.PaymentResult;
 import com.omarhammad.kdg_backend.orders.domain.enums.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,5 +22,6 @@ public class PaymentJpaEntity {
     private UUID id;
     private String method;
     private BigDecimal amount;
-    private boolean isPaid;
+    private String paymentToken;
+    private PaymentResultsJpa paymentResult;
 }

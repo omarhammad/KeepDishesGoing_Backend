@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.orders.adapters.out.httpAdapters;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.omarhammad.kdg_backend.orders.domain.Id;
 import com.omarhammad.kdg_backend.orders.ports.out.RestaurantAvailabilityPort;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,8 @@ public class RestaurantHttpAdapter implements RestaurantAvailabilityPort {
         return Boolean.TRUE.equals(webClient.get()
                 .uri("/{id}/open-status", restaurantId.value())
                 .retrieve()
-                .bodyToMono(Boolean.class)
+                .bodyToMono(JsonNode.class)
+                .map(jsonNode -> jsonNode.get("openStatus").asBoolean())
                 .block());
     }
 

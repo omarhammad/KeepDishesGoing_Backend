@@ -11,6 +11,7 @@ import com.omarhammad.kdg_backend.orders.ports.out.SaveDishProjectionPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,22 +31,43 @@ public class DishProjectionJpaAdapter implements LoadDishProjectionPort, SaveDis
 
 
     @Override
-    public Optional<DishProjection> save(DishProjection dishProjection) {
-        return Optional.empty();
+    public DishProjection save(DishProjection dishProjection) {
+        DishProjectionJpaEntity entity = toDishProjectionJpaEntity(dishProjection);
+        repository.save(entity);
+        return toDishProjection(entity);
     }
+
 
     @Override
     public void edit(DishProjection dishProjection) {
-
+        DishProjectionJpaEntity entity = toDishProjectionJpaEntity(dishProjection);
+        repository.save(entity);
     }
 
     private DishProjection toDishProjection(DishProjectionJpaEntity entity) {
+
+        String liveStatus = entity.getLiveStatus();
+        String stockStatus = entity.getStockStatus();
+
         return new DishProjection(
                 new Id<>(entity.getDishId().toString()),
                 new Id(entity.getRestaurantId().toString()),
                 entity.getOccurredAt(),
-                DishLiveStatus.valueOf(entity.getLiveStatus().toUpperCase()),
-                DishStockStatus.valueOf(entity.getStockStatus().toUpperCase())
+                Objects.nonNull(liveStatus) ? DishLiveStatus.valueOf(liveStatus.toUpperCase()) : null,
+                Objects.nonNull(stockStatus) ? DishStockStatus.valueOf(stockStatus.toUpperCase()) : null
+        );
+    }
+
+    private DishProjectionJpaEntity toDishProjectionJpaEntity(DishProjection dishProjection) {
+        DishLiveStatus liveStatus = dishProjection.getLiveStatus();
+        DishStockStatus stockStatus = dishProjection.getStockStatus();
+
+        return new DishProjectionJpaEntity(
+                UUID.fromString(dishProjection.getDishId().value()),
+                UUID.fromString(dishProjection.getRestaurantId().value()),
+                dishProjection.getOccurredAt(),
+                Objects.nonNull(liveStatus) ? liveStatus.name() : null,
+                Objects.nonNull(stockStatus) ? stockStatus.name() : null
         );
     }
 
