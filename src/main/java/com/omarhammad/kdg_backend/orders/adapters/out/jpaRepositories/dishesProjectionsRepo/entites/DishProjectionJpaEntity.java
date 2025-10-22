@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class DishProjectionJpaEntity {
     private UUID dishId;
     private UUID restaurantId;
     private LocalDateTime occurredAt;
+    private BigDecimal price;
     private String liveStatus;
     private String stockStatus;
 }

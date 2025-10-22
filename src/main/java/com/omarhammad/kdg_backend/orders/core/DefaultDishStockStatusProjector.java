@@ -1,6 +1,7 @@
 package com.omarhammad.kdg_backend.orders.core;
 
 import com.omarhammad.kdg_backend.orders.domain.DishProjection;
+import com.omarhammad.kdg_backend.orders.domain.enums.DishLiveStatus;
 import com.omarhammad.kdg_backend.orders.ports.in.DishStockStatusProjector;
 import com.omarhammad.kdg_backend.orders.ports.in.DishStockStatusProjectorCmd;
 import com.omarhammad.kdg_backend.orders.ports.out.EditDishProjectionPort;
@@ -38,6 +39,7 @@ public class DefaultDishStockStatusProjector implements DishStockStatusProjector
                 cmd.dishId(),
                 cmd.restaurantId(),
                 cmd.occurredAt(),
+                DishLiveStatus.UNPUBLISHED,
                 cmd.newStockStatus()
         );
 

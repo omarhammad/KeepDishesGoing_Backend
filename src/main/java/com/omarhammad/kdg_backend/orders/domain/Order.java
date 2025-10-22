@@ -24,6 +24,7 @@ public class Order {
     private LocalDateTime statusOccurredAt;
     private Id restaurant;
     private List<Id> dishes;
+    private BigDecimal totalPrice;
     private Payment payment;
     private Customer customer;
     private final List<DomainEvent> domainEvents;
@@ -32,12 +33,13 @@ public class Order {
         this.domainEvents = new ArrayList<>();
     }
 
-    public Order(Id<Order> id, OrderStatus orderStatus, LocalDateTime statusOccurredAt, Id restaurant, List<Id> dishes, Payment payment, Customer customer) {
+    public Order(Id<Order> id, OrderStatus orderStatus, LocalDateTime statusOccurredAt, Id restaurant, List<Id> dishes, BigDecimal totalPrice, Payment payment, Customer customer) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.statusOccurredAt = statusOccurredAt;
         this.restaurant = restaurant;
         this.dishes = dishes;
+        this.totalPrice = totalPrice;
         this.payment = payment;
         this.customer = customer;
         this.domainEvents = new ArrayList<>();
@@ -53,10 +55,11 @@ public class Order {
     }
 
 
-    public void createOrder(List<Id> dishes, Id restaurant) {
+    public void createOrder(List<Id> dishes, Id restaurant, BigDecimal totalOrderPrice) {
         this.id = Id.createNewId();
         this.dishes = dishes;
         this.restaurant = restaurant;
+        this.totalPrice = totalOrderPrice;
         this.orderStatus = OrderStatus.PENDING_PAYMENT;
         this.statusOccurredAt = LocalDateTime.now();
     }

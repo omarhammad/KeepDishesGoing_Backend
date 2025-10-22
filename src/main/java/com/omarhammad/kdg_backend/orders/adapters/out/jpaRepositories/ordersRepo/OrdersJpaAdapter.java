@@ -48,6 +48,7 @@ public class OrdersJpaAdapter implements LoadOrderPort, SaveOrderPort, EditOrder
                 entity.getStatusOccurredAt(),
                 new Id(entity.getRestaurant().toString()),
                 entity.getDishes().stream().map(d -> new Id(d.toString())).toList(),
+                entity.getTotalPrice(),
                 toPayment(entity.getPayment()),
                 toCustomer(entity.getCustomer())
         );
@@ -96,6 +97,7 @@ public class OrdersJpaAdapter implements LoadOrderPort, SaveOrderPort, EditOrder
                 order.getStatusOccurredAt(),
                 UUID.fromString(order.getRestaurant().value()),
                 order.getDishes().stream().map(d -> UUID.fromString(d.value())).toList(),
+                order.getTotalPrice(),
                 toPaymentJpaEntity(order.getPayment()),
                 toCustomerJpaEntity(order.getCustomer())
         );

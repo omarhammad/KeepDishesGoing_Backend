@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,20 +20,16 @@ public class DishProjection {
     private Id<DishProjection> dishId;
     private Id restaurantId;
     private LocalDateTime occurredAt;
+    private BigDecimal price;
     private DishLiveStatus liveStatus;
     private DishStockStatus stockStatus;
 
-    public DishProjection(Id<DishProjection> dishId, Id restaurantId, LocalDateTime occurredAt, DishLiveStatus liveStatus) {
+
+    public DishProjection(Id<DishProjection> dishId, Id restaurantId, LocalDateTime occurredAt, DishLiveStatus liveStatus, DishStockStatus stockStatus) {
         this.dishId = dishId;
         this.restaurantId = restaurantId;
         this.occurredAt = occurredAt;
         this.liveStatus = liveStatus;
-    }
-
-    public DishProjection(Id<DishProjection> dishId, Id restaurantId, LocalDateTime occurredAt, DishStockStatus stockStatus) {
-        this.dishId = dishId;
-        this.restaurantId = restaurantId;
-        this.occurredAt = occurredAt;
         this.stockStatus = stockStatus;
     }
 
@@ -49,4 +47,9 @@ public class DishProjection {
         this.occurredAt = occurredAt;
     }
 
+
+    public DishProjection withPrice(BigDecimal price) {
+        this.price = price;
+        return this;
+    }
 }

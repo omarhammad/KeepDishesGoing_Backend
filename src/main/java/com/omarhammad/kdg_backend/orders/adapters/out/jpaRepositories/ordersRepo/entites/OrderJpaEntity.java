@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,8 @@ public class OrderJpaEntity {
     @Column(name = "dish_Id")
     private List<UUID> dishes;
 
+    private BigDecimal totalPrice;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "payment_id")
     private PaymentJpaEntity payment;
@@ -40,8 +43,6 @@ public class OrderJpaEntity {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "customer_id")
     private CustomerJpaEntity customer;
-
-
 
 
 }

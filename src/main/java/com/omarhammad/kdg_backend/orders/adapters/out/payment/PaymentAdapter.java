@@ -10,11 +10,13 @@ import java.math.BigDecimal;
 @Component
 public class PaymentAdapter implements ProcessPaymentPort {
     @Override
-    public PaymentResult process(Payment payment) {
-        if (payment.getPaymentToken() == null) return PaymentResult.failure("no token");
-        if (!payment.getPaymentToken().startsWith("tok_kdg")) return PaymentResult.failure("invalid token");
-        if (payment.getAmount().compareTo(BigDecimal.ZERO) <= 0) return PaymentResult.failure("invalid amount");
-        if (Math.random() < 0.05) return PaymentResult.failure("gateway error");
+    public PaymentResult process(Payment payment, BigDecimal amountToBePaid) {
+        if (payment.getPaymentToken() == null || payment.getPaymentToken().isBlank())
+            return PaymentResult.failure("Missing payment token");
+        if (!payment.getPaymentToken().startsWith("tok_kdg")) return PaymentResult.failure("Invalid token");
+        if (payment.getAmount().compareTo(BigDecimal.ZERO) <= 0) return PaymentResult.failure("Invalid amount");
+        if (payment.getAmount().compareTo(amountToBePaid) < 0) return PaymentResult.failure("Insufficient amount");
+        if (Math.random() < 0.05) return PaymentResult.failure("Gateway error");
         return PaymentResult.success();
     }
 }

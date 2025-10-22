@@ -60,12 +60,11 @@ public class OrderRestController {
      *     - E) make payment entity object - DONE
      *     - F) publish ORDER PLACED IF ALL SUCCESS - DONE
            - G) SEND EMAIL WITH THE TRACKING LINK FOR THE CUSTOMER - DONE
-           - H) TBC-> paidAmount == total_dishes_price
-     *  3) ENDPOINT TO RETURN ORDER STATUS FOR THE TRACKING PAGE
-     *  4) ENDPOINT TO RETURN ORDER DETAILS FOR THE CUSTOMER/OWNER
-     *  5) Integrate delivery with the system to finalize it
-     *  5) As KDG, I want to publish messages for the delivery service when an order is accepted
-     *     and when it is ready for pickup.
+           - H) TBC-> paidAmount == total_dishes_price - DONE
+     *  3) ENDPOINT TO RETURN ALL ORDERS BY RESTAURANT_ID
+     *  4) ENDPOINT TO RETURN ORDER DETAILS FOR THE TRACKING PAGE
+     *  5) publish messages for the delivery service when an order is ACCEPTED and READY_FOR_PICKUP
+     *  6) Listener for the order to mark the Order as DELIVERED
      */
 
 }

@@ -1,6 +1,7 @@
 package com.omarhammad.kdg_backend.orders.core;
 
 import com.omarhammad.kdg_backend.orders.domain.DishProjection;
+import com.omarhammad.kdg_backend.orders.domain.enums.DishStockStatus;
 import com.omarhammad.kdg_backend.orders.ports.in.DishLiveStatusProjector;
 import com.omarhammad.kdg_backend.orders.ports.in.DishLiveStatusProjectorCmd;
 import com.omarhammad.kdg_backend.orders.ports.out.EditDishProjectionPort;
@@ -28,7 +29,7 @@ public class DefaultDishLiveStatusProjector implements DishLiveStatusProjector {
                 .orElse(null);
 
         if (Objects.nonNull(dishProjection)) {
-            dishProjection.changeLiveStatusTo(cmd.newLiveStatus()).at(cmd.occurredAt());
+            dishProjection.changeLiveStatusTo(cmd.newLiveStatus()).withPrice(cmd.dishPrice()).at(cmd.occurredAt());
             editDishProjectionPort.edit(dishProjection);
             return;
         }
@@ -37,7 +38,9 @@ public class DefaultDishLiveStatusProjector implements DishLiveStatusProjector {
                 cmd.dishId(),
                 cmd.restaurantId(),
                 cmd.occurredAt(),
-                cmd.newLiveStatus()
+                cmd.dishPrice(),
+                cmd.newLiveStatus(),
+                DishStockStatus.OUT_OF_STOCK
         );
 
         saveDishProjectionPort.save(dishProjection);

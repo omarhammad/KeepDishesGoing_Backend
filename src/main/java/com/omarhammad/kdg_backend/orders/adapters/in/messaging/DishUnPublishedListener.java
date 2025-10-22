@@ -27,6 +27,7 @@ public class DishUnPublishedListener {
         DishLiveStatusProjectorCmd cmd = new DishLiveStatusProjectorCmd(
                 new Id<>(event.dishId()),
                 new Id<>(event.restaurantId()),
+                null,
                 DishLiveStatus.UNPUBLISHED,
                 event.occurredAt()
         );

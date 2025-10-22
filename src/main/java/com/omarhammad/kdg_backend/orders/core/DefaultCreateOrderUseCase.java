@@ -17,6 +17,7 @@ import com.omarhammad.kdg_backend.orders.ports.out.SaveOrderPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,14 +34,14 @@ public class DefaultCreateOrderUseCase implements CreateOrderUseCase {
     @Override
     public Id<Order> createOrder(CreateOrderCmd cmd) {
 
-        List<DishProjection> dishesFound = new ArrayList<>();
+        List<DishProjection> orderDishes = new ArrayList<>();
         List<Id<DishProjection>> dishesNotFound = new ArrayList<>();
 
         for (Id<DishProjection> dishProjectionId : cmd.dishes()) {
             DishProjection dish = loadDishProjectionPort.findById(dishProjectionId).orElse(null);
 
             if (Objects.nonNull(dish)) {
-                dishesFound.add(dish);
+                orderDishes.add(dish);
             } else {
                 dishesNotFound.add(dishProjectionId);
             }
@@ -54,7 +55,7 @@ public class DefaultCreateOrderUseCase implements CreateOrderUseCase {
 
 
         // 1) check if all dishes comes from the same restaurant and get the restaurantId if true
-        Id restaurantId = getDishesRestaurntId(dishesFound);
+        Id restaurantId = getDishesRestaurntId(orderDishes);
 
         //2)check if the restaurant is open
         boolean isRestaurantOpen = restaurantAvailabilityPort.isRestaurantOpen(restaurantId);
@@ -63,7 +64,7 @@ public class DefaultCreateOrderUseCase implements CreateOrderUseCase {
             throw new ClosedRestaurantException("Can't be ordered from a closed restaurant");
 
         // 3) check if all dishes published and in_stock
-        List<DishProjection> invalidDishes = dishesFound.stream()
+        List<DishProjection> invalidDishes = orderDishes.stream()
                 .filter(d ->
                         d.getLiveStatus().equals(DishLiveStatus.UNPUBLISHED) ||
                                 d.getStockStatus().equals(DishStockStatus.OUT_OF_STOCK)).toList();
@@ -77,11 +78,21 @@ public class DefaultCreateOrderUseCase implements CreateOrderUseCase {
             );
 
 
+        BigDecimal totalOrderPrice = orderDishes
+                .stream()
+                .reduce(
+                        new BigDecimal(0),
+                        (total, d) -> total.add(d.getPrice()),
+                        BigDecimal::add
+                );
+
         Order order = new Order();
 
         order.createOrder(
-                dishesFound.stream().map(d -> new Id(d.getDishId().value())).toList(),
-                restaurantId);
+                orderDishes.stream().map(d -> new Id(d.getDishId().value())).toList(),
+                restaurantId,
+                totalOrderPrice
+        );
 
 
         Order savedOrder = saveOrderPort.save(order);

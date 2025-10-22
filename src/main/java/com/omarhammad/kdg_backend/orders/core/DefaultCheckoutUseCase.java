@@ -39,7 +39,7 @@ public class DefaultCheckoutUseCase implements CheckoutUseCase {
         );
 
         Payment payment = order.addNewPayment(cmd.paymentMethod(), cmd.paymentAmount(), cmd.paymentToken());
-        PaymentResult paymentResult = processPaymentPort.process(payment);
+        PaymentResult paymentResult = processPaymentPort.process(payment, order.getTotalPrice());
         order.verifyPayment(paymentResult);
 
         editOrderPort.edit(order);
