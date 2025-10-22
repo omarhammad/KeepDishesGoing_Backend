@@ -1,19 +1,20 @@
 package com.omarhammad.kdg_backend.orders.adapters.in.webAdapters;
 
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.OrderDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.OrderIdDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.ResponseDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CheckoutRequest;
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CreateOrderRequest;
 import com.omarhammad.kdg_backend.orders.domain.Id;
 import com.omarhammad.kdg_backend.orders.domain.Order;
-import com.omarhammad.kdg_backend.orders.ports.in.CheckoutCmd;
-import com.omarhammad.kdg_backend.orders.ports.in.CheckoutUseCase;
-import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderCmd;
-import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderUseCase;
+import com.omarhammad.kdg_backend.orders.ports.in.*;
 import lombok.AllArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -24,6 +25,9 @@ public class OrderRestController {
     private final CreateOrderUseCase createOrderUseCase;
     private final CheckoutUseCase checkoutUseCase;
     private final OrderRequestMapper mapper;
+    private final FindProcessedOrdersByRestaurantId findProcessedOrdersByRestaurantId;
+    private final FindProcessedOrderByIdUseCase findProcessedOrdersById;
+
 
     @PostMapping("")
     public ResponseEntity<OrderIdDTO> createNewOrder(@RequestBody CreateOrderRequest request) {
@@ -48,6 +52,36 @@ public class OrderRestController {
         ));
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<OrderDTO>> getProcessedOrdersByRestaurantId(@RequestParam String resId) {
+
+        Id restaurantId = new Id(resId);
+        List<Order> orders = findProcessedOrdersByRestaurantId.findProcessedOrdersByRestaurantId(restaurantId);
+
+        if (orders.isEmpty())
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        List<OrderDTO> orderDTOS = orders.stream().map(mapper::toOrderDTO).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(orderDTOS);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getProcessedOrder(@PathVariable String id) {
+
+        Id<Order> orderId = new Id<>(id);
+        Order orders =
+                findProcessedOrdersById.findProcessedOrdersById(orderId);
+
+        OrderDTO orderDTO = mapper.toOrderDTO(orders);
+        return ResponseEntity.status(HttpStatus.OK).body(orderDTO);
+
+    }
+
+
+
+
+
     /*
      * TODO:
      *  1) Make the projection for all [orders status on the domain object]
@@ -61,8 +95,8 @@ public class OrderRestController {
      *     - F) publish ORDER PLACED IF ALL SUCCESS - DONE
            - G) SEND EMAIL WITH THE TRACKING LINK FOR THE CUSTOMER - DONE
            - H) TBC-> paidAmount == total_dishes_price - DONE
-     *  3) ENDPOINT TO RETURN ALL ORDERS BY RESTAURANT_ID
-     *  4) ENDPOINT TO RETURN ORDER DETAILS FOR THE TRACKING PAGE
+     *  3) ENDPOINT TO RETURN ALL ORDERS BY RESTAURANT_ID - DONE
+     *  4) ENDPOINT TO RETURN ORDER DETAILS FOR THE TRACKING PAGE - DONE
      *  5) publish messages for the delivery service when an order is ACCEPTED and READY_FOR_PICKUP
      *  6) Listener for the order to mark the Order as DELIVERED
      */

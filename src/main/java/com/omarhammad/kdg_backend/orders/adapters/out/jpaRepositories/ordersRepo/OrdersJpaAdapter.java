@@ -10,6 +10,7 @@ import com.omarhammad.kdg_backend.orders.ports.out.SaveOrderPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +26,13 @@ public class OrdersJpaAdapter implements LoadOrderPort, SaveOrderPort, EditOrder
     public Optional<Order> findById(Id<Order> orderId) {
         Optional<OrderJpaEntity> entity = repository.findById(UUID.fromString(orderId.value()));
         return entity.map(this::toOrder);
+    }
+
+    @Override
+    public List<Order> findOrdersByRestaurantId(Id restaurantId) {
+        List<OrderJpaEntity> entities = repository.findAllByRestaurant(UUID.fromString(restaurantId.value()));
+
+        return entities.stream().map(this::toOrder).toList();
     }
 
 

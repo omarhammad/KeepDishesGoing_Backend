@@ -1,5 +1,8 @@
 package com.omarhammad.kdg_backend.orders.adapters.in.webAdapters;
 
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.CustomerDTO;
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.DeliveryAddressDTO;
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.OrderDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.exceptions.InvalidEnumValueException;
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CheckoutRequest;
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CreateOrderRequest;
@@ -59,4 +62,38 @@ public class OrderRequestMapper {
     }
 
 
+    public OrderDTO toOrderDTO(Order order) {
+        return new OrderDTO(
+                order.getId().value(),
+                order.getOrderStatus().name(),
+                order.getStatusOccurredAt(),
+                order.getRestaurant().value(),
+                order.getDishes().stream().map(Id::value).toList(),
+                order.getTotalPrice(),
+                toCustomerDTO(order.getCustomer())
+
+
+        );
+    }
+
+    private CustomerDTO toCustomerDTO(Customer customer) {
+        return new CustomerDTO(
+                customer.getId().value(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                toDeliveryAddressDTO(customer.getDeliveryAddress()),
+                customer.getEmail().email(),
+                customer.getPhoneNumber()
+        );
+    }
+
+    public DeliveryAddressDTO toDeliveryAddressDTO(DeliveryAddress deliveryAddress) {
+        return new DeliveryAddressDTO(
+                deliveryAddress.street(),
+                deliveryAddress.number(),
+                deliveryAddress.postalCode(),
+                deliveryAddress.city(),
+                deliveryAddress.country()
+        );
+    }
 }

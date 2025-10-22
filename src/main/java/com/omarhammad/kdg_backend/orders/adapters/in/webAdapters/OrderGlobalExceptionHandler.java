@@ -2,10 +2,7 @@ package com.omarhammad.kdg_backend.orders.adapters.in.webAdapters;
 
 import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.ErrorResponseDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.exceptions.InvalidEnumValueException;
-import com.omarhammad.kdg_backend.orders.core.exceptions.ClosedRestaurantException;
-import com.omarhammad.kdg_backend.orders.core.exceptions.DishesFromDifferentRestaurantException;
-import com.omarhammad.kdg_backend.orders.core.exceptions.EntityNotFoundException;
-import com.omarhammad.kdg_backend.orders.core.exceptions.InvalidDishesException;
+import com.omarhammad.kdg_backend.orders.core.exceptions.*;
 import com.omarhammad.kdg_backend.orders.domain.excptions.CustomerAlreadyExist;
 import com.omarhammad.kdg_backend.orders.domain.excptions.OrderAlreadyPaidException;
 import com.omarhammad.kdg_backend.orders.domain.excptions.PaymentNotSuccessfulException;
@@ -97,12 +94,24 @@ public class OrderGlobalExceptionHandler {
                         LocalDateTime.now()
                 ));
     }
+
     @ExceptionHandler(CustomerAlreadyExist.class)
     public ResponseEntity<ErrorResponseDTO> handleCustomerAlreadyExist(CustomerAlreadyExist exception, WebRequest webRequest) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ErrorResponseDTO(
                         webRequest.getDescription(false),
                         HttpStatus.CONFLICT,
+                        exception.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(OrderNotProcessedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderNotProcessedException(OrderNotProcessedException exception, WebRequest webRequest) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponseDTO(
+                        webRequest.getDescription(false),
+                        HttpStatus.BAD_REQUEST,
                         exception.getMessage(),
                         LocalDateTime.now()
                 ));
