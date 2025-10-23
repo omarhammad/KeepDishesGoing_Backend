@@ -8,6 +8,8 @@ import java.util.List;
 
 public record OrderDTO(String id,
                        String orderStatus,
+                       String rejectedMsg,
+                       String declinedMsg,
                        LocalDateTime statusOccurredAt,
                        String restaurantId,
                        List<String> dishes,

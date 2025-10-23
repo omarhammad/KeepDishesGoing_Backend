@@ -25,7 +25,9 @@ public class OrderDeclinedEventListener {
         OrderStatusProjectorCmd cmd = new OrderStatusProjectorCmd(
                 new Id<>(event.orderId()),
                 OrderStatus.DECLINED,
-                event.occurredAt()
+                event.occurredAt(),
+                null,
+                event.declinedMsg()
         );
         projector.project(cmd);
     }

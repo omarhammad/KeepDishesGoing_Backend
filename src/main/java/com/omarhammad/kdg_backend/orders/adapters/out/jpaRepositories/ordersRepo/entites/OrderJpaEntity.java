@@ -21,6 +21,8 @@ public class OrderJpaEntity {
     private UUID id;
 
     private String orderStatus;
+    private String rejectedMessage;
+    private String declinedMessage;
     private LocalDateTime statusOccurredAt;
 
     @Column(name = "restaurant_id")

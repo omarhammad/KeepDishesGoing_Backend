@@ -26,7 +26,9 @@ public class OrderReadyForPickUpEventListener {
         OrderStatusProjectorCmd cmd = new OrderStatusProjectorCmd(
                 new Id<>(event.orderId()),
                 OrderStatus.READY_FOR_PICKUP,
-                event.occurredAt()
+                event.occurredAt(),
+                null,
+                null
         );
         projector.project(cmd);
     }

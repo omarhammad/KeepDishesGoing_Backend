@@ -21,6 +21,8 @@ public class Order {
 
     private Id<Order> id;
     private OrderStatus orderStatus;
+    private String rejectedMessage;
+    private String declinedMessage;
     private LocalDateTime statusOccurredAt;
     private Id restaurant;
     private List<Id> dishes;
@@ -33,9 +35,11 @@ public class Order {
         this.domainEvents = new ArrayList<>();
     }
 
-    public Order(Id<Order> id, OrderStatus orderStatus, LocalDateTime statusOccurredAt, Id restaurant, List<Id> dishes, BigDecimal totalPrice, Payment payment, Customer customer) {
+    public Order(Id<Order> id, OrderStatus orderStatus, String rejectedMessage, String declinedMessage, LocalDateTime statusOccurredAt, Id restaurant, List<Id> dishes, BigDecimal totalPrice, Payment payment, Customer customer) {
         this.id = id;
         this.orderStatus = orderStatus;
+        this.rejectedMessage = rejectedMessage;
+        this.declinedMessage = declinedMessage;
         this.statusOccurredAt = statusOccurredAt;
         this.restaurant = restaurant;
         this.dishes = dishes;
@@ -113,5 +117,13 @@ public class Order {
         ));
 
 
+    }
+
+    public void addRejectedMsg(String rejectedMsg) {
+        this.rejectedMessage = rejectedMsg;
+    }
+
+    public void addDeclinedMsg(String declinedMsg) {
+        this.declinedMessage = declinedMsg;
     }
 }

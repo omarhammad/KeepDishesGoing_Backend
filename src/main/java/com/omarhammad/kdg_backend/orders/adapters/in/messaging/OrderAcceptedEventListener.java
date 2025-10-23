@@ -25,7 +25,9 @@ public class OrderAcceptedEventListener {
         OrderStatusProjectorCmd cmd = new OrderStatusProjectorCmd(
                 new Id<>(event.orderId()),
                 OrderStatus.ACCEPTED,
-                event.occurredAt()
+                event.occurredAt(),
+                null,
+                null
         );
 
         projector.project(cmd);

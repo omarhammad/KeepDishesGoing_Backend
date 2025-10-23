@@ -66,6 +66,8 @@ public class OrderRequestMapper {
         return new OrderDTO(
                 order.getId().value(),
                 order.getOrderStatus().name(),
+                order.getRejectedMessage(),
+                order.getDeclinedMessage(),
                 order.getStatusOccurredAt(),
                 order.getRestaurant().value(),
                 order.getDishes().stream().map(Id::value).toList(),

@@ -53,6 +53,8 @@ public class OrdersJpaAdapter implements LoadOrderPort, SaveOrderPort, EditOrder
         return new Order(
                 new Id<>(entity.getId().toString()),
                 OrderStatus.valueOf(entity.getOrderStatus().toUpperCase()),
+                entity.getRejectedMessage(),
+                entity.getDeclinedMessage(),
                 entity.getStatusOccurredAt(),
                 new Id(entity.getRestaurant().toString()),
                 entity.getDishes().stream().map(d -> new Id(d.toString())).toList(),
@@ -102,6 +104,8 @@ public class OrdersJpaAdapter implements LoadOrderPort, SaveOrderPort, EditOrder
         return new OrderJpaEntity(
                 UUID.fromString(order.getId().value()),
                 order.getOrderStatus().name(),
+                order.getRejectedMessage(),
+                order.getDeclinedMessage(),
                 order.getStatusOccurredAt(),
                 UUID.fromString(order.getRestaurant().value()),
                 order.getDishes().stream().map(d -> UUID.fromString(d.value())).toList(),

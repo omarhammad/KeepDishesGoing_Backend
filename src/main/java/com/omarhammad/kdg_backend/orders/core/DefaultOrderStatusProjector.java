@@ -23,6 +23,8 @@ public class DefaultOrderStatusProjector implements OrderStatusProjector {
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         order.changeStatusTo(cmd.newOrderStatus()).at(cmd.occurredAt());
+        order.addRejectedMsg(cmd.rejectedMessage());
+        order.addDeclinedMsg(cmd.declinedMessage());
         editOrderPOrt.edit(order);
     }
 }

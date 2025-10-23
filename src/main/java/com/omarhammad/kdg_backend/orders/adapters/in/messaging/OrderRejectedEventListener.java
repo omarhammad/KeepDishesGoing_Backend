@@ -28,8 +28,12 @@ public class OrderRejectedEventListener {
         OrderStatusProjectorCmd cmd = new OrderStatusProjectorCmd(
                 new Id<>(event.orderId()),
                 OrderStatus.REJECTED,
-                event.occurredAt()
+                event.occurredAt(),
+                event.reason(),
+                ""
+
         );
+
         orderStatusProjector.project(cmd);
     }
 }

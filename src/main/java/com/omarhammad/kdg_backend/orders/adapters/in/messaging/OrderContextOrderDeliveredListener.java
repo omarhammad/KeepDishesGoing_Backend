@@ -27,7 +27,9 @@ public class OrderContextOrderDeliveredListener {
         OrderStatusProjectorCmd cmd = new OrderStatusProjectorCmd(
                 new Id<>(event.orderId()),
                 OrderStatus.DELIVERED,
-                event.occurredAt()
+                event.occurredAt(),
+                null,
+                null
         );
         projector.project(cmd);
     }

@@ -27,7 +27,9 @@ public class OrderContextOrderPickedupListener {
         OrderStatusProjectorCmd cmd = new OrderStatusProjectorCmd(
                 new Id<>(event.orderId()),
                 OrderStatus.PICKED_UP,
-                event.occurredAt()
+                event.occurredAt(),
+                null,
+                null
         );
         projector.project(cmd);
 
