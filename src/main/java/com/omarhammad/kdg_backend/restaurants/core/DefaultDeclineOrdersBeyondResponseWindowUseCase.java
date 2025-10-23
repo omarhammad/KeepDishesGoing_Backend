@@ -41,17 +41,17 @@ public class DefaultDeclineOrdersBeyondResponseWindowUseCase
 
             OrderDeclinedEvent event = new OrderDeclinedEvent(
                     placedOrderProjection.getOrderId().value(),
+                    placedOrderProjection.getRestaurantId().value(),
                     OrderDeclinedEvent.ERROR_RESPONSE_TIME_EXCEEDED,
                     LocalDateTime.now()
             );
-            eventPublisherPort.publishOrderDeclined(event);
 
             placedOrderProjection.setStatus(OrderProjectionStatus.DECLINED);
             placedOrderProjection.setDeclinedReason(OrderDeclinedEvent.ERROR_RESPONSE_TIME_EXCEEDED);
             placedOrderProjection.setOccurredAt(event.occurredAt());
             updateOrderProjection.update(placedOrderProjection);
 
-
+            eventPublisherPort.publishOrderDeclined(event);
         }
 
     }

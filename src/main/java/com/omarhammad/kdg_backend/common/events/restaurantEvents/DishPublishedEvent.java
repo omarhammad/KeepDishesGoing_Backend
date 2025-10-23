@@ -6,7 +6,7 @@ import org.jmolecules.event.annotation.Externalized;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Externalized("kdg.exchange::#{'kdg.' + #this.dishId() + '.dish.published'}")
+@Externalized("kdg.events::#{'restaurant.' + #this.restaurantId() + '.dish.published.v1'}")
 public record DishPublishedEvent(String dishId, String restaurantId, BigDecimal price,
                                  LocalDateTime occurredAt) implements DomainEvent {
     @Override

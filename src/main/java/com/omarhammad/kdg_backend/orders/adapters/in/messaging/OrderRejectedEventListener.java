@@ -20,7 +20,7 @@ public class OrderRejectedEventListener {
 
     private OrderStatusProjector orderStatusProjector;
 
-    @RabbitListener(queues = RabbitMQTopology.ORDER_REJECTED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_ORDER_REJECTED_QUEUE)
     @Async
     public void handleOrderRejectedEvent(OrderRejectedEvent event) {
         log.info("Order Rejected event : {}", event);

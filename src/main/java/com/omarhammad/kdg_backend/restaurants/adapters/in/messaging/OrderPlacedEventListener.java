@@ -2,6 +2,7 @@ package com.omarhammad.kdg_backend.restaurants.adapters.in.messaging;
 
 import com.omarhammad.kdg_backend.common.events.config.RabbitMQTopology;
 import com.omarhammad.kdg_backend.common.events.ordersEvents.OrderPlacedEvent;
+import com.omarhammad.kdg_backend.restaurants.domain.Address;
 import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.ports.in.OrderPlacedProjectionCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.OrderPlacedProjector;
@@ -20,15 +21,22 @@ public class OrderPlacedEventListener {
     private final OrderPlacedProjector orderPlacedProjector;
 
 
-    @RabbitListener(queues = RabbitMQTopology.ORDER_PLACED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.RESTAURANT_BC_ORDER_PLACED_QUEUE)
     @Async
-    public void handleOrderPlacedEvent(OrderPlacedEvent orderPlacedEvent) {
-        log.info("Order Placed event : {}", orderPlacedEvent);
+    public void handleOrderPlacedEvent(OrderPlacedEvent event) {
+        log.info("Order Placed event : {}", event);
 
         OrderPlacedProjectionCmd cmd = new OrderPlacedProjectionCmd(
-                new Id<>(orderPlacedEvent.orderId()),
-                new Id<>(orderPlacedEvent.restaurantId()),
-                orderPlacedEvent.occurredAt()
+                new Id<>(event.orderId()),
+                new Id<>(event.restaurantId()),
+                new Address(
+                        event.dropOfAddress().street(),
+                        event.dropOfAddress().number(),
+                        event.dropOfAddress().postalCode(),
+                        event.dropOfAddress().city(),
+                        event.dropOfAddress().country()
+                ),
+                event.occurredAt()
         );
         orderPlacedProjector.project(cmd);
 

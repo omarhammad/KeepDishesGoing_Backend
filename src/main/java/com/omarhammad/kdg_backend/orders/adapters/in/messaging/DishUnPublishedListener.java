@@ -21,7 +21,7 @@ public class DishUnPublishedListener {
 
     private DishLiveStatusProjector projector;
 
-    @RabbitListener(queues = RabbitMQTopology.DISH_UNPUBLISHED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_DISH_UNPUBLISHED_QUEUE)
     public void handleDishUnPublishedEvent(DishUnPublishedEvent event) {
         log.info("Dish UnPublished Event : {}", event);
         DishLiveStatusProjectorCmd cmd = new DishLiveStatusProjectorCmd(

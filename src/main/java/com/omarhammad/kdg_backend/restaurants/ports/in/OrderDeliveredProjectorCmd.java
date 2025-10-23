@@ -1,4 +1,11 @@
 package com.omarhammad.kdg_backend.restaurants.ports.in;
 
-public class OrderDeliveredProjectorCmd {
+import com.omarhammad.kdg_backend.restaurants.domain.Id;
+import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
+import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
+
+import java.time.LocalDateTime;
+
+public record OrderDeliveredProjectorCmd(Id<OrderProjection> orderId, Id<Restaurant> restaurantId,
+                                        LocalDateTime occurredAt) {
 }

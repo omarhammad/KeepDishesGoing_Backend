@@ -5,8 +5,9 @@ import org.jmolecules.event.annotation.Externalized;
 
 import java.time.LocalDateTime;
 
-@Externalized("kdg.exchange::#{'kdg.' + #this.orderId() +'.order.ready-for-pickup'}")
-public record OrderReadyForPickUpEvent(String orderId, LocalDateTime occurredAt) implements DomainEvent {
+@Externalized("kdg.events::#{'restaurant.' + #this.restaurantId() +'.order.ready.v1'}")
+public record OrderReadyForPickUpEvent(String eventId, String orderId, String restaurantId,
+                                       LocalDateTime occurredAt) implements DomainEvent {
     @Override
     public LocalDateTime occurredAt() {
         return this.occurredAt;

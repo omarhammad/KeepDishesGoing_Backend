@@ -3,9 +3,9 @@ package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.Orde
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public record DropOfAddressJpa(String street,
-                               int number,
-                               String postalCode,
-                               String city,
-                               String country) {
+public record DropOffAddressJpa(String street,
+                                int number,
+                                String postalCode,
+                                String city,
+                                String country) {
 }

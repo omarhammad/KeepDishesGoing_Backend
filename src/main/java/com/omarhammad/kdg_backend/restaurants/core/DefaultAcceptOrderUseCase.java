@@ -1,5 +1,6 @@
 package com.omarhammad.kdg_backend.restaurants.core;
 
+import com.omarhammad.kdg_backend.restaurants.domain.Coordinates;
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.OrderBusinessRuleException;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
@@ -7,15 +8,14 @@ import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus
 import com.omarhammad.kdg_backend.restaurants.domain.exceptions.EntityNotFoundException;
 import com.omarhammad.kdg_backend.restaurants.ports.in.AcceptOrderCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.AcceptOrderUseCase;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadOrderProjection;
-import com.omarhammad.kdg_backend.restaurants.ports.out.LoadRestaurantPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.EventPublisherPort;
-import com.omarhammad.kdg_backend.restaurants.ports.out.UpdateOrderProjection;
+import com.omarhammad.kdg_backend.restaurants.ports.out.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class DefaultAcceptOrderUseCase implements AcceptOrderUseCase {
@@ -24,6 +24,7 @@ public class DefaultAcceptOrderUseCase implements AcceptOrderUseCase {
     private LoadOrderProjection loadOrderProjection;
     private EventPublisherPort eventPublisherPort;
     private UpdateOrderProjection updateOrderProjection;
+    private GeocodingPort geocodingPort;
 
 
     @Override
@@ -44,9 +45,17 @@ public class DefaultAcceptOrderUseCase implements AcceptOrderUseCase {
         }
 
 
+        Coordinates pickUpCoords = geocodingPort.geocode(restaurant.getAddress());
+        Coordinates dropOffCoords = geocodingPort.geocode(orderProjection.getDropOfAddress());
+        log.info("pickUpCoords: {}  , dropOffCoords: {}", pickUpCoords, dropOffCoords);
+        log.info("pickUpAddress: {}  , dropOffAddress: {}", restaurant.getAddress(), orderProjection.getDropOfAddress());
+
         LocalDateTime eventOccurredAt = LocalDateTime.now();
         restaurant.acceptOrder(
                 orderProjection.getOrderId().value(),
+                orderProjection.getDropOfAddress(),
+                pickUpCoords,
+                dropOffCoords,
                 eventOccurredAt
         );
 

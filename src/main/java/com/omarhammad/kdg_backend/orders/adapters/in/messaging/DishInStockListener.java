@@ -19,7 +19,7 @@ public class DishInStockListener {
     private final DishStockStatusProjector projector;
 
 
-    @RabbitListener(queues = RabbitMQTopology.DISH_IN_STOCK_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_DISH_IN_STOCK_QUEUE)
     public void handleDishInStockEvent(DishInStockEvent event) {
         log.info("Dish InStock Event : {}", event);
 

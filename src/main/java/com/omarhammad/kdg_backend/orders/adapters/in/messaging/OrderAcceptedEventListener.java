@@ -18,7 +18,7 @@ public class OrderAcceptedEventListener {
 
     private final OrderStatusProjector projector;
 
-    @RabbitListener(queues = RabbitMQTopology.ORDER_ACCEPTED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_ORDER_ACCEPTED_QUEUE)
     public void handleOrderAcceptedEvent(OrderAcceptedEvent event) {
         log.info("Order Accepted event : {}", event);
 

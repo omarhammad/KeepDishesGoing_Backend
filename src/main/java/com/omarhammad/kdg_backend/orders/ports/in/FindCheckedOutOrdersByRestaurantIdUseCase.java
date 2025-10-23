@@ -5,7 +5,7 @@ import com.omarhammad.kdg_backend.orders.domain.Order;
 
 import java.util.List;
 
-public interface FindProcessedOrdersByRestaurantId {
+public interface FindCheckedOutOrdersByRestaurantIdUseCase {
 
-    List<Order> findProcessedOrdersByRestaurantId(Id restaurantId);
+    List<Order> findCheckedOutOrdersByRestaurantId(Id restaurantId);
 }

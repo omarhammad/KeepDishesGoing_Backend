@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,7 +41,7 @@ public class DefaultAutoMarkOrdersReadyForPickUpUseCase implements AutoMarkOrder
             int defaultPrepTime = restaurant.getDefaultPrepTime();
             if (orderProjection.getOccurredAt().plusMinutes(defaultPrepTime).isAfter(LocalDateTime.now())) continue;
 
-            LocalDateTime occurredAt = LocalDateTime.now();
+            LocalDateTime occurredAt = LocalDateTime.now(ZoneOffset.UTC);
             restaurant.readyForPickUp(orderProjection.getOrderId().value(), occurredAt);
 
             eventPublisherPort.publishRestaurantEvents(restaurant);

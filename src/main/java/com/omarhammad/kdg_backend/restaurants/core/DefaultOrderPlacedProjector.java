@@ -2,6 +2,7 @@ package com.omarhammad.kdg_backend.restaurants.core;
 
 import com.omarhammad.kdg_backend.common.events.restaurantEvents.OrderDeclinedEvent;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
+import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
 import com.omarhammad.kdg_backend.restaurants.domain.enums.OrderProjectionStatus;
 import com.omarhammad.kdg_backend.restaurants.ports.in.OrderPlacedProjectionCmd;
 import com.omarhammad.kdg_backend.restaurants.ports.in.OrderPlacedProjector;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -30,25 +32,28 @@ public class DefaultOrderPlacedProjector implements OrderPlacedProjector {
     @Override
     public void project(OrderPlacedProjectionCmd cmd) {
 
+        Restaurant restaurant = loadRestaurantPort.findRestaurantById(cmd.restaurantId()).orElse(null);
         boolean isOrderProjectionExist = loadOrderProjection.findByOrderId(cmd.orderId()).isPresent();
-        boolean restaurantExit = loadRestaurantPort.findRestaurantById(cmd.restaurantId()).isPresent();
+
+        if (Objects.isNull(restaurant)) {
+            eventPublisherPort.publishOrderDeclined(
+                    new OrderDeclinedEvent(cmd.orderId().value(), null, OrderDeclinedEvent.ERROR_RESTAURANT_NOT_FOUND, LocalDateTime.now()));
+            return;
+        }
 
         if (isOrderProjectionExist) {
+
             eventPublisherPort.publishOrderDeclined(
-                    new OrderDeclinedEvent(cmd.orderId().value(), OrderDeclinedEvent.ERROR_ORDER_ALREADY_EXIST, LocalDateTime.now()));
+                    new OrderDeclinedEvent(cmd.orderId().value(), restaurant.getId().value(), OrderDeclinedEvent.ERROR_ORDER_ALREADY_EXIST, LocalDateTime.now()));
             return;
         }
 
-        if (!restaurantExit) {
-            eventPublisherPort.publishOrderDeclined(
-                    new OrderDeclinedEvent(cmd.orderId().value(), OrderDeclinedEvent.ERROR_RESTAURANT_NOT_FOUND, LocalDateTime.now()));
-            return;
-        }
 
         OrderProjection newOrderProjection = new OrderProjection(
                 cmd.orderId(),
                 cmd.restaurantId(),
                 OrderProjectionStatus.PLACED,
+                cmd.dropOfAddress(),
                 cmd.occurredAt());
 
 

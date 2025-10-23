@@ -1,6 +1,8 @@
 package com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.OrdersProjectionsRespo;
 
+import com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.OrdersProjectionsRespo.entities.DropOffAddressJpa;
 import com.omarhammad.kdg_backend.restaurants.adapters.out.jpaRepositories.OrdersProjectionsRespo.entities.OrderProjectionJpaEntity;
+import com.omarhammad.kdg_backend.restaurants.domain.Address;
 import com.omarhammad.kdg_backend.restaurants.domain.Id;
 import com.omarhammad.kdg_backend.restaurants.domain.OrderProjection;
 import com.omarhammad.kdg_backend.restaurants.domain.Restaurant;
@@ -12,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,7 +43,6 @@ public class OrdersProjectionsJpaAdapter implements SaveOrderProjection, UpdateO
     }
 
 
-
     @Override
     public Optional<OrderProjection> save(OrderProjection orderProjection) {
         OrderProjectionJpaEntity entity = toOrderProjectionJpaEntity(orderProjection);
@@ -52,15 +52,7 @@ public class OrdersProjectionsJpaAdapter implements SaveOrderProjection, UpdateO
 
     @Override
     public void update(OrderProjection orderProjection) {
-        OrderProjectionJpaEntity entity = repository.findById(UUID.fromString(orderProjection.getOrderId().value())).orElse(null);
-
-        if (Objects.isNull(entity)) return;
-
-        entity.setStatus(orderProjection.getStatus().toString());
-        entity.setRejectedReason(orderProjection.getRejectedReason());
-        entity.setDeclinedReason(orderProjection.getDeclinedReason());
-        entity.setOccurredAt(orderProjection.getOccurredAt());
-
+        OrderProjectionJpaEntity entity = toOrderProjectionJpaEntity(orderProjection);
         repository.save(entity);
     }
 
@@ -70,7 +62,18 @@ public class OrdersProjectionsJpaAdapter implements SaveOrderProjection, UpdateO
                 new Id<>(entity.getOrderId().toString()),
                 new Id<>(entity.getRestaurantId().toString()),
                 OrderProjectionStatus.valueOf(entity.getStatus().toUpperCase()),
+                toDropOfAddress(entity.getDropOfAddress()),
                 entity.getOccurredAt()
+        );
+    }
+
+    private Address toDropOfAddress(DropOffAddressJpa dropOfAddress) {
+        return new Address(
+                dropOfAddress.street(),
+                dropOfAddress.number(),
+                dropOfAddress.postalCode(),
+                dropOfAddress.city(),
+                dropOfAddress.country()
         );
     }
 
@@ -79,9 +82,24 @@ public class OrdersProjectionsJpaAdapter implements SaveOrderProjection, UpdateO
                 UUID.fromString(orderProjection.getOrderId().value()),
                 UUID.fromString(orderProjection.getRestaurantId().value()),
                 orderProjection.getStatus().toString(),
+                orderProjection.getRejectedReason(),
+                orderProjection.getDeclinedReason(),
+                toDropOfAddressJpa(orderProjection.getDropOfAddress()),
                 orderProjection.getOccurredAt()
         );
     }
 
-
+    private DropOffAddressJpa toDropOfAddressJpa(Address dropOfAddress) {
+        return
+                new DropOffAddressJpa(
+                        dropOfAddress.street(),
+                        dropOfAddress.number(),
+                        dropOfAddress.postalCode(),
+                        dropOfAddress.city(),
+                        dropOfAddress.country()
+                );
+    }
 }
+
+
+

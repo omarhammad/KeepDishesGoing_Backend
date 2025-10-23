@@ -18,7 +18,7 @@ public class OrderDeclinedEventListener {
 
     private final OrderStatusProjector projector;
 
-    @RabbitListener(queues = RabbitMQTopology.ORDER_DECLINED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_ORDER_DECLINED_QUEUE)
     public void handleOrderDeclinedEvent(OrderDeclinedEvent event) {
         log.info("Order Declined event: {}", event);
 

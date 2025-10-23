@@ -9,7 +9,6 @@ import com.omarhammad.kdg_backend.orders.domain.Id;
 import com.omarhammad.kdg_backend.orders.domain.Order;
 import com.omarhammad.kdg_backend.orders.ports.in.*;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +24,8 @@ public class OrderRestController {
     private final CreateOrderUseCase createOrderUseCase;
     private final CheckoutUseCase checkoutUseCase;
     private final OrderRequestMapper mapper;
-    private final FindProcessedOrdersByRestaurantId findProcessedOrdersByRestaurantId;
-    private final FindProcessedOrderByIdUseCase findProcessedOrdersById;
+    private final FindCheckedOutOrdersByRestaurantIdUseCase findCheckedOutOrdersByRestaurantIdUseCase;
+    private final FindCheckedOutrderByIdUseCase findCheckedOutrderByIdUseCase;
 
 
     @PostMapping("")
@@ -53,10 +52,10 @@ public class OrderRestController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<OrderDTO>> getProcessedOrdersByRestaurantId(@RequestParam String resId) {
+    public ResponseEntity<List<OrderDTO>> getCheckedOUtOrdersByRestaurantId(@RequestParam String resId) {
 
         Id restaurantId = new Id(resId);
-        List<Order> orders = findProcessedOrdersByRestaurantId.findProcessedOrdersByRestaurantId(restaurantId);
+        List<Order> orders = findCheckedOutOrdersByRestaurantIdUseCase.findCheckedOutOrdersByRestaurantId(restaurantId);
 
         if (orders.isEmpty())
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -67,11 +66,11 @@ public class OrderRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getProcessedOrder(@PathVariable String id) {
+    public ResponseEntity<OrderDTO> getCheckedOUtOrderById(@PathVariable String id) {
 
         Id<Order> orderId = new Id<>(id);
         Order orders =
-                findProcessedOrdersById.findProcessedOrdersById(orderId);
+                findCheckedOutrderByIdUseCase.findCheckedOutOrdersById(orderId);
 
         OrderDTO orderDTO = mapper.toOrderDTO(orders);
         return ResponseEntity.status(HttpStatus.OK).body(orderDTO);
@@ -93,12 +92,10 @@ public class OrderRestController {
      *     - D) create customer entity object - DONE
      *     - E) make payment entity object - DONE
      *     - F) publish ORDER PLACED IF ALL SUCCESS - DONE
-           - G) SEND EMAIL WITH THE TRACKING LINK FOR THE CUSTOMER - DONE
-           - H) TBC-> paidAmount == total_dishes_price - DONE
+     *     - G) SEND EMAIL WITH THE TRACKING LINK FOR THE CUSTOMER - DONE
+     *     - H) TBC-> paidAmount == total_dishes_price - DONE
      *  3) ENDPOINT TO RETURN ALL ORDERS BY RESTAURANT_ID - DONE
      *  4) ENDPOINT TO RETURN ORDER DETAILS FOR THE TRACKING PAGE - DONE
-     *  5) publish messages for the delivery service when an order is ACCEPTED and READY_FOR_PICKUP
-     *  6) Listener for the order to mark the Order as DELIVERED
      */
 
 }

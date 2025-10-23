@@ -5,8 +5,8 @@ import org.jmolecules.event.annotation.Externalized;
 
 import java.time.LocalDateTime;
 
-@Externalized("kdg.exchange::#{'kdg.' + #this.orderId() + '.order.declined'}")
-public record OrderDeclinedEvent(String orderId, String declinedMsg,
+@Externalized("kdg.events::#{'restaurant.' + #this.restaurantId() + '.order.declined.v1'}")
+public record OrderDeclinedEvent(String orderId, String restaurantId, String declinedMsg,
                                  LocalDateTime occurredAt) implements DomainEvent {
 
     public static String ERROR_RESTAURANT_NOT_FOUND = "RESTAURANT_NOT_FOUND";

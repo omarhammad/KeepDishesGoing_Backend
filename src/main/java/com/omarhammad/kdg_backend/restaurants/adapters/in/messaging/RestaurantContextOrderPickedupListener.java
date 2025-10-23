@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestaurantOrderPickedupListener {
+public class RestaurantContextOrderPickedupListener {
 
     private final OrderPickedupProjector projector;
 

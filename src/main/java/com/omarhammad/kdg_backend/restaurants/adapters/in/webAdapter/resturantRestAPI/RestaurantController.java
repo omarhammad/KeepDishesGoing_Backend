@@ -340,7 +340,7 @@ public class RestaurantController {
         ));
     }
 
-    @PostMapping("/{id}/mark-ready-for-pickup-order")
+    @PostMapping("/{id}/ready-order")
     public ResponseEntity<ResponseDTO> markReadyForPickupOrder(@PathVariable String id, @RequestBody ReadyForPickupRequest request) {
 
         Id<Restaurant> restaurantId = new Id<>(id);
@@ -353,9 +353,17 @@ public class RestaurantController {
         ));
     }
 
-    // TODO (Tuesday 18th OCT)
-    //   1) REQUEST ALL ORDERS PROJECTIONS FOR TODAY , AS ALL
-    //   2) REQUEST THE MENU OF 10 DISHES ONLY.
+    // TODO:
+    //   1) publish messages for the delivery service when an order is ACCEPTED and READY_FOR_PICKUP
+    //   3) REQUEST THE MENU OF 10 DISHES ONLY.
+//       Events:
+//         OrderPlaced ---> Order publish >>> RESTAURANT(kdg.event:order.placed)
+//         OrderDeclined ---> Restaurant publish >>> ORDER(kdg.event:order.declined)
+//         OrderRejected ---> Restaurant publish >>> ORDER(kdg.event:order.rejected)
+//         OrderAccepted ---> Restaurant publish >>> ORDER(kdg.event:order-svc.order.accepted) , DELIVERY(kdg.event:delivery-svc.order.accepted) - Same RK
+//         OrderReadyForPickUp ---> Restaurant publish >>> ORDER(kdg.exchange:order-svc.order.ready-for-pickup) , DELIVERY(kdg.event:delivery-svc.order.order.ready-for-pickup) - Same RK
+//         OrderPickedUp ---> Delivery publish >>> RESTAURANT(kdg.event:restaurant-sv.corder.picked-up) ---> Restaurant publish >>> ORDER(kdg.event:order-svc.order.picked-up) - Same RK
+//         OrderDelivered ---> Delivery publish >>> RESTAURANT(kdg.event:restaurant-sv.order.delivered) ---> Restaurant publish >>> ORDER(kdg.event:order-svc.order.delivered) - Same RK
 
 
 }

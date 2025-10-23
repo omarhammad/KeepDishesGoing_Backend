@@ -5,8 +5,8 @@ INSERT INTO restaurants (
     res_picture_url, manual_opening, cuisine, default_prep_time, has_scheduled_publish, owner
 ) VALUES
       ('11111111-1111-1111-1111-111111111111', 'La Bella Italia', 'contact@labellaitalia.com',
-       'Main Street', 12, '2000', 'Antwerp', 'Belgium',
-       'https://i.etsystatic.com/16895977/r/il/dbd742/5846514509/il_fullxfull.5846514509_ijhv.jpg', 'AUTO', 'Italian', 20, FALSE, '82d63058-20bc-4ab2-8fb7-36b352c6d67c'),
+       'Volkstraat', 44, '2000', 'Antwerpen', 'Belgium',
+       'https://i.etsystatic.com/16895977/r/il/dbd742/5846514509/il_fullxfull.5846514509_ijhv.jpg', 'OPEN', 'Italian', 20, FALSE, '82d63058-20bc-4ab2-8fb7-36b352c6d67c'),
 
       ('22222222-2222-2222-2222-222222222222', 'Sushi World', 'hello@sushiworld.com',
        'Harbor Road', 45, '9000', 'Ghent', 'Belgium',

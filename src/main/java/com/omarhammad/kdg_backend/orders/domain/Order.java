@@ -101,6 +101,14 @@ public class Order {
         this.domainEvents.add(new OrderPlacedEvent(
                 this.id.value(),
                 this.restaurant.value(),
+                new OrderPlacedEvent.Address(
+                        customer.getDeliveryAddress().street(),
+                        customer.getDeliveryAddress().number(),
+                        customer.getDeliveryAddress().postalCode(),
+                        customer.getDeliveryAddress().city(),
+                        customer.getDeliveryAddress().country()
+
+                ),
                 LocalDateTime.now()
         ));
 

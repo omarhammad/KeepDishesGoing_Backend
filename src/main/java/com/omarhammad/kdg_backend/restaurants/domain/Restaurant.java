@@ -324,27 +324,69 @@ public class Restaurant {
 
         this.domainEvents.add(new OrderRejectedEvent(
                 orderId,
+                this.id.value(),
                 reason,
                 occurredAt
         ));
 
     }
 
-    public void acceptOrder(String orderId, LocalDateTime occurredAt) {
-        this.domainEvents.add(new OrderAcceptedEvent(
-                orderId,
-                occurredAt
-        ));
+    public void acceptOrder(String orderId,
+                            Address dropoffAddress,
+                            Coordinates pickupCoords,
+                            Coordinates dropOffCoords,
+                            LocalDateTime occurredAt) {
+        this.domainEvents.add(createOrderAcceptedEvent(orderId, dropoffAddress, pickupCoords, dropOffCoords, occurredAt));
 
+    }
+
+    public OrderAcceptedEvent createOrderAcceptedEvent(String orderId,
+                                                       Address dropoffAddress,
+                                                       Coordinates pickupCoords,
+                                                       Coordinates dropOffCoords,
+                                                       LocalDateTime occurredAt) {
+
+        return new OrderAcceptedEvent(
+                UUID.randomUUID().toString(),
+                orderId,
+                this.id.value(),
+                occurredAt,
+                // Pickup (restaurant address)
+                new OrderAcceptedEvent.Address(
+                        this.address.street(),
+                        String.valueOf(this.address.number()),
+                        this.address.postalCode(),
+                        this.address.city()
+                ),
+                new OrderAcceptedEvent.Coordinates(
+                        pickupCoords.lat(),
+                        pickupCoords.lng()
+                ),
+                // DropOff (customer address)
+                new OrderAcceptedEvent.Address(
+                        dropoffAddress.street(),
+                        String.valueOf(dropoffAddress.number()),
+                        dropoffAddress.postalCode(),
+                        dropoffAddress.city()
+                ),
+                new OrderAcceptedEvent.Coordinates(
+                        dropOffCoords.lat(),
+                        dropOffCoords.lng()
+                )
+        );
     }
 
     public void readyForPickUp(String orderId, LocalDateTime occurredAt) {
 
         this.domainEvents.add(new OrderReadyForPickUpEvent(
+                UUID.randomUUID().toString(),
                 orderId,
+                this.getId().value(),
                 occurredAt
         ));
+
     }
+
 
     @Override
     public String toString() {

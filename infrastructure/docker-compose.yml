@@ -15,16 +15,28 @@ services:
     networks:
       - backend
 
-  service_kdg_rabbitmq:
-    image: rabbitmq:3-management
-    container_name: service_kdg_rabbitmq
-    restart: always
-    ports:
-      - "5672:5672"  # main RabbitMQ port
-      - "15672:15672" # management UI
+  app_rabbitmq:
+    image: rabbitmq:3.13.7-management-alpine
     environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_USER: 'user'
+      RABBITMQ_DEFAULT_PASS: 'password'
+    ports:
+      - "5672:5672" #AMQP
+      - "15672:15672" #MGMT
+    networks:
+      - backend
+    volumes:
+      - ./rabbitmq/data/:/var/lib/rabbitmq/
+      - ./rabbitmq/log/:/var/log/rabbitmq/
+
+  delivery_service:
+    image: registry.gitlab.com/kdg-ti/programming6/material/2025-2026/delivery-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+      SPRING_RABBITMQ_HOST: 'app_rabbitmq'
+    pull_policy: "always"
+    ports:
+      - "8095:8095"
     networks:
       - backend
 
@@ -57,9 +69,6 @@ services:
       - idp_postgres
     networks:
       - backend
-
-
-
 
 networks:
   backend:

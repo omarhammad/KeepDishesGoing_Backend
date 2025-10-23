@@ -20,7 +20,7 @@ public class DishOutOfStockListener {
     private final DishStockStatusProjector projector;
 
 
-    @RabbitListener(queues = RabbitMQTopology.DISH_OUT_OF_STOCK_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_DISH_OUT_OF_STOCK_QUEUE)
     public void handleDishOutOfStockEvent(DishOutOfStockEvent event) {
         log.info("Dish OutOfStock Event : {}", event);
 

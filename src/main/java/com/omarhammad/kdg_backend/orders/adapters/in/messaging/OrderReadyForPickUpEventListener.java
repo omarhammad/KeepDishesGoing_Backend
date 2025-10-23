@@ -19,7 +19,7 @@ public class OrderReadyForPickUpEventListener {
 
     private OrderStatusProjector projector;
 
-    @RabbitListener(queues = RabbitMQTopology.ORDER_READY_FOR_PICKUP_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_ORDER_READY_QUEUE)
     public void handleOrderReadyForPickUpEvent(OrderReadyForPickUpEvent event) {
         log.info("Order Ready For PickUp : {}", event);
 

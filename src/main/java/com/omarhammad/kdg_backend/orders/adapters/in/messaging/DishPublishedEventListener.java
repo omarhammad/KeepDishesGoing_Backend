@@ -9,7 +9,6 @@ import com.omarhammad.kdg_backend.orders.ports.in.DishLiveStatusProjectorCmd;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +19,7 @@ public class DishPublishedEventListener {
     private final DishLiveStatusProjector projector;
 
 
-    @RabbitListener(queues = RabbitMQTopology.DISH_PUBLISHED_QUEUE)
+    @RabbitListener(queues = RabbitMQTopology.ORDER_BC_DISH_PUBLISHED_QUEUE)
     public void handleDishPublishedEvent(DishPublishedEvent event) {
         log.info("Dish Published Event : {}", event);
 

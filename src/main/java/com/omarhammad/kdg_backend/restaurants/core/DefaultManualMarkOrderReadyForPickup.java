@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +44,7 @@ public class DefaultManualMarkOrderReadyForPickup implements ManualMarkOrderRead
         }
 
 
-        LocalDateTime eventOccurredAt = LocalDateTime.now();
+        LocalDateTime eventOccurredAt = LocalDateTime.now(ZoneOffset.UTC);
         restaurant.readyForPickUp(
                 orderProjection.getOrderId().value(),
                 eventOccurredAt
