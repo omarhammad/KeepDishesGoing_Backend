@@ -29,7 +29,10 @@ public class DefaultDishLiveStatusProjector implements DishLiveStatusProjector {
                 .orElse(null);
 
         if (Objects.nonNull(dishProjection)) {
-            dishProjection.changeLiveStatusTo(cmd.newLiveStatus()).withPrice(cmd.dishPrice()).at(cmd.occurredAt());
+            dishProjection.changeLiveStatusTo(cmd.newLiveStatus())
+                    .withPrice(cmd.dishPrice())
+                    .andName(cmd.dishName())
+                    .at(cmd.occurredAt());
             editDishProjectionPort.edit(dishProjection);
             return;
         }
@@ -38,6 +41,7 @@ public class DefaultDishLiveStatusProjector implements DishLiveStatusProjector {
                 cmd.dishId(),
                 cmd.restaurantId(),
                 cmd.occurredAt(),
+                cmd.dishName(),
                 cmd.dishPrice(),
                 cmd.newLiveStatus(),
                 DishStockStatus.OUT_OF_STOCK

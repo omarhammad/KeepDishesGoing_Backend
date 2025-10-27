@@ -14,7 +14,7 @@ public record OrderDTO(String id,
                        String restaurantId,
                        List<String> dishes,
                        BigDecimal totalPrice,
-                       CustomerDTO customerDTO
+                       CustomerDTO customer
 ) {
 
 

@@ -23,6 +23,7 @@ public class DishProjectionJpaEntity {
     private UUID dishId;
     private UUID restaurantId;
     private LocalDateTime occurredAt;
+    private String name;
     private BigDecimal price;
     private String liveStatus;
     private String stockStatus;

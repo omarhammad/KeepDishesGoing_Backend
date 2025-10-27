@@ -28,6 +28,7 @@ public class DishUnPublishedListener {
                 new Id<>(event.dishId()),
                 new Id<>(event.restaurantId()),
                 null,
+                null,
                 DishLiveStatus.UNPUBLISHED,
                 event.occurredAt()
         );

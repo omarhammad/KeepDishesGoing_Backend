@@ -46,7 +46,8 @@ public class RestaurantSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOriginPattern("*"); // allow any origin
+        config.addAllowedOriginPattern("*");
+        config.addAllowedOrigin("http://192.168.0.159:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");

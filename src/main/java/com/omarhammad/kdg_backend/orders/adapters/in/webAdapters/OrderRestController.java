@@ -1,7 +1,7 @@
 package com.omarhammad.kdg_backend.orders.adapters.in.webAdapters;
 
 import com.omarhammad.kdg_backend.orders.adapters.in.dtos.OrderDTO;
-import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.OrderIdDTO;
+import com.omarhammad.kdg_backend.orders.adapters.in.dtos.OrderIdDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.dtos.generic.ResponseDTO;
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CheckoutRequest;
 import com.omarhammad.kdg_backend.orders.adapters.in.webAdapters.requests.CreateOrderRequest;

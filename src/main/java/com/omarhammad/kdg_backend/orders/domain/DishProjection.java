@@ -20,6 +20,7 @@ public class DishProjection {
     private Id<DishProjection> dishId;
     private Id restaurantId;
     private LocalDateTime occurredAt;
+    private String name;
     private BigDecimal price;
     private DishLiveStatus liveStatus;
     private DishStockStatus stockStatus;
@@ -50,6 +51,12 @@ public class DishProjection {
 
     public DishProjection withPrice(BigDecimal price) {
         this.price = price;
+        return this;
+    }
+
+    public DishProjection andName(String name) {
+        if (Objects.isNull(name)) return this;
+        this.name = name;
         return this;
     }
 }

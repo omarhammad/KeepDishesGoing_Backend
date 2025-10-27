@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 public record OrderDeclinedEvent(String orderId, String restaurantId, String declinedMsg,
                                  LocalDateTime occurredAt) implements DomainEvent {
 
-    public static String ERROR_RESTAURANT_NOT_FOUND = "RESTAURANT_NOT_FOUND";
-    public static String ERROR_ORDER_ALREADY_EXIST = "ORDER_ALREADY_EXIST";
     public static String ERROR_RESPONSE_TIME_EXCEEDED = "RESPONSE_TIME_EXCEEDED";
 
     @Override

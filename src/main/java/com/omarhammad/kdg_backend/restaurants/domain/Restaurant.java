@@ -193,6 +193,7 @@ public class Restaurant {
         this.domainEvents.add(new DishPublishedEvent(
                 dish.getId().value(),
                 this.getId().value(),
+                dish.getLive().name(),
                 dish.getLive().price(),
                 LocalDateTime.now()
         ));
@@ -223,6 +224,7 @@ public class Restaurant {
             this.domainEvents.add(new DishPublishedEvent(
                     dish.getId().value(),
                     this.getId().value(),
+                    dish.getLive().name(),
                     dish.getLive().price(),
                     LocalDateTime.now()
             ));
@@ -260,6 +262,7 @@ public class Restaurant {
             this.domainEvents.add(new DishPublishedEvent(
                     dish.getId().value(),
                     this.getId().value(),
+                    dish.getLive().name(),
                     dish.getLive().price(),
                     LocalDateTime.now()
             ));

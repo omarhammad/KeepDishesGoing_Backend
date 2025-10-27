@@ -35,18 +35,7 @@ public class DefaultOrderPlacedProjector implements OrderPlacedProjector {
         Restaurant restaurant = loadRestaurantPort.findRestaurantById(cmd.restaurantId()).orElse(null);
         boolean isOrderProjectionExist = loadOrderProjection.findByOrderId(cmd.orderId()).isPresent();
 
-        if (Objects.isNull(restaurant)) {
-            eventPublisherPort.publishOrderDeclined(
-                    new OrderDeclinedEvent(cmd.orderId().value(), null, OrderDeclinedEvent.ERROR_RESTAURANT_NOT_FOUND, LocalDateTime.now()));
-            return;
-        }
-
-        if (isOrderProjectionExist) {
-
-            eventPublisherPort.publishOrderDeclined(
-                    new OrderDeclinedEvent(cmd.orderId().value(), restaurant.getId().value(), OrderDeclinedEvent.ERROR_ORDER_ALREADY_EXIST, LocalDateTime.now()));
-            return;
-        }
+        if (Objects.isNull(restaurant) || isOrderProjectionExist) return;
 
 
         OrderProjection newOrderProjection = new OrderProjection(

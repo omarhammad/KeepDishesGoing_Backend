@@ -7,7 +7,8 @@ import com.omarhammad.kdg_backend.orders.domain.enums.DishLiveStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record DishLiveStatusProjectorCmd(Id<DishProjection> dishId, Id restaurantId, BigDecimal dishPrice,
+public record DishLiveStatusProjectorCmd(Id<DishProjection> dishId, Id restaurantId, String dishName,
+                                         BigDecimal dishPrice,
                                          DishLiveStatus newLiveStatus,
                                          LocalDateTime occurredAt) {
 }

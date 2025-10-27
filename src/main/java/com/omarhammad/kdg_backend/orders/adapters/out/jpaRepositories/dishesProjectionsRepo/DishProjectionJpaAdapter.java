@@ -53,6 +53,7 @@ public class DishProjectionJpaAdapter implements LoadDishProjectionPort, SaveDis
                 new Id<>(entity.getDishId().toString()),
                 new Id(entity.getRestaurantId().toString()),
                 entity.getOccurredAt(),
+                entity.getName(),
                 entity.getPrice(),
                 Objects.nonNull(liveStatus) ? DishLiveStatus.valueOf(liveStatus.toUpperCase()) : null,
                 Objects.nonNull(stockStatus) ? DishStockStatus.valueOf(stockStatus.toUpperCase()) : null
@@ -67,10 +68,11 @@ public class DishProjectionJpaAdapter implements LoadDishProjectionPort, SaveDis
                 UUID.fromString(dishProjection.getDishId().value()),
                 UUID.fromString(dishProjection.getRestaurantId().value()),
                 dishProjection.getOccurredAt(),
+                dishProjection.getName(),
                 dishProjection.getPrice(),
                 Objects.nonNull(liveStatus) ? liveStatus.name() : null,
                 Objects.nonNull(stockStatus) ? stockStatus.name() : null
         );
     }
-
+    
 }

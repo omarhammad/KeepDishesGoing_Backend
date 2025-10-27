@@ -26,6 +26,7 @@ public class DishPublishedEventListener {
         DishLiveStatusProjectorCmd cmd = new DishLiveStatusProjectorCmd(
                 new Id<>(event.dishId()),
                 new Id<>(event.restaurantId()),
+                event.dishName(),
                 event.price(),
                 DishLiveStatus.PUBLISHED,
                 event.occurredAt()

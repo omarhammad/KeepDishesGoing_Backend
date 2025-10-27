@@ -13,6 +13,8 @@ import com.omarhammad.kdg_backend.orders.ports.in.CheckoutCmd;
 import com.omarhammad.kdg_backend.orders.ports.in.CreateOrderCmd;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class OrderRequestMapper {
 

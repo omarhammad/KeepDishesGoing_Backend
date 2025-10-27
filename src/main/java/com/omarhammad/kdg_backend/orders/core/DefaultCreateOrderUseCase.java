@@ -73,8 +73,9 @@ public class DefaultCreateOrderUseCase implements CreateOrderUseCase {
         if (!invalidDishes.isEmpty())
             throw new InvalidDishesException(
                     invalidDishes.stream()
-                            .map(this::getDishAsString)
-                            .collect(Collectors.joining(",", "{", "}"))
+                            .map(DishProjection::getName)
+                            .distinct()
+                            .collect(Collectors.joining(",", "Invalid dishes:[", "] remove them and then proceed"))
             );
 
 
@@ -101,12 +102,9 @@ public class DefaultCreateOrderUseCase implements CreateOrderUseCase {
     }
 
     private String getDishAsString(DishProjection dish) {
-        return "\"%s\": {\"restaurantId\": \"%s\", \"liveStatus\": \"%s\", \"stockStatus\": \"%s\"}"
+        return "%s"
                 .formatted(
-                        dish.getDishId().value(),
-                        dish.getRestaurantId().value(),
-                        dish.getLiveStatus(),
-                        dish.getStockStatus()
+                        dish.getName()
                 );
     }
 
