@@ -14,16 +14,16 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.omarhammad.kdg_backend.orders.adapters.in.webAdapters")
 public class OrderGlobalExceptionHandler {
 
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleEntityNotFoundException(EntityNotFoundException exception, WebRequest webRequest) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponseDTO(
                         webRequest.getDescription(false),
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatus.NOT_FOUND,
                         exception.getMessage(),
                         LocalDateTime.now()
                 ));

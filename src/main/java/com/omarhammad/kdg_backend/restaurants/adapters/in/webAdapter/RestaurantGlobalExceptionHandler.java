@@ -18,7 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.omarhammad.kdg_backend.restaurants.adapters.in.webAdapter")
 public class RestaurantGlobalExceptionHandler {
 
 
