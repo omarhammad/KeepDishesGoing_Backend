@@ -76,15 +76,3 @@ maintainable.
 - [x] Each owner can only have one restaurant
 
 ---
-
-## ❌ Unfinished / Planned Features
-
-List features that are not yet implemented.
-
-- [x] guesstimated delivery time is not implemented
-- [X] price range evolution of a restaurant is not implemented
-- [X] when returning all ive dishes, it's just all not only 10 dishes.
-- [X] no adjusting the price ranges criteria
-
-
-----
