@@ -21,7 +21,7 @@ maintainable.
 ## Technologies Used
 
 - **Java + Spring Boot**
-- **PostgreSQL**
+- **PostgreSQL + JPA with Hibernate**
 - **RabbitMQ**
 - **Keycloak**
 - **Docker Compose**
