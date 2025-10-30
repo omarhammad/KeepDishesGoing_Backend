@@ -47,7 +47,7 @@ maintainable.
 
 ---
 
-## ✅ Finished Features
+##  Features
 
 - [x] Sign-up/Sign-in for a restaurant owner.
 - [x] Creation of a restaurant.
