@@ -15,6 +15,7 @@ public record RestaurantDTO(String id,
                             String resPictureUrl,
                             Map<Day, OpeningHours> dayOpeningHours,
                             Cuisine cuisine,
+                            String manualOpening,
                             int defaultPrepTime,
                             boolean hasScheduledPublish,
                             OwnerDTO owner) {

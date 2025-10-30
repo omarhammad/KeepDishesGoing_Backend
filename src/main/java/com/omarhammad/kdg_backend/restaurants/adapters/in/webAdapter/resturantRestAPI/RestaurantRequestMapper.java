@@ -28,6 +28,7 @@ public class RestaurantRequestMapper {
                 restaurant.getResPictureUrl(),
                 restaurant.getDayOpeningHours(),
                 restaurant.getCuisine(),
+                restaurant.getManualOpening().name(),
                 restaurant.getDefaultPrepTime(),
                 restaurant.hasScheduledPublish(),
                 new OwnerDTO(owner.getId().value(),
