@@ -29,24 +29,6 @@ maintainable.
 
 ---
 
-### Challenges & Accomplishments
-
-* I faced many challenges during the development of the KDG application.
-
-* I initially struggled to understand how to keep the Aggregate Root responsible for all tasks related to its domain.
-
-* At first, in a use case where I published a dish, I did it directly in the use case (`dish.publish()`), but later I
-  learned that such operations should be handled by the Aggregate Root (`restaurant.publishDish(dishId)`), aligning with
-  hexagonal conventions in DDD.
-
-* Understanding the RabbitMQ topology was also challenging;
-  it was confusing at first, but I eventually grasped the concepts and how it works.
-
-* The concepts I learned in this course gave me strong confidence in developing any kind of system, as they broadened my
-  imagination and understanding of software architecture.
-
----
-
 ##  Features
 
 - [x] Sign-up/Sign-in for a restaurant owner.
